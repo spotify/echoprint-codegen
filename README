@@ -45,7 +45,7 @@ Will take 10 seconds of audio from 10 seconds into the file and output JSON suit
 
 You can POST this JSON directly to alpha_identify_song, for example:
 
-# curl -F "query=@post_string" http://beta.developer.echonest.com/api/v4/song/identify?api_key=YOUR_KEY
+# curl -F "query=@post_string" http://developer.echonest.com/api/v4/song/identify?api_key=YOUR_KEY
 {"fp_lookup_time_ms": 21, "results": [{"songID": "SOAFVGQ1280ED4E371", "match_type": "fp", "title": "Billie Jean", "artist": "Michael Jackson", 
 "artistID": "ARXPPEY1187FB51DF4", "score": 63, "release": "Thriller"}]
 

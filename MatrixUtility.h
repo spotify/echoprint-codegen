@@ -13,6 +13,8 @@
 namespace ublas = boost::numeric::ublas; 
 
 typedef ublas::matrix<float> matrix_f;
+typedef ublas::matrix<uint> matrix_u;
+
 typedef ublas::matrix_row<matrix_f> matrix_row_f;
 typedef ublas::matrix_row<const ublas::matrix<float> > const_matrix_row_f;
 typedef ublas::matrix_column<matrix_f> matrix_column_f;

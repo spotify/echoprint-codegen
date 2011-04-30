@@ -33,13 +33,13 @@ class Fingerprint;
 class CODEGEN_API Codegen {
 public:
     Codegen(const float* pcm, uint numSamples, int start_offset);
-    Codegen(auto_ptr<AudioBufferInput>pAudio, auto_ptr<Spectrogram>p16Spectrogram, auto_ptr<Spectrogram>p512Spectrogram, int start_offset);
+    Codegen(auto_ptr<AudioBufferInput>pAudio, auto_ptr<Spectrogram>p16Spectrogram, int start_offset);
 
     string getCodeString(){return _CodeString;}
     int getNumCodes(){return _NumCodes;}
     float getVersion() { return VERSION; }
 private:
-    Fingerprint* computeFingerprint(auto_ptr<AudioBufferInput>pAudio, auto_ptr<Spectrogram>p16Spectrogram, auto_ptr<Spectrogram>p512Spectrogram, int start_offset);
+    Fingerprint* computeFingerprint(auto_ptr<AudioBufferInput>pAudio, auto_ptr<Spectrogram>p16Spectrogram, int start_offset);
     void setCodeString(Fingerprint *pFingerprint);
 
     string compress(const string& s);
