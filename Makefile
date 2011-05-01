@@ -31,8 +31,9 @@ main: $(MODULES) main.o
 	$(CXX) $(MODULES) $(LDFLAGS) main.o -o codegen.$(PLATFORM)-$(ARCH) 
 ifeq ($(UNAME),Darwin)
 	$(CXX) -shared -fPIC -o libcodegen.$(PLATFORM)-$(ARCH).so $(MODULES_LIB) -framework Accelerate -framework vecLib
-	libtool -dynamic -flat_namespace -install_name libcodegen.4.0.0.dylib -lSystem -compatibility_version 4.0 \
-	    -current_version 4.0.0 -o libcodegen.4.0.0.dylib -undefined suppress $(MODULES) -framework vecLib -framework Accelerate
+	libtool -dynamic -flat_namespace -install_name libcodegen.4.0.0.dylib -lSystem -compatibility_version 4.0 -macosx_version_min 10.6 \
+	    -current_version 4.0.0 -o libcodegen.4.0.0.dylib -undefined suppress \
+	    $(MODULES) -framework vecLib -framework Accelerate
 else
 	$(CXX) -shared -fPIC -o libcodegen.$(PLATFORM)-$(ARCH).so $(MODULES_LIB) 
 endif

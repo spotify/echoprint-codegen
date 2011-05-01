@@ -51,6 +51,7 @@ Codegen::Codegen(const float* pcm, uint numSamples, int start_offset) {
 
     delete pFingerprint;
 }
+
 void Codegen::setCodeString(Fingerprint *pFingerprint) {
     vector<FPCode> vCodes = pFingerprint->getCodes();
     _NumCodes = vCodes.size();
@@ -59,11 +60,14 @@ void Codegen::setCodeString(Fingerprint *pFingerprint) {
         _CodeString = "";
         return;
     }
-    
+        
+    // Can constrain decimated time to 5 hex digits, since that represents about 3 hours of audio (we only support 1)
     // hash codes are 16-bit numbers, so we need 4 hex digits to represent them.
     std::ostringstream codestream;
     codestream << std::setfill('0') << std::hex;
-
+    for (uint i = 0; i < vCodes.size(); i++)
+        codestream << std::setw(5) << vCodes[i].frame;
+    
     for (uint i = 0; i < vCodes.size(); i++)
     {
         int hash = vCodes[i].code;
