@@ -80,8 +80,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
     bands = Eb.size2(); // 9
     pE = &Eb.data()[0];
 
-    // upper limit on # of onset-vectors is (frames/ttarg) * bands
-	// on iOS this is not true?? so I did a *2 -- TODO, ask dpwe why this happens
+
     out = matrix_u(STFT_A_BANDS, frames); 
     matrix_f O = matrix_f(frames, bands);
     pO = &O.data()[0];
@@ -201,7 +200,7 @@ void Fingerprint::Compute() {
                     uint hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
                     // Set the code alongside the time of onset (ignored)
                     _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
-                    fprintf(stderr, "whee %d,%d: %d, %d, %d = %d at %d\n", actual_codes, k, time_delta0, time_delta1, band, hashed_code, time_for_onset_ms_quantized);
+                    //fprintf(stderr, "whee %d,%d: %d, %d, %d = %d at %d\n", actual_codes, k, time_delta0, time_delta1, band, hashed_code, time_for_onset_ms_quantized);
                 }
             }
         }
