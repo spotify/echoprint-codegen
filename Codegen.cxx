@@ -71,7 +71,7 @@ void Codegen::setCodeString(Fingerprint *pFingerprint) {
     for (uint i = 0; i < vCodes.size(); i++)
     {
         int hash = vCodes[i].code;
-        codestream << std::setw(4) << hash;
+        codestream << std::setw(8) << hash;
     }
     _CodeString = compress(codestream.str());
 }

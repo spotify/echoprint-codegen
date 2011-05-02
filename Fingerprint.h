@@ -14,7 +14,7 @@
 #define HASH_SEED 0x9ea5fa36
 #define QUANTIZE_DT_MS 3
 #define QUANTIZE_A_MS 23
-#define HASH_BITMASK 0x0000ffff
+#define HASH_BITMASK 0xffffffff
 #define STFT_A_BANDS 9
 
 struct FPCode {
