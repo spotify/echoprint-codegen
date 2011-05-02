@@ -12,7 +12,8 @@
 #include <vector>
 
 #define HASH_SEED 0x9ea5fa36
-#define QUANTIZE_MS 3
+#define QUANTIZE_DT_MS 3
+#define QUANTIZE_A_MS 23
 #define HASH_BITMASK 0x0000ffff
 #define STFT_A_BANDS 9
 
@@ -27,7 +28,8 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed );
 
 class Fingerprint {
 public:
-    uint quantized_time_for_frame(uint frame);
+    uint quantized_time_for_frame_delta(uint frame_delta);
+    uint quantized_time_for_frame_absolute(uint frame);
     Fingerprint(Spectrogram* p16Spectrogram, int offset);
     void Compute();
     uint adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) ;
