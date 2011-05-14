@@ -2,7 +2,7 @@
 Building echoprint-codegen-ios
 ------------------------------
 
-0. If you don't have it, get (boost)[http://www.boost.org/]
+0. If you don't have it, get [boost](http://www.boost.org/)
    **Note:** echoprint-codegen only uses boost headers for some numeric operations, 
    so you don't need to compile boost.
     
