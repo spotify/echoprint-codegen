@@ -52,22 +52,21 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
 Fingerprint::Fingerprint(Spectrogram* p16Spectrogram, int offset) 
     : _p16Spectrogram(p16Spectrogram), _Offset(offset) { }
 
-uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {
+uint Fingerprint::adaptiveOnsets(uint ttarg, matrix_u&out, uint*&onset_counter_for_band) {
     //  E is a sgram-like matrix of energies.
     const float *pE;
-    float *pO;
-    int bands, frames, i, j, k;
-    int deadtime = 32;
+    uint bands, frames, i, j, k;
+    uint deadtime = 32;
     double H[STFT_A_BANDS],taus[STFT_A_BANDS], N[STFT_A_BANDS];
-    int contact[STFT_A_BANDS], lcontact[STFT_A_BANDS], tsince[STFT_A_BANDS];
+    uint contact[STFT_A_BANDS], lcontact[STFT_A_BANDS], tsince[STFT_A_BANDS];
     double overfact = 1.05;  /* threshold rel. to actual peak */
     uint onset_counter = 0;
 
     // Do the blocking
     matrix_f E = _p16Spectrogram->getMatrix();
     matrix_f Eb = matrix_f(E.size1()/4, E.size2());
-    for(i=0;i<(int)Eb.size1();i++) {
-        for(j=0;j<(int)Eb.size2();j++) {
+    for(i=0;i<(uint)Eb.size1();i++) {
+        for(j=0;j<(uint)Eb.size2();j++) {
             Eb(i,j) = 0;
             // compute the rms of each block
             for(k=0;k<4;k++)
@@ -82,8 +81,6 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
 
 
     out = matrix_u(STFT_A_BANDS, frames); 
-    matrix_f O = matrix_f(frames, bands);
-    pO = &O.data()[0];
 
     onset_counter_for_band = new uint[STFT_A_BANDS];
 
@@ -118,14 +115,15 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
 
     		if (contact[j] == 0 && lcontact[j] == 1) {
     		    /* detach */
-    		    pO[j] = 1;
     		    
-                out(j, onset_counter_for_band[j]++) = i;
-                onset_counter++;
-    		    /* apply deadtime */
-    		    for(k = 1; k < ((i > deadtime)?deadtime:i); ++k) {
-    			    pO[j - k*bands] = 0;
-    		    }
+		    	if (onset_counter_for_band[j] == 0 || out(j, onset_counter_for_band[j]) < i - deadtime ) {
+					onset_counter_for_band[j]++;
+	            	onset_counter++;
+	            }
+				/* but if last onset is within deadtime, overwrite it */
+
+                out(j, onset_counter_for_band[j]) = i;
+    		    
     		    tsince[j] = 0;      
 
     	    }
@@ -144,7 +142,6 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
     		lcontact[j] = contact[j];
     	}
     	pE += bands;
-    	pO += bands;
     }
 
     return onset_counter;
