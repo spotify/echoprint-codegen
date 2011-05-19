@@ -52,26 +52,26 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
 Fingerprint::Fingerprint(Spectrogram* p16Spectrogram, int offset) 
     : _p16Spectrogram(p16Spectrogram), _Offset(offset) { }
 
-uint Fingerprint::adaptiveOnsets(uint ttarg, matrix_u&out, uint*&onset_counter_for_band) {
+uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {
     //  E is a sgram-like matrix of energies.
     const float *pE;
-    uint bands, frames, i, j, k;
-    uint deadtime = 32;
+    int bands, frames, i, j, k;
+    int deadtime = 32;
     double H[STFT_A_BANDS],taus[STFT_A_BANDS], N[STFT_A_BANDS];
-    uint contact[STFT_A_BANDS], lcontact[STFT_A_BANDS], tsince[STFT_A_BANDS];
+    int contact[STFT_A_BANDS], lcontact[STFT_A_BANDS], tsince[STFT_A_BANDS];
     double overfact = 1.05;  /* threshold rel. to actual peak */
     uint onset_counter = 0;
 
     // Do the blocking
     matrix_f E = _p16Spectrogram->getMatrix();
     matrix_f Eb = matrix_f(E.size1()/4, E.size2());
-    for(i=0;i<(uint)Eb.size1();i++) {
-        for(j=0;j<(uint)Eb.size2();j++) {
-            Eb(i,j) = 0;
+    for(size_t x=0;x<Eb.size1();x++) {
+        for(size_t y=0;y<Eb.size2();y++) {
+            Eb(x,y) = 0;
             // compute the rms of each block
             for(k=0;k<4;k++)
-                Eb(i,j) = Eb(i,j) + (E((i*4)+k, j) * E((i*4)+k, j));
-            Eb(i,j) = sqrtf(Eb(i,j) / 1.0); // i used to divide here / 4 (b/c the M in RMS) but dpwe doesn't
+                Eb(x,y) = Eb(x,y) + (E((x*4)+k, y) * E((x*4)+k, y));
+            Eb(x,y) = sqrtf(Eb(x,y) / 1.0); // i used to divide here / 4 (b/c the M in RMS) but dpwe doesn't
         }
     }
     
@@ -85,6 +85,7 @@ uint Fingerprint::adaptiveOnsets(uint ttarg, matrix_u&out, uint*&onset_counter_f
     onset_counter_for_band = new uint[STFT_A_BANDS];
 
     for (j = 0; j < bands; ++j) {
+        out(j, 0) = 0;
         onset_counter_for_band[j] = 0;
         N[j] = 0.0;
         taus[j] = 1.0;
@@ -116,7 +117,7 @@ uint Fingerprint::adaptiveOnsets(uint ttarg, matrix_u&out, uint*&onset_counter_f
     		if (contact[j] == 0 && lcontact[j] == 1) {
     		    /* detach */
     		    
-		    	if (onset_counter_for_band[j] == 0 || out(j, onset_counter_for_band[j]) < i - deadtime ) {
+		    	if (onset_counter_for_band[j] == 0 || (int)out(j, onset_counter_for_band[j]) < i - deadtime ) {
 					onset_counter_for_band[j]++;
 	            	onset_counter++;
 	            }
@@ -202,7 +203,7 @@ void Fingerprint::Compute() {
                     uint hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
                     // Set the code alongside the time of onset
                     _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
-                    fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %d at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);
+                    fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %u at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);
                 }
             }
         }

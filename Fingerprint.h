@@ -32,7 +32,7 @@ public:
     uint quantized_time_for_frame_absolute(uint frame);
     Fingerprint(Spectrogram* p16Spectrogram, int offset);
     void Compute();
-    uint adaptiveOnsets(uint ttarg, matrix_u&out, uint*&onset_counter_for_band) ;
+    uint adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) ;
     std::vector<FPCode>& getCodes(){return _Codes;}
 public:
     Spectrogram *_p16Spectrogram;
