@@ -85,7 +85,6 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
     onset_counter_for_band = new uint[STFT_A_BANDS];
 
     for (j = 0; j < bands; ++j) {
-        out(j, 0) = 0;
         onset_counter_for_band[j] = 0;
         N[j] = 0.0;
         taus[j] = 1.0;
@@ -117,14 +116,15 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
     		if (contact[j] == 0 && lcontact[j] == 1) {
     		    /* detach */
     		    
-		    	if (onset_counter_for_band[j] == 0 || (int)out(j, onset_counter_for_band[j]) < i - deadtime ) {
-					onset_counter_for_band[j]++;
-	            	onset_counter++;
-	            }
-				/* but if last onset is within deadtime, overwrite it */
+    		     if (onset_counter_for_band[j] > 0   && (int)out(j, onset_counter_for_band[j]-1) > i - deadtime)  {
+                       // overwrite last-written time
+                       --onset_counter_for_band[j];
+                       --onset_counter;
+               }
+               out(j, onset_counter_for_band[j]++) = i;
+               ++onset_counter;
 
-                out(j, onset_counter_for_band[j]) = i;
-    		    
+		    
     		    tsince[j] = 0;      
 
     	    }
