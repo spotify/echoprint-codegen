@@ -61,6 +61,16 @@ void Spectrogram::Compute() {
 
 // valgrind --leak-check=yes ./codegen.Darwin-i386 billie_jean.wav 10 60
 
+/*
+Really?  Your specgram function doesn't return the nonredundant N/2 (origin 0)
+bin?  I.e. a 16-point FFT has 9 nonredundant bins, and a 512 point has 257
+nonredundant ones.  Bins 0 and N/2 are "half bins" because they straddle
+zero frequency and the nyquist frequency, respectively - what this means is
+that their values are always real, whereas all the other bins can be
+any complex value (hence, they both have only half the information, or degrees 
+of freedom, of the others).
+*/
+
 void Spectrogram::SimpleFFT(float*& input) {
     input[_FFTSize] = 0;
     input[_FFTSize+1] = 0;
@@ -77,17 +87,19 @@ void Spectrogram::SimpleFFT(float*& input) {
     vDSP_vsmul(_pBuffer->realp, 1, &scale, _pBuffer->realp, 1, _FFTSize/2 + 1 ); 
     vDSP_vsmul(_pBuffer->imagp, 1, &scale, _pBuffer->imagp, 1, _FFTSize/2 + 1); 
 #endif
+
     // this is abs(specgram(sig, FFTSize)).^2
-    for (uint i=0;i < (_FFTSize/2 + 1);++i) {
-
+    // Apple's vDSP FFT packs the DC and Nyquist components into one real/imag pair at the start
 #if USE_ACCELERATE
-		// TODO there is actually an accelerate hypot i believe, use that
+    for (uint i=1;i < (_FFTSize/2);++i) 
         input[i] = hypot(_pBuffer->realp[i], _pBuffer->imagp[i]);
+    input[0] = _pBuffer->realp[0];
+    input[_FFTSize/2] = _pBuffer->imagp[0];
 #else
+    // kissFFT does it "right"
+    for (uint i=0;i < (_FFTSize/2 + 1);++i) 
         input[i] = hypot(_pBuffer[i].r, _pBuffer[i].i);
-
-#endif   
-    }
+#endif
 
 }
 
