@@ -166,7 +166,7 @@ void Fingerprint::Compute() {
     uint onset_count = adaptiveOnsets(86, out, onset_counter_for_band);
     _Codes.resize(onset_count*6);
 
-    for(unsigned char band=0;band<STFT_A_BANDS;band++) { // TODO there is never any material in band 9 / idx 8
+    for(unsigned char band=0;band<STFT_A_BANDS;band++) { 
         if(onset_counter_for_band[band]>0) {
             for(uint onset=0;onset<onset_counter_for_band[band]-5;onset++) {
                 // What time was this onset at?
