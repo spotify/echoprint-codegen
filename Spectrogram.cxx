@@ -61,6 +61,7 @@ void Spectrogram::Compute() {
 
 // valgrind --leak-check=yes ./codegen.Darwin-i386 billie_jean.wav 10 60
 
+// A simple FFT that outputs magnitude
 void Spectrogram::SimpleFFT(float*& input) {
     input[_FFTSize] = 0;
     input[_FFTSize+1] = 0;
@@ -79,21 +80,22 @@ void Spectrogram::SimpleFFT(float*& input) {
 #endif
 
     // this is abs(specgram(sig, FFTSize)).^2
-    // Apple's vDSP FFT packs the DC and Nyquist components into one real/imag pair at the start
 #if USE_ACCELERATE
+    // Apple's vDSP FFT packs the DC aand Nyquist components into one real/imag pair at the start
     for (uint i=1;i < (_FFTSize/2);++i) 
         input[i] = hypot(_pBuffer->realp[i], _pBuffer->imagp[i]);
+
     input[0] = _pBuffer->realp[0];
     input[_FFTSize/2] = _pBuffer->imagp[0];
 #else
-    // kissFFT does it "right"
+    // kissFFT does it as you'd expect
     for (uint i=0;i < (_FFTSize/2 + 1);++i) 
         input[i] = hypot(_pBuffer[i].r, _pBuffer[i].i);
 #endif
 
 }
 
-// A simple STFT that will work in a "real time" instance.
+// A simple STFT that outputs magnitude
 void Spectrogram::SimpleSTFT() {
 
     float *ham = new float[_FFTSize];
