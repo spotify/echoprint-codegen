@@ -44,7 +44,8 @@ Codegen::Codegen(const float* pcm, uint numSamples, int start_offset, bool full,
     pAudio->SetBuffer(pcm, numSamples);
     Spectrogram *p16Spectrogram = new Spectrogram(pAudio, 8, 16, 16);
     p16Spectrogram->Compute();
-
+    _LowRankCodeString = "";
+    _LowRankNumCodes = 0;
     if(full) {
         Fingerprint * pFingerprint;
         pFingerprint = computeFullFingerprint(p16Spectrogram, start_offset);

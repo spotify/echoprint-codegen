@@ -124,7 +124,7 @@ char* json_string_for_file(char* filename, int start_offset, int duration, int t
     t1 = now() - t1;
 
     double t2 = now();
-    auto_ptr<Codegen> pCodegen(new Codegen(pAudio->getSamples(), numSamples, start_offset, true, true));    
+    auto_ptr<Codegen> pCodegen(new Codegen(pAudio->getSamples(), numSamples, start_offset, true, false));    
     t2 = now() - t2;
 
     // Get the ID3 tag information.
