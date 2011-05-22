@@ -31,27 +31,27 @@ using namespace std;
 #endif
 
 class Fingerprint;
-class FingerprintStage2;
+class FingerprintLowRank;
 
 class CODEGEN_API Codegen {
 public:
-    Codegen(const float* pcm, uint numSamples, int start_offset, bool stage1, bool stage2);
+    Codegen(const float* pcm, uint numSamples, int start_offset, bool full, bool lowrank);
 
-    string getStage1CodeString(){return _Stage1CodeString;}
-    string getStage2CodeString(){return _Stage2CodeString;}
-    int getStage1NumCodes(){return _Stage1NumCodes;}
-    int getStage2NumCodes(){return _Stage2NumCodes;}
+    string getFullCodeString(){return _FullCodeString;}
+    string getLowRankCodeString(){return _LowRankCodeString;}
+    int getFullNumCodes(){return _FullNumCodes;}
+    int getLowRankNumCodes(){return _LowRankNumCodes;}
     float getVersion() { return VERSION; }
 private:
-    Fingerprint* computeStage1Fingerprint(Spectrogram *p16Spectrogram, int start_offset);
-    FingerprintStage2* computeStage2Fingerprint(Spectrogram *p16Spectrogram, Spectrogram *p512Spectrogram, int start_offset);
+    Fingerprint* computeFullFingerprint(Spectrogram *p16Spectrogram, int start_offset);
+    FingerprintLowRank* computeLowRankFingerprint(Spectrogram *p16Spectrogram, Spectrogram *p512Spectrogram, int start_offset);
     string createCodeString(vector<FPCode> vCodes);
 
     string compress(const string& s);
-    string _Stage1CodeString;
-    string _Stage2CodeString;
-    int _Stage1NumCodes;
-    int _Stage2NumCodes;
+    string _FullCodeString;
+    string _LowRankCodeString;
+    int _FullNumCodes;
+    int _LowRankNumCodes;
 };
 
 #endif

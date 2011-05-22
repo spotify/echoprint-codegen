@@ -3,8 +3,8 @@
 //
 
 
-#ifndef FINGERPRINTSTAGE2_H
-#define FINGERPRINTSTAGE2_H
+#ifndef FINGERPRINTLOWRANK_H
+#define FINGERPRINTLOWRANK_H
 #include "Common.h"
 #include "Spectrogram.h"
 #include "MatrixUtility.h"
@@ -14,10 +14,10 @@
 #define QUANTIZE_MS 52
 #define STFT_B_BANDS 257 
 
-class FingerprintStage2 {
+class FingerprintLowRank {
 public:
     uint quantized_time_for_frame(uint frame);
-    FingerprintStage2(Spectrogram* p16Spectrogram, Spectrogram* p512Spectrogram, int offset);
+    FingerprintLowRank(Spectrogram* p16Spectrogram, Spectrogram* p512Spectrogram, int offset);
     std::vector<FPCode>& getCodes(){return _Codes;}
     void Compute();
     uint adaptiveOnsets(int ttarg, matrix_f&out, unsigned char*&band_for_onset, uint*&frame_delta_for_onset) ;

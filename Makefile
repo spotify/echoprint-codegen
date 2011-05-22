@@ -19,7 +19,7 @@ MODULES_LIB = \
     Base64.o \
     Codegen.o \
     Fingerprint.o \
-    FingerprintStage2.o \
+    FingerprintLowRank.o \
     MatrixUtility.o \
     Spectrogram.o \
     VectorUtility.o \

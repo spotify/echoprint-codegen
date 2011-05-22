@@ -9,7 +9,7 @@
 #include "AudioBufferInput.h"
 #include "Spectrogram.h"
 #include "Fingerprint.h"
-#include "FingerprintStage2.h"
+#include "FingerprintLowRank.h"
 
 #include "Base64.h"
 #include "easyzlib.h"
@@ -21,23 +21,23 @@ extern "C" {
 }
 #endif
 
-Fingerprint* Codegen::computeStage1Fingerprint(Spectrogram *p16Spectrogram, int start_offset) {
+Fingerprint* Codegen::computeFullFingerprint(Spectrogram *p16Spectrogram, int start_offset) {
     Fingerprint *pFingerprint = new Fingerprint(p16Spectrogram, start_offset);
     pFingerprint->Compute();
     return pFingerprint;
 }
 
-FingerprintStage2* Codegen::computeStage2Fingerprint(Spectrogram *p16Spectrogram, Spectrogram *p512Spectrogram, int start_offset) {
-    FingerprintStage2 *pFingerprint = new FingerprintStage2(p16Spectrogram, p512Spectrogram, start_offset);
+FingerprintLowRank* Codegen::computeLowRankFingerprint(Spectrogram *p16Spectrogram, Spectrogram *p512Spectrogram, int start_offset) {
+    FingerprintLowRank *pFingerprint = new FingerprintLowRank(p16Spectrogram, p512Spectrogram, start_offset);
     pFingerprint->Compute();
     return pFingerprint;
 }
 
-Codegen::Codegen(const float* pcm, uint numSamples, int start_offset, bool stage1, bool stage2) {
+Codegen::Codegen(const float* pcm, uint numSamples, int start_offset, bool full, bool lowrank) {
     if (Params::AudioStreamInput::MaxSamples < (uint)numSamples)
         throw std::runtime_error("File was too big\n");
 
-    if (!stage1 && !stage2) 
+    if (!full && !lowrank) 
         throw std::runtime_error("Need at least one stage\n");
         
     AudioBufferInput *pAudio = new AudioBufferInput();
@@ -45,20 +45,20 @@ Codegen::Codegen(const float* pcm, uint numSamples, int start_offset, bool stage
     Spectrogram *p16Spectrogram = new Spectrogram(pAudio, 8, 16, 16);
     p16Spectrogram->Compute();
 
-    if(stage1) {
+    if(full) {
         Fingerprint * pFingerprint;
-        pFingerprint = computeStage1Fingerprint(p16Spectrogram, start_offset);
-        _Stage1CodeString = createCodeString(pFingerprint->getCodes());
-        _Stage1NumCodes = pFingerprint->getCodes().size();
+        pFingerprint = computeFullFingerprint(p16Spectrogram, start_offset);
+        _FullCodeString = createCodeString(pFingerprint->getCodes());
+        _FullNumCodes = pFingerprint->getCodes().size();
         delete pFingerprint;
     }
-    if(stage2) {
+    if(lowrank) {
         Spectrogram *p512Spectrogram = new Spectrogram(pAudio, 128, 512, 512);
         p512Spectrogram->Compute();
-        FingerprintStage2 * pFingerprint;
-        pFingerprint = computeStage2Fingerprint(p16Spectrogram, p512Spectrogram, start_offset);
-        _Stage2CodeString = createCodeString(pFingerprint->getCodes());
-        _Stage2NumCodes = pFingerprint->getCodes().size();
+        FingerprintLowRank * pFingerprint;
+        pFingerprint = computeLowRankFingerprint(p16Spectrogram, p512Spectrogram, start_offset);
+        _LowRankCodeString = createCodeString(pFingerprint->getCodes());
+        _LowRankNumCodes = pFingerprint->getCodes().size();
         delete pFingerprint;
         delete p512Spectrogram;
     }

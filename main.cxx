@@ -131,7 +131,7 @@ char* json_string_for_file(char* filename, int start_offset, int duration, int t
     auto_ptr<Metadata> pMetadata(new Metadata(filename));
 
     // preamble + codelen
-    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(pCodegen->getStage1CodeString().c_str()) + strlen(pCodegen->getStage2CodeString().c_str()) ));
+    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(pCodegen->getFullCodeString().c_str()) + strlen(pCodegen->getLowRankCodeString().c_str()) ));
     
     sprintf(output,"{\"metadata\":{\"artist\":\"%s\", \"release\":\"%s\", \"title\":\"%s\", \"genre\":\"%s\", \"bitrate\":%d,"
                     "\"sample_rate\":%d, \"duration\":%d, \"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
@@ -151,10 +151,10 @@ char* json_string_for_file(char* filename, int start_offset, int duration, int t
         pCodegen->getVersion(),
         t2,
         t1,
-        pCodegen->getStage1NumCodes(),
-        pCodegen->getStage1CodeString().c_str(),
-        pCodegen->getStage2CodeString().c_str(),
-        pCodegen->getStage2NumCodes(),        
+        pCodegen->getFullNumCodes(),
+        pCodegen->getFullCodeString().c_str(),
+        pCodegen->getLowRankCodeString().c_str(),
+        pCodegen->getLowRankNumCodes(),        
         tag
     );
     return output;

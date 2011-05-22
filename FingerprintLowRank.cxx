@@ -2,7 +2,7 @@
 //  Copyright 2011 The Echo Nest. All rights reserved.
 //
 
-#include "FingerprintStage2.h"
+#include "FingerprintLowRank.h"
 #include "Params.h"
 #include "Fingerprint.h"
 
@@ -14,10 +14,10 @@ extern "C" {
 #endif
 
 
-FingerprintStage2::FingerprintStage2(Spectrogram* p16Spectrogram, Spectrogram* p512Spectrogram, int offset) 
+FingerprintLowRank::FingerprintLowRank(Spectrogram* p16Spectrogram, Spectrogram* p512Spectrogram, int offset) 
     : _p16Spectrogram(p16Spectrogram), _p512Spectrogram(p512Spectrogram), _Offset(offset) { }
 
-uint FingerprintStage2::adaptiveOnsets(int ttarg, matrix_f&out, unsigned char*&band_for_onset, uint*&frame_for_onset) {
+uint FingerprintLowRank::adaptiveOnsets(int ttarg, matrix_f&out, unsigned char*&band_for_onset, uint*&frame_for_onset) {
     //  E is a sgram-like matrix of energies.
     const float *pE;
     float *pO;
@@ -151,12 +151,12 @@ uint FingerprintStage2::adaptiveOnsets(int ttarg, matrix_f&out, unsigned char*&b
 
 
 // dan is going to beat me if i call this "decimated_time_for_frame" like i want to
-uint FingerprintStage2::quantized_time_for_frame(uint frame) {
+uint FingerprintLowRank::quantized_time_for_frame(uint frame) {
     double time_for_onset = _Offset + (double)frame / ((double)Params::AudioStreamInput::SamplingRate / 32.0);
     return (int)floor((time_for_onset * 1000.0) /  (float)QUANTIZE_MS) * QUANTIZE_MS;
 }
 
-void FingerprintStage2::Compute() {
+void FingerprintLowRank::Compute() {
     uint onset_count;
     matrix_f out;
     uint *frame_for_onset;
