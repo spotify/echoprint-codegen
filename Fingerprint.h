@@ -14,7 +14,7 @@
 #define HASH_SEED 0x9ea5fa36
 #define QUANTIZE_DT_MS 3
 #define QUANTIZE_A_MS 23
-#define HASH_BITMASK 0xffffffff
+#define HASH_BITMASK 0x000fffff
 #define STFT_A_BANDS 9
 
 struct FPCode {
@@ -34,10 +34,10 @@ public:
     void Compute();
     uint adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) ;
     std::vector<FPCode>& getCodes(){return _Codes;}
-public:
+protected:
     Spectrogram *_p16Spectrogram;
-    std::vector<FPCode> _Codes;
     int _Offset;
+    std::vector<FPCode> _Codes;
 };
 
 #endif

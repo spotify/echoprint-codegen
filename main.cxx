@@ -124,19 +124,19 @@ char* json_string_for_file(char* filename, int start_offset, int duration, int t
     t1 = now() - t1;
 
     double t2 = now();
-    auto_ptr<Codegen> pCodegen(new Codegen(pAudio->getSamples(), numSamples, start_offset));    
+    auto_ptr<Codegen> pCodegen(new Codegen(pAudio->getSamples(), numSamples, start_offset, true, true));    
     t2 = now() - t2;
 
     // Get the ID3 tag information.
     auto_ptr<Metadata> pMetadata(new Metadata(filename));
 
     // preamble + codelen
-    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(pCodegen->getCodeString().c_str())));
+    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(pCodegen->getStage1CodeString().c_str()) + strlen(pCodegen->getStage2CodeString().c_str()) ));
     
     sprintf(output,"{\"metadata\":{\"artist\":\"%s\", \"release\":\"%s\", \"title\":\"%s\", \"genre\":\"%s\", \"bitrate\":%d,"
                     "\"sample_rate\":%d, \"duration\":%d, \"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
                     " \"start_offset\":%d, \"version\":%2.2f, \"codegen_time\":%2.6f, \"decode_time\":%2.6f}, \"code_count\":%d,"
-                    " \"code\":\"%s\", \"tag\":%d}",
+                    " \"code\":\"%s\", \"lowrank_code\":\"%s\", \"lowrank_code_count\":%d, \"tag\":%d}",
         escape(pMetadata->Artist()).c_str(), 
         escape(pMetadata->Album()).c_str(), 
         escape(pMetadata->Title()).c_str(), 
@@ -151,8 +151,10 @@ char* json_string_for_file(char* filename, int start_offset, int duration, int t
         pCodegen->getVersion(),
         t2,
         t1,
-        pCodegen->getNumCodes(),
-        pCodegen->getCodeString().c_str(),
+        pCodegen->getStage1NumCodes(),
+        pCodegen->getStage1CodeString().c_str(),
+        pCodegen->getStage2CodeString().c_str(),
+        pCodegen->getStage2NumCodes(),        
         tag
     );
     return output;

@@ -52,6 +52,7 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
 Fingerprint::Fingerprint(Spectrogram* p16Spectrogram, int offset) 
     : _p16Spectrogram(p16Spectrogram), _Offset(offset) { }
 
+
 uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {
     //  E is a sgram-like matrix of energies.
     const float *pE;

@@ -14,6 +14,7 @@
 #include "Common.h"
 #include "AudioBufferInput.h"
 #include "Spectrogram.h"
+#include "Fingerprint.h"
 
 using namespace std;
 
@@ -30,21 +31,27 @@ using namespace std;
 #endif
 
 class Fingerprint;
+class FingerprintStage2;
+
 class CODEGEN_API Codegen {
 public:
-    Codegen(const float* pcm, uint numSamples, int start_offset);
-    Codegen(auto_ptr<AudioBufferInput>pAudio, auto_ptr<Spectrogram>p16Spectrogram, int start_offset);
+    Codegen(const float* pcm, uint numSamples, int start_offset, bool stage1, bool stage2);
 
-    string getCodeString(){return _CodeString;}
-    int getNumCodes(){return _NumCodes;}
+    string getStage1CodeString(){return _Stage1CodeString;}
+    string getStage2CodeString(){return _Stage2CodeString;}
+    int getStage1NumCodes(){return _Stage1NumCodes;}
+    int getStage2NumCodes(){return _Stage2NumCodes;}
     float getVersion() { return VERSION; }
 private:
-    Fingerprint* computeFingerprint(auto_ptr<AudioBufferInput>pAudio, auto_ptr<Spectrogram>p16Spectrogram, int start_offset);
-    void setCodeString(Fingerprint *pFingerprint);
+    Fingerprint* computeStage1Fingerprint(Spectrogram *p16Spectrogram, int start_offset);
+    FingerprintStage2* computeStage2Fingerprint(Spectrogram *p16Spectrogram, Spectrogram *p512Spectrogram, int start_offset);
+    string createCodeString(vector<FPCode> vCodes);
 
     string compress(const string& s);
-    string _CodeString;
-    int _NumCodes;
+    string _Stage1CodeString;
+    string _Stage2CodeString;
+    int _Stage1NumCodes;
+    int _Stage2NumCodes;
 };
 
 #endif
