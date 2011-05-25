@@ -5,12 +5,12 @@ PLATFORM=`uname`
 ARCH=`uname -m`
 #OPTFLAGS=-g -O0
 OPTFLAGS=-O3
-CXXFLAGS=-Wall -I/usr/local/include/boost-1_35 -I/usr/local/include/taglib -fPIC $(OPTFLAGS)
+CXXFLAGS=-Wall -I/usr/local/include/boost-1_35 -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -Ifft -fPIC $(OPTFLAGS)
 ifeq ($(UNAME),Darwin)
-	LDFLAGS=-L/usr/local/lib libtag-$(PLATFORM)-$(ARCH).a -lz -lpthread -framework Accelerate -framework vecLib $(OPTFLAGS)
+	LDFLAGS=-L/usr/local/lib ../lib/libtag-$(PLATFORM)-$(ARCH).a -lz -lpthread -framework Accelerate -framework vecLib $(OPTFLAGS)
 else
-	LDFLAGS=-L/usr/local/lib libtag-$(PLATFORM)-$(ARCH).a -lz -lpthread $(OPTFLAGS)
+	LDFLAGS=-L/usr/local/lib ../lib/libtag-$(PLATFORM)-$(ARCH).a -lz -lpthread $(OPTFLAGS)
 endif
 
 MODULES_LIB = \
@@ -29,7 +29,7 @@ MODULES_LIB = \
 MODULES = $(MODULES_LIB) Metadata.o
 
 main: $(MODULES) main.o
-	$(CXX) $(MODULES) $(LDFLAGS) main.o -o codegen.$(PLATFORM)-$(ARCH) 
+	$(CXX) $(MODULES) $(LDFLAGS) main.o -o ../codegen.$(PLATFORM)-$(ARCH) 
 ifeq ($(UNAME),Darwin)
 	$(CXX) -shared -fPIC -o libcodegen.$(PLATFORM)-$(ARCH).so $(MODULES_LIB) -framework Accelerate -framework vecLib
 	libtool -dynamic -flat_namespace -install_name libcodegen.4.0.0.dylib -lSystem -compatibility_version 4.0 -macosx_version_min 10.6 \
@@ -52,6 +52,9 @@ endif
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f *.o codegen.$(PLATFORM)-$(ARCH)
+	rm -f *.o ../codegen.$(PLATFORM)-$(ARCH)
 	rm -f fft/*.o
-
+	rm -f *.so
+ifeq ($(UNAME),Darwin)
+	rm -f *.dylib
+endif
