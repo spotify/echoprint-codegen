@@ -31,7 +31,7 @@ the "offset" parameter creates a hint to the server on where the sample is taken
 
 After compute, you want to call pCodegen->getCodeString() to get the code string. (The code string is just a base64 encoding of a zlib compression of the original code string, which is a series of ASCII numbers.)
 
-This package also contains an example code generator binary for all 3 platforms (Mac 10.6/10.5, Windows, Linux 64-bit & 32-bit.) This code generator has more features -- it will output ID3 tag information and uses ffmpeg to decode any type of file. If you don't need to compile libcodegen into your app you can rely on this. Note that you need to have ffmpeg installed and accessible on your path for this to work.
+The makefile builds an example code generator that uses libcodegen, called "codegen." This code generator has more features -- it will output ID3 tag information and uses ffmpeg to decode any type of file. If you don't need to compile libcodegen into your app you can rely on this. Note that you need to have ffmpeg installed and accessible on your path for this to work.
 
     ./codegen.Linux-x86_64 billie_jean.mp3 10 10
 
