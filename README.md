@@ -2,13 +2,13 @@
 
 **Please note: this is not the final version and will likely not emit codes that match release Echoprint codes. However, this version will correctly match files.**
 
-Echoprint is an open source music fingerprint and resolving framework powered by the [The Echo Nest](http://the.echonest.com/ "The Echo Nest"). The "code generator" (library to convert PCM samples from a microphone or file into Echoprint codes) is MIT licensed and free for any use. The [server component](http://github.com/echonest/echoprint-server "echoprint-server") that stores and resolves queries is Apache licensed and free for any use. The [data for resolving to millions of songs](http://echoprint.me/data "Echoprint Data") is free for any use provided any changes or additions are merged back to the community. 
+Echoprint is an open source music fingerprint and resolving framework powered by the [The Echo Nest](http://the.echonest.com/ "The Echo Nest"). The [code generator](http://github.com/echonest/echoprint-codegen "echoprint-codegen") (library to convert PCM samples from a microphone or file into Echoprint codes) is MIT licensed and free for any use. The [server component](http://github.com/echonest/echoprint-server "echoprint-server") that stores and resolves queries is Apache licensed and free for any use. The [data for resolving to millions of songs](http://echoprint.me/data "Echoprint Data") is free for any use provided any changes or additions are merged back to the community. 
 
-There are two modes of operation:
+There are two modes of operation of the Echoprint codegen:
 
-1. the Codegen library is meant to be linked into code that passes it a buffer of PCM data and will output a code string.
+1. the codegen library (libcodegen) is meant to be linked into code that passes it a buffer of PCM data and will output a code string.
  
-2. the Codegen binary runs standalone, accepts filenames as inputs and runs in a multithreaded worker mode.
+2. the codegen binary runs standalone, accepts filenames as inputs and runs in a multithreaded worker mode.
 
 ## Requirements for the codegen library
 
