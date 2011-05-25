@@ -86,7 +86,9 @@ string Codegen::createCodeString(vector<FPCode> vCodes) {
 
 string Codegen::compress(const string& s) {
     long nDest = (long)EZ_COMPRESSMAXDESTLENGTH((float)s.size());
-    auto_ptr<unsigned char> pDest(new unsigned char[nDest]);
-    ezcompress(pDest.get(), &nDest, (unsigned char*)s.c_str(), s.size());
-    return base64_encode(pDest.get(), nDest, true);
+    unsigned char *pDest = new unsigned char[nDest];
+    ezcompress(pDest, &nDest, (unsigned char*)s.c_str(), s.size());
+    string encoded = base64_encode(pDest, nDest, true);
+    delete [] pDest;
+    return encoded;
 }
