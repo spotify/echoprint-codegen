@@ -27,11 +27,17 @@ You only need to query for 20 seconds of audio (or less sometimes) to get a resu
 
 Code generation takes a buffer of floating point PCM data sampled at 11025 Hz and mono. 
 
-    Codegen * pCodegen = new Codegen(_pSamples, _NumberSamples, offset);
+    Codegen * pCodegen = new Codegen(const float* pcm, uint numSamples, int start_offset, bool full, bool lowrank);
 
-the "offset" parameter creates a hint to the server on where the sample is taken from in the original file. If you know this (for example, if you are automatically scanning a large library of audio, choosing specific 20 seconds chunks of audio) the server will use this information but it is not required.
+    pcm: a buffer of floats, mono, 11025 Hz
+    numSamples: the number of samples
+    start_offset: creates a hint to the server on where the sample is taken from in the original file if known
+    full: creates "full" Echoprint codes (roughly 100Hz, matches in the air)
+    lowrank: creates "lowrank" Echoprint codes (roughly 5Hz, matches files)
 
-After compute, you want to call pCodegen->getCodeString() to get the code string. (The code string is just a base64 encoding of a zlib compression of the original code string, which is a series of ASCII numbers.)
+    string code = pCodegen->getFullCodeString(); 
+
+The code string is just a base64 encoding of a zlib compression of the original code string, which is a series of ASCII numbers.)
 
 The makefile builds an example code generator that uses libcodegen, called "codegen." This code generator has more features -- it will output ID3 tag information and uses ffmpeg to decode any type of file. If you don't need to compile libcodegen into your app you can rely on this. Note that you need to have ffmpeg installed and accessible on your path for this to work.
 
