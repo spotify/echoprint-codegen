@@ -47,12 +47,13 @@ Will take 10 seconds of audio from 10 seconds into the file and output JSON suit
 
     {"metadata":{"artist":"Michael jackson", "release":"800 chansons des annes 80", "title":"Billie jean", "genre":"", "bitrate":192, "sample_rate":44100, "seconds":294, "filename":"billie_jean.mp3", "samples_decoded":220598, "given_duration":10, "start_offset":10, "version":3.14}, "code_count":76, "codes":"JxVlIuNwzAMQ1fxCDL133+xo1rnGqNAEcWy/ERa2aKeZmW...
 
-You can POST this JSON directly to alpha_identify_song, for example:
+You can POST this JSON directly to the Echo Nest's song/identify, for example:
 
     curl -F "query=@post_string" http://developer.echonest.com/api/v4/song/identify?api_key=YOUR_KEY
     {"fp_lookup_time_ms": 21, "results": [{"songID": "SOAFVGQ1280ED4E371", "match_type": "fp", "title": "Billie Jean", "artist": "Michael Jackson", "artistID": "ARXPPEY1187FB51DF4", "score": 63, "release": "Thriller"}]
+    (you can also use GET, see the API description)
 
-(you can also use GET, see the API description)
+Or you can host your own [Echoprint server](http://github.com/echonest/echoprint-server "echoprint-server") and ingest or query to that.
 
 ## FAQ
 
