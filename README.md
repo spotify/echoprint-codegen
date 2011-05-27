@@ -10,7 +10,7 @@ There are two modes of operation of the Echoprint codegen:
  
 2. the codegen binary runs standalone, accepts filenames as inputs and runs in a multithreaded worker mode.
 
-## Requirements for the codegen library
+## Requirements for libcodegen
 
 * Boost >= 1.35
 
@@ -18,10 +18,6 @@ There are two modes of operation of the Echoprint codegen:
 
 * Taglib (we provide compiled libraries for Linux and OS X)
 * ffmpeg - this is called via shell and is not linked into codegen
-
-## Notes
-
-You only need to query for 20 seconds of audio (or less sometimes) to get a result.
 
 ## Notes about libcodegen:
 
@@ -39,6 +35,10 @@ Code generation takes a buffer of floating point PCM data sampled at 11025 Hz an
 
 The code string is just a base64 encoding of a zlib compression of the original code string, which is a series of ASCII numbers.)
 
+You only need to query for 20 seconds of audio (or less sometimes) to get a result.
+
+## Notes about the codegen binary
+
 The makefile builds an example code generator that uses libcodegen, called "codegen." This code generator has more features -- it will output ID3 tag information and uses ffmpeg to decode any type of file. If you don't need to compile libcodegen into your app you can rely on this. Note that you need to have ffmpeg installed and accessible on your path for this to work.
 
     ./codegen.Linux-x86_64 billie_jean.mp3 10 10
@@ -55,9 +55,14 @@ You can POST this JSON directly to the Echo Nest's [song/identify](http://develo
 
 Or you can host your own [Echoprint server](http://github.com/echonest/echoprint-server "echoprint-server") and ingest or query to that.
 
+Codegen also runs in a multithreaded mode for bulk resolving:
+
+    ./codegen.Linux-x86_64 billie_jean.mp3 -s 10 30 < file_list
+
+Will compute codes for every file in file_list for 30 seconds starting at 10 seconds. It will output a JSON list. Note that song/identify can accept lists, which will be faster than sending each code one at a time. The "tag" parameter is added to each code dictionary to match the resolving material.
+
 ## FAQ
 
-Q: I get "Couldn't decode any samples with: ffmpeg" when running the example code generator.
+Q: I get "Couldn't decode any samples with: ffmpeg" when running codegen
 
 A: When running the example code generator (codegen.$(PLATFORM)) make sure ffmpeg is accessible to your path. Try running ffmpeg filename.mp3 on the file you are testing the code generator with. If it doesn't work, codegen won't work.
-
