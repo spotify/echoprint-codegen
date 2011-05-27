@@ -57,9 +57,9 @@ Or you can host your own [Echoprint server](http://github.com/echonest/echoprint
 
 Codegen also runs in a multithreaded mode for bulk resolving:
 
-    ./codegen.Linux-x86_64 billie_jean.mp3 -s 10 30 < file_list
+    ./codegen.Linux-x86_64 -s 10 30 < file_list
 
-Will compute codes for every file in file_list for 30 seconds starting at 10 seconds. It will output a JSON list. Note that song/identify can accept lists, which will be faster than sending each code one at a time. The "tag" parameter is added to each code dictionary to match the resolving material.
+Will compute codes for every file in file_list for 30 seconds starting at 10 seconds. (It tries to be smart about the number of threads to use.) It will output a JSON list. Note that song/identify can accept lists, which will be faster than sending each code one at a time. The "tag" parameter is added to each code dictionary to match the resolving material.
 
 ## FAQ
 
