@@ -53,14 +53,16 @@ Fingerprint::Fingerprint(Spectrogram* p128Spectrogram, int offset)
     : _p128Spectrogram(p128Spectrogram), _Offset(offset) { }
 
 
+
+
 uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {
     //  E is a sgram-like matrix of energies.
     const float *pE;
     int bands, frames, i, j;
-    int deadtime = 32;
+    int deadtime = 128;
     double H[STFT_A_BANDS],taus[STFT_A_BANDS], N[STFT_A_BANDS];
     int contact[STFT_A_BANDS], lcontact[STFT_A_BANDS], tsince[STFT_A_BANDS];
-    double overfact = 1.05;  /* threshold rel. to actual peak */
+    double overfact = 1.1;  /* threshold rel. to actual peak */
     uint onset_counter = 0;
 
     // combine adjacent blocks of 8 FFT bins as sqrt(sum(X[k]^2)); thus,
@@ -85,6 +87,12 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
 
     onset_counter_for_band = new uint[STFT_A_BANDS];
 
+
+    double bn[] = {0.1883, 0.4230, 0.3392}; /* preemph filter */   // new
+    int nbn = 3;
+    double a1 = 0.98;
+    double Y0[STFT_A_BANDS];
+
     for (j = 0; j < bands; ++j) {
         onset_counter_for_band[j] = 0;
         N[j] = 0.0;
@@ -93,12 +101,27 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
         contact[j] = 0;
         lcontact[j] = 0;
         tsince[j] = 0;
+        Y0[j] = 0;  // new
+        
     }
 
     for (i = 0; i < frames; ++i) {
         for (j = 0; j < STFT_A_BANDS; ++j) { 
 
-    	    contact[j] = (pE[j] > H[j])? 1 : 0;
+
+            double xn = 0;  // new part
+            /* calculate the filter -  FIR part */
+            if (i >= 2*nbn) {
+                for (int k = 0; k < nbn; ++k) {
+                    xn += bn[k]*(pE[j-STFT_A_BANDS*k] - pE[j-STFT_A_BANDS*(2*nbn-k)]);
+                }
+            }
+            /* IIR part */
+            xn = xn + a1*Y0[j];
+            /* remember the last filtered level */
+            Y0[j] = xn;
+
+            contact[j] = (xn > H[j])? 1 : 0;  // changed
 
     	    if (contact[j] == 1 && lcontact[j] == 0) {
     	        /* attach - record the threshold level unless we have one */
@@ -108,7 +131,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
     		}
     		if (contact[j] == 1) {
     		    /* update with new threshold */
-    		    H[j] = pE[j] * overfact;
+                H[j] = xn * overfact;  // changed
     		} else {
     		    /* apply decays */
     		    H[j] = H[j] * exp(-1.0/(double)taus[j]);

@@ -12,7 +12,7 @@
 #include <vector>
 
 #define HASH_SEED 0x9ea5fa36
-#define QUANTIZE_DT_MS 3
+#define QUANTIZE_DT_MS 6
 #define QUANTIZE_A_MS 23
 #define HASH_BITMASK 0x000fffff
 #define STFT_A_BANDS 8
