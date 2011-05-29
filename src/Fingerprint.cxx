@@ -49,30 +49,30 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
 	return h;
 }
 
-Fingerprint::Fingerprint(Spectrogram* p16Spectrogram, int offset) 
-    : _p16Spectrogram(p16Spectrogram), _Offset(offset) { }
+Fingerprint::Fingerprint(Spectrogram* p128Spectrogram, int offset) 
+    : _p128Spectrogram(p128Spectrogram), _Offset(offset) { }
 
 
 uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {
     //  E is a sgram-like matrix of energies.
     const float *pE;
-    int bands, frames, i, j, k;
+    int bands, frames, i, j;
     int deadtime = 32;
     double H[STFT_A_BANDS],taus[STFT_A_BANDS], N[STFT_A_BANDS];
     int contact[STFT_A_BANDS], lcontact[STFT_A_BANDS], tsince[STFT_A_BANDS];
     double overfact = 1.05;  /* threshold rel. to actual peak */
     uint onset_counter = 0;
 
-    // Do the blocking
-    matrix_f E = _p16Spectrogram->getMatrix();
-    matrix_f Eb = matrix_f(E.size1()/4, E.size2());
+    // combine adjacent blocks of 8 FFT bins as sqrt(sum(X[k]^2)); thus,
+    //reducing the 65 spectral bins to 8 bins (forget the top bin now)
+    matrix_f E = _p128Spectrogram->getMatrix();
+    matrix_f Eb = matrix_f(E.size1(), 8);
     for(size_t x=0;x<Eb.size1();x++) {
         for(size_t y=0;y<Eb.size2();y++) {
             Eb(x,y) = 0;
-            // compute the rms of each block
-            for(k=0;k<4;k++)
-                Eb(x,y) = Eb(x,y) + (E((x*4)+k, y) * E((x*4)+k, y));
-            Eb(x,y) = sqrtf(Eb(x,y) / 1.0); // i used to divide here / 4 (b/c the M in RMS) but dpwe doesn't
+            for(size_t z=0;z<8;z++)
+                Eb(x,y) = Eb(x,y) + (E(x,(y*8)+z) * E(x,(y*8)+z));
+            Eb(x,y) = sqrtf(Eb(x,y));
         }
     }
     

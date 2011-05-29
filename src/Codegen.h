@@ -43,7 +43,7 @@ public:
     int getLowRankNumCodes(){return _LowRankNumCodes;}
     float getVersion() { return VERSION; }
 private:
-    Fingerprint* computeFullFingerprint(Spectrogram *p16Spectrogram, int start_offset);
+    Fingerprint* computeFullFingerprint(Spectrogram *p128Spectrogram, int start_offset);
     FingerprintLowRank* computeLowRankFingerprint(Spectrogram *p16Spectrogram, Spectrogram *p512Spectrogram, int start_offset);
     string createCodeString(vector<FPCode> vCodes);
 

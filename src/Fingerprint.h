@@ -15,7 +15,7 @@
 #define QUANTIZE_DT_MS 3
 #define QUANTIZE_A_MS 23
 #define HASH_BITMASK 0x000fffff
-#define STFT_A_BANDS 9
+#define STFT_A_BANDS 8
 
 struct FPCode {
     FPCode() : frame(0), code(0) {}
@@ -30,12 +30,12 @@ class Fingerprint {
 public:
     uint quantized_time_for_frame_delta(uint frame_delta);
     uint quantized_time_for_frame_absolute(uint frame);
-    Fingerprint(Spectrogram* p16Spectrogram, int offset);
+    Fingerprint(Spectrogram* p128Spectrogram, int offset);
     void Compute();
     uint adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) ;
     std::vector<FPCode>& getCodes(){return _Codes;}
 protected:
-    Spectrogram *_p16Spectrogram;
+    Spectrogram *_p128Spectrogram;
     int _Offset;
     std::vector<FPCode> _Codes;
 };
