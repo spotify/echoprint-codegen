@@ -196,23 +196,20 @@ void Fingerprint::Compute() {
                 // What time was this onset at?
                 uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(out(band,onset));
 
-                // Build up 6 pairs of deltas from the successive onset times
-                uint p[2][6];
+                
+                
+                // Build up 3 pairs of deltas from the successive onset times
+                uint p[2][3];
                 p[0][0] = (out(band,onset+1) - out(band,onset));
                 p[1][0] = (out(band,onset+2) - out(band,onset+1));
                 p[0][1] = (out(band,onset+1) - out(band,onset));
                 p[1][1] = (out(band,onset+3) - out(band,onset+1));
-                p[0][2] = (out(band,onset+1) - out(band,onset));
-                p[1][2] = (out(band,onset+4) - out(band,onset+1));
-                p[0][3] = (out(band,onset+2) - out(band,onset));
-                p[1][3] = (out(band,onset+3) - out(band,onset+2));
-                p[0][4] = (out(band,onset+2) - out(band,onset));
-                p[1][4] = (out(band,onset+4) - out(band,onset+2));
-                p[0][5] = (out(band,onset+3) - out(band,onset));
-                p[1][5] = (out(band,onset+4) - out(band,onset+3));
+                p[0][2] = (out(band,onset+2) - out(band,onset));
+                p[1][2] = (out(band,onset+3) - out(band,onset+2));
+                
             
                 // For each pair emit a code
-                for(uint k=0;k<6;k++) {
+                for(uint k=0;k<3;k++) {
                     // Quantize the time deltas to 3ms
                     short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
                     short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
