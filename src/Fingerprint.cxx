@@ -191,8 +191,8 @@ void Fingerprint::Compute() {
 
     for(unsigned char band=0;band<STFT_A_BANDS;band++) { 
         if(onset_counter_for_band[band]>0) {
-            if (onset_counter_for_band[band]>4) {
-                for(uint onset=0;onset<onset_counter_for_band[band]-4;onset++) {
+            if (onset_counter_for_band[band]>3) {
+                for(uint onset=0;onset<onset_counter_for_band[band]-3;onset++) {
                     // What time was this onset at?
                     uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(out(band,onset));
                 
