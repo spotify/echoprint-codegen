@@ -184,7 +184,6 @@ void Fingerprint::Compute() {
     uint actual_codes = 0;
     unsigned char hash_material[5];
     for(uint i=0;i<5;i++) hash_material[i] = 0;
-
     uint * onset_counter_for_band;
     matrix_u out;
     uint onset_count = adaptiveOnsets(86, out, onset_counter_for_band);
@@ -192,35 +191,35 @@ void Fingerprint::Compute() {
 
     for(unsigned char band=0;band<STFT_A_BANDS;band++) { 
         if(onset_counter_for_band[band]>0) {
-            for(uint onset=0;onset<onset_counter_for_band[band]-5;onset++) {
-                // What time was this onset at?
-                uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(out(band,onset));
+            if (onset_counter_for_band[band]>4) {
+                for(uint onset=0;onset<onset_counter_for_band[band]-4;onset++) {
+                    // What time was this onset at?
+                    uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(out(band,onset));
+                
+                    // Build up 3 pairs of deltas from the successive onset times
+                    uint p[2][3];
+                    p[0][0] = (out(band,onset+1) - out(band,onset));
+                    p[1][0] = (out(band,onset+2) - out(band,onset+1));
+                    p[0][1] = (out(band,onset+1) - out(band,onset));
+                    p[1][1] = (out(band,onset+3) - out(band,onset+1));
+                    p[0][2] = (out(band,onset+2) - out(band,onset));
+                    p[1][2] = (out(band,onset+3) - out(band,onset+2));
 
-                
-                
-                // Build up 3 pairs of deltas from the successive onset times
-                uint p[2][3];
-                p[0][0] = (out(band,onset+1) - out(band,onset));
-                p[1][0] = (out(band,onset+2) - out(band,onset+1));
-                p[0][1] = (out(band,onset+1) - out(band,onset));
-                p[1][1] = (out(band,onset+3) - out(band,onset+1));
-                p[0][2] = (out(band,onset+2) - out(band,onset));
-                p[1][2] = (out(band,onset+3) - out(band,onset+2));
-                
-            
-                // For each pair emit a code
-                for(uint k=0;k<3;k++) {
-                    // Quantize the time deltas to 3ms
-                    short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
-                    short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
-                    // Create a key from the time deltas and the band index
-                    memcpy(hash_material+0, (const void*)&time_delta0, 2);
-                    memcpy(hash_material+2, (const void*)&time_delta1, 2);
-                    memcpy(hash_material+4, (const void*)&band, 1);
-                    uint hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
-                    // Set the code alongside the time of onset
-                    _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
-                    //fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %u at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);
+                    // For each pair emit a code
+                    for(uint k=0;k<3;k++) {
+                        // Quantize the time deltas to 3ms
+                        short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
+                        short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
+                        // Create a key from the time deltas and the band index
+                        memcpy(hash_material+0, (const void*)&time_delta0, 2);
+                        memcpy(hash_material+2, (const void*)&time_delta1, 2);
+                        memcpy(hash_material+4, (const void*)&band, 1);
+                        uint hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
+
+                        // Set the code alongside the time of onset
+                        _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
+                        //fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %u at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);
+                    }
                 }
             }
         }
