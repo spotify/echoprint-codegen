@@ -18,6 +18,12 @@
     // Nothing yet
 #endif
 
+#define C_LEN 128
+#define SUBBANDS 8
+#define M_ROWS 8
+#define M_COLS 16
+
+
 
 class AudioStreamInput;
 
@@ -30,19 +36,20 @@ public:
     void Compute();
 public:
     inline uint getNumFrames() const {return _NumFrames;}
-    inline uint getNumBands() const {return _Bands;}
-    matrix_row_f getFrame(uint nIndex) {return row(_Data, nIndex);} 
-    const matrix_f& getMatrix() {return _Data;}  
+    inline uint getNumBands() const {return SUBBANDS;}
+    const matrix_f& getMatrixI() {return _DataI;}  
+    const matrix_f& getMatrixR() {return _DataR;}  
+    
 protected:
 
     const float* _pSamples;
     uint _NumSamples;
     uint _NumFrames;
-    matrix_f _Data;
     matrix_f _C;
-    uint _WLen;
-    uint _Bands;
-    uint _Hop;
+    matrix_f _Mi;
+    matrix_f _Mr;
+    matrix_f _DataI;
+    matrix_f _DataR;
 
 private:
     void Init();

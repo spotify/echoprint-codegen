@@ -22,6 +22,7 @@ MODULES_LIB = \
     FingerprintLowRank.o \
     MatrixUtility.o \
     Spectrogram.o \
+    SubbandAnalysis.o \
     VectorUtility.o \
     fft/kiss_fft.o \
     fft/kiss_fftr.o \
