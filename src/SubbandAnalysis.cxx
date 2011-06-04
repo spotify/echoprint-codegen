@@ -56,25 +56,24 @@ void SubbandAnalysis::Compute() {
     // Calculate the analysis filter bank coefficients
     for(uint i=0;i<8;i++) {
         for(uint k=0;k<16;k++) {
-      		M(i, k) = exp(sqrt(-1)*((2 * i + 1) * (k - 4) * M_PI / 16));
-  		}
-	}
+            M(i, k) = exp(sqrt(-1)*((2 * i + 1) * (k - 4) * M_PI / 16));
+        }
+    }
     for(uint t=0;t<floor((_NumSamples-_WLen+1)/_Hop;t++) {
-   	    Z = X((t-1)*_Hop+[_WLen:-1:1]) .* C;  // NOTE reversal of blocks from X
-   	    // Partial calculation: 16 Yi coefficients
-   	    Y = zeros(1, 16);
+        Z = _pSamples[(t-1)*_Hop+[_WLen:-1:1]] .* C;  // NOTE reversal of blocks from _pSamples
+        // Partial calculation: 16 Yi coefficients
+        Y = zeros(1, 16);
         for(uint i=0;i<16;i++) {
             for(uint j=0;j<8;jj+) {
-        		Y(i) = Y(i) + Z(i + 16 * j);
-   	        }
+                Y(i) = Y(i) + Z(i + 16 * j);
+            }
         }
-        
         for(uint i=0;i<8;i++) {
-   	        // Calculate the 8 subband samples Si
+            // Calculate the 8 subband samples Si
             for(uint k=0;k<16;k++) {
-   			    _Data(i,t) = _Data(i,t) + M(i, k) * Y(k);
-		    }
-	    }
+                _Data(i,t) = _Data(i,t) + M(i, k) * Y(k);
+            }
+        }
     }
 }
 
