@@ -46,8 +46,6 @@ Fingerprint::Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset)
     : _pSubbandAnalysis(pSubbandAnalysis), _Offset(offset) { }
 
 
-
-
 uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {
     //  E is a sgram-like matrix of energies.
     const float *pE;
@@ -60,13 +58,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
 
     matrix_f E = _pSubbandAnalysis->getMatrix();
 
-
-    // Now integrate blocks of <blocking> from windows of <blocking*overblock>
-
-    // Take successive stretches of 8 subband samples and sums their
-    // energy under a hann window, then hops by 4 samples (50% window
-    // overlap).
-    
+    // Take successive stretches of 8 subband samples and sum their energy under a hann window, then hop by 4 samples (50% window overlap).
     int hop = 4;
     int nsm = 8;
     float ham[nsm];
@@ -78,15 +70,13 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
     MatrixUtility::clear(Eb);
     for(i=0;i<nc;i++) {
         for(j=0;j<SUBBANDS;j++) {
-            for(k=0;k<nsm;k++) {
-                Eb(i,j) = Eb(i,j) + ( E(j,(i*hop)+k) * ham[k]);
-            }
-            Eb(i,j) = sqrt(Eb(i,j));
+            for(k=0;k<nsm;k++)  Eb(i,j) = Eb(i,j) + ( E(j,(i*hop)+k) * ham[k]);
+            Eb(i,j) = sqrtf(Eb(i,j));
         }
     }
     
-    frames = Eb.size1(); // 20K
-    bands = Eb.size2(); // 8
+    frames = Eb.size1(); 
+    bands = Eb.size2(); 
     pE = &Eb.data()[0];
 
     out = matrix_u(SUBBANDS, frames); 
@@ -105,13 +95,13 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
         contact[j] = 0;
         lcontact[j] = 0;
         tsince[j] = 0;
-        Y0[j] = 0;  // new
+        Y0[j] = 0; 
     }
 
     for (i = 0; i < frames; ++i) {
         for (j = 0; j < SUBBANDS; ++j) { 
 
-            double xn = 0;  // new part
+            double xn = 0;  
             /* calculate the filter -  FIR part */
             if (i >= 2*nbn) {
                 for (int k = 0; k < nbn; ++k) {
@@ -123,7 +113,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
             /* remember the last filtered level */
             Y0[j] = xn;
 
-            contact[j] = (xn > H[j])? 1 : 0;  // changed
+            contact[j] = (xn > H[j])? 1 : 0;
 
     	    if (contact[j] == 1 && lcontact[j] == 0) {
     	        /* attach - record the threshold level unless we have one */
@@ -133,7 +123,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
     		}
     		if (contact[j] == 1) {
     		    /* update with new threshold */
-                H[j] = xn * overfact;  // changed
+                H[j] = xn * overfact;
     		} else {
     		    /* apply decays */
     		    H[j] = H[j] * exp(-1.0/(double)taus[j]);
@@ -189,9 +179,9 @@ void Fingerprint::Compute() {
     for(uint i=0;i<5;i++) hash_material[i] = 0;
     uint * onset_counter_for_band;
     matrix_u out;
-    //uint onset_count = adaptiveOnsets(86, out, onset_counter_for_band);
     uint onset_count = adaptiveOnsets(345, out, onset_counter_for_band);
     _Codes.resize(onset_count*6);
+
     for(unsigned char band=0;band<SUBBANDS;band++) { 
         if (onset_counter_for_band[band]>4) {
             for(uint onset=0;onset<onset_counter_for_band[band]-4;onset++) {
@@ -211,9 +201,10 @@ void Fingerprint::Compute() {
                 p[1][4] = (out(band,onset+4) - out(band,onset+2));
                 p[0][5] = (out(band,onset+3) - out(band,onset));
                 p[1][5] = (out(band,onset+4) - out(band,onset+3));
+
                 // For each pair emit a code
                 for(uint k=0;k<6;k++) {
-                    // Quantize the time deltas to 3ms
+                    // Quantize the time deltas to 23ms
                     short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
                     short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
                     // Create a key from the time deltas and the band index
