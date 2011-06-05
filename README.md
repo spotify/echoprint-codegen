@@ -23,13 +23,11 @@ There are two modes of operation of the Echoprint codegen:
 
 Code generation takes a buffer of floating point PCM data sampled at 11025 Hz and mono. 
 
-    Codegen * pCodegen = new Codegen(const float* pcm, uint numSamples, int start_offset, bool full, bool lowrank);
+    Codegen * pCodegen = new Codegen(const float* pcm, uint numSamples, int start_offset);
 
     pcm: a buffer of floats, mono, 11025 Hz
     numSamples: the number of samples
     start_offset: creates a hint to the server on where the sample is taken from in the original file if known
-    full: creates "full" Echoprint codes (roughly 25Hz, matches in the air)
-    lowrank: creates "lowrank" Echoprint codes (roughly 5Hz, matches files)
 
     string code = pCodegen->getFullCodeString(); 
 
