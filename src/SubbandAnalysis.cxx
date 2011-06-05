@@ -38,19 +38,12 @@ void SubbandAnalysis::Compute() {
     
     matrix_f Z = matrix_f(C_LEN,1);
     matrix_f Y = matrix_f(M_COLS,1);
-    MatrixUtility::clear(Y);
-    MatrixUtility::clear(Z);
     
     _NumFrames = (_NumSamples - C_LEN + 1)/SUBBANDS;
     assert(_NumFrames > 0);
 
-    matrix_f DataI = matrix_f(SUBBANDS, _NumFrames);
-    matrix_f DataR = matrix_f(SUBBANDS, _NumFrames);
     _Data = matrix_f(SUBBANDS, _NumFrames);
     
-    MatrixUtility::clear(DataI);
-    MatrixUtility::clear(DataR);
-    MatrixUtility::clear(_Data);
 
     for (t = 0; t < _NumFrames; ++t) {
         for (i = 0; i < C_LEN; ++i) {
@@ -66,13 +59,12 @@ void SubbandAnalysis::Compute() {
     	    }
         }
         for (i = 0; i < M_ROWS; ++i) {
+            float Dr = 0, Di = 0;
             for (j = 0; j < M_COLS; ++j) {
-                DataR(i, t) += _Mr(i,j) * Y(j,0);
-                DataI(i, t) -= _Mi(i,j) * Y(j,0);
+                Dr += _Mr(i,j) * Y(j,0);
+                Di -= _Mi(i,j) * Y(j,0);
             }
-            _Data(i,t) = hypotf(DataR(i,t), DataI(i,t));
-            _Data(i,t) = _Data(i,t) * _Data(i,t);
-            
+            _Data(i,t) = Dr*Dr + Di*Di;
         }
     }
 }
