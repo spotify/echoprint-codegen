@@ -13,7 +13,6 @@
 
 #include "Common.h"
 #include "AudioBufferInput.h"
-#include "Spectrogram.h"
 #include "SubbandAnalysis.h"
 #include "Fingerprint.h"
 
@@ -32,27 +31,21 @@ using namespace std;
 #endif
 
 class Fingerprint;
-class FingerprintLowRank;
 
 class CODEGEN_API Codegen {
 public:
-    Codegen(const float* pcm, uint numSamples, int start_offset, bool full, bool lowrank);
+    Codegen(const float* pcm, uint numSamples, int start_offset);
 
-    string getFullCodeString(){return _FullCodeString;}
-    string getLowRankCodeString(){return _LowRankCodeString;}
-    int getFullNumCodes(){return _FullNumCodes;}
-    int getLowRankNumCodes(){return _LowRankNumCodes;}
+    string getCodeString(){return _CodeString;}
+    int getNumCodes(){return _NumCodes;}
     float getVersion() { return VERSION; }
 private:
-    Fingerprint* computeFullFingerprint(SubbandAnalysis *pSubbandAnalysis, int start_offset);
-    FingerprintLowRank* computeLowRankFingerprint(Spectrogram *p16Spectrogram, Spectrogram *p512Spectrogram, int start_offset);
+    Fingerprint* computeFingerprint(SubbandAnalysis *pSubbandAnalysis, int start_offset);
     string createCodeString(vector<FPCode> vCodes);
 
     string compress(const string& s);
-    string _FullCodeString;
-    string _LowRankCodeString;
-    int _FullNumCodes;
-    int _LowRankNumCodes;
+    string _CodeString;
+    int _NumCodes;
 };
 
 #endif

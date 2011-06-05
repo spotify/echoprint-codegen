@@ -6,7 +6,7 @@ ARCH=`uname -m`
 #OPTFLAGS=-g -O0
 OPTFLAGS=-O3
 CXXFLAGS=-Wall -I/usr/local/include/boost-1_35 -fPIC $(OPTFLAGS)
-CFLAGS=-Wall -Ifft -fPIC $(OPTFLAGS)
+CFLAGS=-Wall -fPIC $(OPTFLAGS)
 ifeq ($(UNAME),Darwin)
 	LDFLAGS=-L/usr/local/lib ../lib/libtag-$(PLATFORM)-$(ARCH).a -lz -lpthread -framework Accelerate -framework vecLib $(OPTFLAGS)
 else
@@ -19,13 +19,9 @@ MODULES_LIB = \
     Base64.o \
     Codegen.o \
     Fingerprint.o \
-    FingerprintLowRank.o \
     MatrixUtility.o \
-    Spectrogram.o \
     SubbandAnalysis.o \
     VectorUtility.o \
-    fft/kiss_fft.o \
-    fft/kiss_fftr.o \
     easyzlib.o
 MODULES = $(MODULES_LIB) Metadata.o
 
@@ -54,7 +50,6 @@ endif
 
 clean:
 	rm -f *.o ../codegen.$(PLATFORM)-$(ARCH)
-	rm -f fft/*.o
 	rm -f *.so
 ifeq ($(UNAME),Darwin)
 	rm -f *.dylib
