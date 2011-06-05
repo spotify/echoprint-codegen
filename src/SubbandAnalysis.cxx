@@ -70,7 +70,7 @@ void SubbandAnalysis::Compute() {
                 DataR(i, t) += _Mr(i,j) * Y(j,0);
                 DataI(i, t) -= _Mi(i,j) * Y(j,0);
             }
-            _Data(i,t) = hypot(DataR(i,t), DataI(i,t));
+            _Data(i,t) = hypotf(DataR(i,t), DataI(i,t));
             _Data(i,t) = _Data(i,t) * _Data(i,t);
             
         }

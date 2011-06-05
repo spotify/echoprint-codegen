@@ -4,7 +4,7 @@ CC=gcc
 PLATFORM=`uname`
 ARCH=`uname -m`
 #OPTFLAGS=-g -O0
-OPTFLAGS=-O3
+OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
 CXXFLAGS=-Wall -I/usr/local/include/boost-1_35 -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -fPIC $(OPTFLAGS)
 ifeq ($(UNAME),Darwin)
