@@ -29,7 +29,7 @@ Code generation takes a buffer of floating point PCM data sampled at 11025 Hz an
     numSamples: the number of samples
     start_offset: creates a hint to the server on where the sample is taken from in the original file if known
 
-    string code = pCodegen->getFullCodeString(); 
+    string code = pCodegen->getCodeString(); 
 
 The code string is just a base64 encoding of a zlib compression of the original code string, which is a hex encoded series of ASCII numbers. See API/fp.py in echoprint-server for decoding help.
 
