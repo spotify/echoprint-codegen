@@ -37,7 +37,7 @@ void SubbandAnalysis::Compute() {
     uint t, i, j;
     
     matrix_f Z = matrix_f(C_LEN,1);
-    matrix_f Y = matrix_f(M_COLS,1);
+    float Y[M_COLS];
     
     _NumFrames = (_NumSamples - C_LEN + 1)/SUBBANDS;
     assert(_NumFrames > 0);
@@ -51,18 +51,18 @@ void SubbandAnalysis::Compute() {
         }
 
         for (i = 0; i < M_COLS; ++i) {
-            Y(i,0) = Z(i,0);
+            Y[i] = Z(i,0);
         }
         for (i = 0; i < M_COLS; ++i) {
             for (j = 1; j < M_ROWS; ++j) {
-                Y(i,0) += Z(i + M_COLS*j,0);
+                Y[i] += Z(i + M_COLS*j,0);
     	    }
         }
         for (i = 0; i < M_ROWS; ++i) {
             float Dr = 0, Di = 0;
             for (j = 0; j < M_COLS; ++j) {
-                Dr += _Mr(i,j) * Y(j,0);
-                Di -= _Mi(i,j) * Y(j,0);
+                Dr += _Mr(i,j) * Y[j];
+                Di -= _Mi(i,j) * Y[j];
             }
             _Data(i,t) = Dr*Dr + Di*Di;
         }
