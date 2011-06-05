@@ -8,7 +8,6 @@
 #include "Params.h"
 #include "MatrixUtility.h"
 
-
 #define C_LEN 128
 #define SUBBANDS 8
 #define M_ROWS 8
@@ -50,7 +49,6 @@ public:
     const matrix_f& getMatrix() {return _Data;}  
     
 protected:
-
     const float* _pSamples;
     uint _NumSamples;
     uint _NumFrames;

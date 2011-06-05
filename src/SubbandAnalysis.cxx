@@ -1,6 +1,5 @@
 //
 //  Copyright 2011 The Echo Nest. All rights reserved.
-//
 
 
 #include "SubbandAnalysis.h"
@@ -36,26 +35,25 @@ void SubbandAnalysis::Init() {
 void SubbandAnalysis::Compute() {
     uint t, i, j;
     
-    matrix_f Z = matrix_f(C_LEN,1);
+    float Z[C_LEN];
     float Y[M_COLS];
     
     _NumFrames = (_NumSamples - C_LEN + 1)/SUBBANDS;
     assert(_NumFrames > 0);
 
     _Data = matrix_f(SUBBANDS, _NumFrames);
-    
 
     for (t = 0; t < _NumFrames; ++t) {
         for (i = 0; i < C_LEN; ++i) {
-            Z(i,0) = _pSamples[ t*SUBBANDS + i] * SubbandFilterBank::C[i];
+            Z[i] = _pSamples[ t*SUBBANDS + i] * SubbandFilterBank::C[i];
         }
 
         for (i = 0; i < M_COLS; ++i) {
-            Y[i] = Z(i,0);
+            Y[i] = Z[i];
         }
         for (i = 0; i < M_COLS; ++i) {
             for (j = 1; j < M_ROWS; ++j) {
-                Y[i] += Z(i + M_COLS*j,0);
+                Y[i] += Z[i + M_COLS*j];
     	    }
         }
         for (i = 0; i < M_ROWS; ++i) {

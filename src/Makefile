@@ -1,17 +1,12 @@
 UNAME := $(shell uname -s)
 CXX=g++
 CC=gcc
-PLATFORM=`uname`
 ARCH=`uname -m`
 #OPTFLAGS=-g -O0
 OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
 CXXFLAGS=-Wall -I/usr/local/include/boost-1_35 -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -fPIC $(OPTFLAGS)
-ifeq ($(UNAME),Darwin)
-	LDFLAGS=-L/usr/local/lib ../lib/libtag-$(PLATFORM)-$(ARCH).a -lz -lpthread -framework Accelerate -framework vecLib $(OPTFLAGS)
-else
-	LDFLAGS=-L/usr/local/lib ../lib/libtag-$(PLATFORM)-$(ARCH).a -lz -lpthread $(OPTFLAGS)
-endif
+LDFLAGS=-L/usr/local/lib ../lib/libtag-$(UNAME)-$(ARCH).a -lz -lpthread $(OPTFLAGS)
 
 MODULES_LIB = \
     AudioBufferInput.o \
@@ -26,14 +21,12 @@ MODULES_LIB = \
 MODULES = $(MODULES_LIB) Metadata.o
 
 main: $(MODULES) main.o
-	$(CXX) $(MODULES) $(LDFLAGS) main.o -o ../codegen.$(PLATFORM)-$(ARCH) 
+	$(CXX) $(MODULES) $(LDFLAGS) main.o -o ../codegen.$(UNAME)-$(ARCH) 
+	$(CXX) -shared -fPIC -o libcodegen.$(UNAME)-$(ARCH).so $(MODULES_LIB)
 ifeq ($(UNAME),Darwin)
-	$(CXX) -shared -fPIC -o libcodegen.$(PLATFORM)-$(ARCH).so $(MODULES_LIB) -framework Accelerate -framework vecLib
 	libtool -dynamic -flat_namespace -install_name libcodegen.4.0.0.dylib -lSystem -compatibility_version 4.0 -macosx_version_min 10.6 \
 	    -current_version 4.0.0 -o libcodegen.4.0.0.dylib -undefined suppress \
 	    $(MODULES) -framework vecLib -framework Accelerate
-else
-	$(CXX) -shared -fPIC -o libcodegen.$(PLATFORM)-$(ARCH).so $(MODULES_LIB) 
 endif
 
 %.o: %.c %.h
@@ -49,7 +42,7 @@ endif
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f *.o ../codegen.$(PLATFORM)-$(ARCH)
+	rm -f *.o ../codegen.$(UNAME)-$(ARCH)
 	rm -f *.so
 ifeq ($(UNAME),Darwin)
 	rm -f *.dylib
