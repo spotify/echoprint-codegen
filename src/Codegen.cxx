@@ -21,8 +21,8 @@ extern "C" {
 }
 #endif
 
-Fingerprint* Codegen::computeFullFingerprint(Spectrogram *p128Spectrogram, int start_offset) {
-    Fingerprint *pFingerprint = new Fingerprint(p128Spectrogram, start_offset);
+Fingerprint* Codegen::computeFullFingerprint(SubbandAnalysis *pSubbandAnalysis, int start_offset) {
+    Fingerprint *pFingerprint = new Fingerprint(pSubbandAnalysis, start_offset);
     pFingerprint->Compute();
     return pFingerprint;
 }
@@ -46,13 +46,13 @@ Codegen::Codegen(const float* pcm, uint numSamples, int start_offset, bool full,
     _LowRankNumCodes = 0;
     if(full) {
         Fingerprint * pFingerprint;
-        Spectrogram *p128Spectrogram = new Spectrogram(pAudio, 32, 128, 128);
-        p128Spectrogram->Compute();
-        pFingerprint = computeFullFingerprint(p128Spectrogram, start_offset);
+        SubbandAnalysis *pSubbandAnalysis = new SubbandAnalysis(pAudio);
+        pSubbandAnalysis->Compute();
+        pFingerprint = computeFullFingerprint(pSubbandAnalysis, start_offset);
         _FullCodeString = createCodeString(pFingerprint->getCodes());
         _FullNumCodes = pFingerprint->getCodes().size();
         delete pFingerprint;
-        delete p128Spectrogram;
+        delete pSubbandAnalysis;
     }
     if(lowrank) {
         Spectrogram *p16Spectrogram = new Spectrogram(pAudio, 8, 16, 16);

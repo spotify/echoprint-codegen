@@ -12,6 +12,7 @@
 #include "Fingerprint.h"
 
 #define QUANTIZE_MS 52
+#define STFT_A_BANDS 9
 #define STFT_B_BANDS 257 
 
 class FingerprintLowRank {

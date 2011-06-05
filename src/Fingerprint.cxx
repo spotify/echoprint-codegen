@@ -6,13 +6,6 @@
 #include "Params.h"
 
 
-#ifdef __APPLE__
-// iOS debugging
-extern "C" {
-	extern void NSLog(CFStringRef format, ...); 
-}
-#endif
-
 unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     // MurmurHash2, by Austin Appleby http://sites.google.com/site/murmurhash/
     // m and r are constants set by austin
@@ -49,8 +42,8 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
 	return h;
 }
 
-Fingerprint::Fingerprint(Spectrogram* p128Spectrogram, int offset) 
-    : _p128Spectrogram(p128Spectrogram), _Offset(offset) { }
+Fingerprint::Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset) 
+    : _pSubbandAnalysis(pSubbandAnalysis), _Offset(offset) { }
 
 
 
@@ -58,40 +51,51 @@ Fingerprint::Fingerprint(Spectrogram* p128Spectrogram, int offset)
 uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {
     //  E is a sgram-like matrix of energies.
     const float *pE;
-    int bands, frames, i, j;
+    int bands, frames, i, j, k;
     int deadtime = 128;
-    double H[STFT_A_BANDS],taus[STFT_A_BANDS], N[STFT_A_BANDS];
-    int contact[STFT_A_BANDS], lcontact[STFT_A_BANDS], tsince[STFT_A_BANDS];
+    double H[SUBBANDS],taus[SUBBANDS], N[SUBBANDS];
+    int contact[SUBBANDS], lcontact[SUBBANDS], tsince[SUBBANDS];
     double overfact = 1.1;  /* threshold rel. to actual peak */
     uint onset_counter = 0;
 
-    // combine adjacent blocks of 8 FFT bins as sqrt(sum(X[k]^2)); thus,
-    //reducing the 65 spectral bins to 8 bins (forget the top bin now)
-    matrix_f E = _p128Spectrogram->getMatrix();
-    matrix_f Eb = matrix_f(E.size1(), 8);
-    for(size_t x=0;x<Eb.size1();x++) {
-        for(size_t y=0;y<Eb.size2();y++) {
-            Eb(x,y) = 0;
-            for(size_t z=0;z<8;z++)
-                Eb(x,y) = Eb(x,y) + (E(x,(y*8)+z) * E(x,(y*8)+z));
-            Eb(x,y) = sqrtf(Eb(x,y));
+    matrix_f E = _pSubbandAnalysis->getMatrix();
+
+
+    // Now integrate blocks of <blocking> from windows of <blocking*overblock>
+
+    // Take successive stretches of 8 subband samples and sums their
+    // energy under a hann window, then hops by 4 samples (50% window
+    // overlap).
+    
+    int hop = 4;
+    int nsm = 8;
+    float ham[nsm];
+    for(int i = 0 ; i != nsm ; i++)
+        ham[i] = .5 - .5*cos( (2.*M_PI/(nsm-1))*i);
+
+    int nc =  floor((float)E.size2()/(float)hop)-(floor((float)nsm/(float)hop)-1);
+    matrix_f Eb = matrix_f(nc, 8);
+    MatrixUtility::clear(Eb);
+    for(i=0;i<nc;i++) {
+        for(j=0;j<SUBBANDS;j++) {
+            for(k=0;k<nsm;k++) {
+                Eb(i,j) = Eb(i,j) + ( E(j,(i*hop)+k) * ham[k]);
+            }
+            Eb(i,j) = sqrt(Eb(i,j));
         }
     }
-
+    
     frames = Eb.size1(); // 20K
-    bands = Eb.size2(); // 9
+    bands = Eb.size2(); // 8
     pE = &Eb.data()[0];
 
-
-    out = matrix_u(STFT_A_BANDS, frames); 
-
-    onset_counter_for_band = new uint[STFT_A_BANDS];
-
+    out = matrix_u(SUBBANDS, frames); 
+    onset_counter_for_band = new uint[SUBBANDS];
 
     double bn[] = {0.1883, 0.4230, 0.3392}; /* preemph filter */   // new
     int nbn = 3;
     double a1 = 0.98;
-    double Y0[STFT_A_BANDS];
+    double Y0[SUBBANDS];
 
     for (j = 0; j < bands; ++j) {
         onset_counter_for_band[j] = 0;
@@ -102,18 +106,16 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
         lcontact[j] = 0;
         tsince[j] = 0;
         Y0[j] = 0;  // new
-        
     }
 
     for (i = 0; i < frames; ++i) {
-        for (j = 0; j < STFT_A_BANDS; ++j) { 
-
+        for (j = 0; j < SUBBANDS; ++j) { 
 
             double xn = 0;  // new part
             /* calculate the filter -  FIR part */
             if (i >= 2*nbn) {
                 for (int k = 0; k < nbn; ++k) {
-                    xn += bn[k]*(pE[j-STFT_A_BANDS*k] - pE[j-STFT_A_BANDS*(2*nbn-k)]);
+                    xn += bn[k]*(pE[j-SUBBANDS*k] - pE[j-SUBBANDS*(2*nbn-k)]);
                 }
             }
             /* IIR part */
@@ -190,7 +192,7 @@ void Fingerprint::Compute() {
     //uint onset_count = adaptiveOnsets(86, out, onset_counter_for_band);
     uint onset_count = adaptiveOnsets(345, out, onset_counter_for_band);
     _Codes.resize(onset_count*6);
-    for(unsigned char band=0;band<STFT_A_BANDS;band++) { 
+    for(unsigned char band=0;band<SUBBANDS;band++) { 
         if (onset_counter_for_band[band]>4) {
             for(uint onset=0;onset<onset_counter_for_band[band]-4;onset++) {
                 // What time was this onset at?

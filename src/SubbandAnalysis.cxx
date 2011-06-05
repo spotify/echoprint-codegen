@@ -29,9 +29,8 @@ void SubbandAnalysis::Init() {
         for (uint k = 0; k < M_COLS; ++k) {
             _Mr(i,k) = cos((2*i + 1)*(k-4)*(M_PI/16.0));
     		_Mi(i,k) = sin((2*i + 1)*(k-4)*(M_PI/16.0));
-		}
+        }
     }
-    
 }
 
 void SubbandAnalysis::Compute() {
@@ -42,17 +41,20 @@ void SubbandAnalysis::Compute() {
     MatrixUtility::clear(Y);
     MatrixUtility::clear(Z);
     
-	_NumFrames = (_NumSamples - C_LEN + 1)/SUBBANDS;
+    _NumFrames = (_NumSamples - C_LEN + 1)/SUBBANDS;
     assert(_NumFrames > 0);
 
-    _DataI = matrix_f(SUBBANDS, _NumFrames);
-    _DataR = matrix_f(SUBBANDS, _NumFrames);
-    MatrixUtility::clear(_DataI);
-    MatrixUtility::clear(_DataR);
+    matrix_f DataI = matrix_f(SUBBANDS, _NumFrames);
+    matrix_f DataR = matrix_f(SUBBANDS, _NumFrames);
+    _Data = matrix_f(SUBBANDS, _NumFrames);
+    
+    MatrixUtility::clear(DataI);
+    MatrixUtility::clear(DataR);
+    MatrixUtility::clear(_Data);
 
     for (t = 0; t < _NumFrames; ++t) {
         for (i = 0; i < C_LEN; ++i) {
-            Z(i,0) = _pSamples[ t*SUBBANDS + i] * _C[i];
+            Z(i,0) = _pSamples[ t*SUBBANDS + i] * SubbandFilterBank::C[i];
         }
 
         for (i = 0; i < M_COLS; ++i) {
@@ -65,11 +67,13 @@ void SubbandAnalysis::Compute() {
         }
         for (i = 0; i < M_ROWS; ++i) {
             for (j = 0; j < M_COLS; ++j) {
-                _DataR(i, t) += _Mr(i,j) * Y(j,0);
-                _DataI(i, t) -= _Mi(i,j) * Y(j,0);
+                DataR(i, t) += _Mr(i,j) * Y(j,0);
+                DataI(i, t) -= _Mi(i,j) * Y(j,0);
             }
+            _Data(i,t) = hypot(DataR(i,t), DataI(i,t));
+            _Data(i,t) = _Data(i,t) * _Data(i,t);
+            
         }
-	}
-
+    }
 }
 

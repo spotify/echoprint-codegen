@@ -14,6 +14,7 @@
 #include "Common.h"
 #include "AudioBufferInput.h"
 #include "Spectrogram.h"
+#include "SubbandAnalysis.h"
 #include "Fingerprint.h"
 
 using namespace std;
@@ -43,7 +44,7 @@ public:
     int getLowRankNumCodes(){return _LowRankNumCodes;}
     float getVersion() { return VERSION; }
 private:
-    Fingerprint* computeFullFingerprint(Spectrogram *p128Spectrogram, int start_offset);
+    Fingerprint* computeFullFingerprint(SubbandAnalysis *pSubbandAnalysis, int start_offset);
     FingerprintLowRank* computeLowRankFingerprint(Spectrogram *p16Spectrogram, Spectrogram *p512Spectrogram, int start_offset);
     string createCodeString(vector<FPCode> vCodes);
 

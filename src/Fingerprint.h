@@ -7,7 +7,7 @@
 #define FINGERPRINT_H
 
 #include "Common.h"
-#include "Spectrogram.h"
+#include "SubbandAnalysis.h"
 #include "MatrixUtility.h"
 #include <vector>
 
@@ -15,7 +15,7 @@
 #define QUANTIZE_DT_S (256.0/11025.0)
 #define QUANTIZE_A_S (256.0/11025.0)
 #define HASH_BITMASK 0x000fffff
-#define STFT_A_BANDS 8
+#define SUBBANDS 8
 
 struct FPCode {
     FPCode() : frame(0), code(0) {}
@@ -30,12 +30,12 @@ class Fingerprint {
 public:
     uint quantized_time_for_frame_delta(uint frame_delta);
     uint quantized_time_for_frame_absolute(uint frame);
-    Fingerprint(Spectrogram* p128Spectrogram, int offset);
+    Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset);
     void Compute();
     uint adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) ;
     std::vector<FPCode>& getCodes(){return _Codes;}
 protected:
-    Spectrogram *_p128Spectrogram;
+    SubbandAnalysis *_pSubbandAnalysis;
     int _Offset;
     std::vector<FPCode> _Codes;
 };
