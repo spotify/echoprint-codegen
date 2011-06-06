@@ -1,5 +1,7 @@
 //
-//  Copyright 2011 The Echo Nest. All rights reserved.
+//  echoprint-codegen
+//  Copyright 2011 The Echo Nest Corporation. All rights reserved.
+//
 
 
 #include "SubbandAnalysis.h"

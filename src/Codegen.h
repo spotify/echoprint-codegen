@@ -1,12 +1,14 @@
 //
-//  Copyright 2011 The Echo Nest. All rights reserved.
+//  echoprint-codegen
+//  Copyright 2011 The Echo Nest Corporation. All rights reserved.
 //
+
 
 #ifndef CODEGEN_H
 #define CODEGEN_H
 
 // Entry point for generating codes from PCM data.
-#define VERSION 4.00
+#define VERSION 4.10
 
 #include <memory>
 #include <string>

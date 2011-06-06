@@ -1,3 +1,6 @@
+echoprint-codegen is open source software licensed under the "MIT License"
+More information about the MIT License: http://en.wikipedia.org/wiki/MIT_License
+
 Copyright (c) 2011 The Echo Nest Corporation
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,3 +20,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+
+libcodegen makes use of the following pieces of software:
+
+- Murmurhash by Austin Appleby (Public Domain / MIT)
+http://sites.google.com/site/murmurhash/
+
+- Boost (Boost Software License)
+http://www.boost.org/users/license.html
+
+- Base64.cpp and Base64.h, see source files for license
+Copyright (C) 2004-2008 René Nyffenegger
+
+
+codegen (the example binary that the makefile also builds) makes use of libcodegen and:
+
+- Taglib (LGPL)
+http://developer.kde.org/~wheeler/taglib.html
+
+- ffmpeg (via system shell, you must install ffmpeg on your own)
+http://www.ffmpeg.org/legal.html
+

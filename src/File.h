@@ -1,6 +1,8 @@
 //
-//  Copyright 2011 The Echo Nest. All rights reserved.
+//  echoprint-codegen
+//  Copyright 2011 The Echo Nest Corporation. All rights reserved.
 //
+
 
 #ifndef FILE_H
 #define FILE_H
