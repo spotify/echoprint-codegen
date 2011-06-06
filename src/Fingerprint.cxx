@@ -6,7 +6,7 @@
 
 #include "Fingerprint.h"
 #include "Params.h"
-
+#include <string.h>
 
 unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     // MurmurHash2, by Austin Appleby http://sites.google.com/site/murmurhash/
