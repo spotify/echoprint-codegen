@@ -67,8 +67,8 @@ string Codegen::compress(const string& s) {
     stream.opaque = (voidpf)0;
     deflateInit(&stream, Z_DEFAULT_COMPRESSION);
     do {
-		stream.next_out = compressed;
-		stream.avail_out = max_compressed_length;
+        stream.next_out = compressed;
+        stream.avail_out = max_compressed_length;
         if(deflate(&stream, Z_FINISH) == Z_STREAM_END) break;
     } while (stream.avail_out == 0);
     uint compressed_length = stream.total_out;
