@@ -15,8 +15,7 @@ MODULES_LIB = \
     Codegen.o \
     Fingerprint.o \
     MatrixUtility.o \
-    SubbandAnalysis.o \
-    VectorUtility.o
+    SubbandAnalysis.o
 MODULES = $(MODULES_LIB) Metadata.o
 
 main: $(MODULES) main.o
