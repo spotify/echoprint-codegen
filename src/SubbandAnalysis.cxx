@@ -6,7 +6,6 @@
 
 #include "SubbandAnalysis.h"
 #include "AudioStreamInput.h"
-#include "VectorUtility.h"
 
 SubbandAnalysis::SubbandAnalysis(AudioStreamInput* pAudio) {
     _pSamples = pAudio->getSamples();

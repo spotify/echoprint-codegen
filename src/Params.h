@@ -9,7 +9,6 @@
 #define PARAMS_H
 
 #include "Common.h"
-#include "VectorUtility.h"
 
 namespace Params {
     namespace AudioStreamInput {

@@ -5,7 +5,6 @@
 
 
 
-#include "VectorUtility.h"
 #include "MatrixUtility.h"
 
 // http://www.boost.org/doc/libs/1_35_0/libs/numeric/ublas/doc/matrix.htm
