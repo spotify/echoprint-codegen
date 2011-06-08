@@ -1,7 +1,5 @@
 # Codegen for Echoprint
 
-**Please note: this is not the final version and will likely not emit codes that match release Echoprint codes.**
-
 Echoprint is an open source music fingerprint and resolving framework powered by the [The Echo Nest](http://the.echonest.com/ "The Echo Nest"). The [code generator](http://github.com/echonest/echoprint-codegen "echoprint-codegen") (library to convert PCM samples from a microphone or file into Echoprint codes) is open source (MIT licensed) and free for any use. The [server component](http://github.com/echonest/echoprint-server "echoprint-server") that stores and resolves queries is open source (Apache 2 licensed) and free for any use. The [data for resolving to millions of songs](http://echoprint.me/data "Echoprint Data") is free for any use provided any changes or additions are merged back to the community. 
 
 There are two modes of operation of the Echoprint codegen:
@@ -58,6 +56,25 @@ Codegen also runs in a multithreaded mode for bulk resolving:
     ./codegen.Linux-x86_64 -s 10 30 < file_list
 
 Will compute codes for every file in file_list for 30 seconds starting at 10 seconds. (It tries to be smart about the number of threads to use.) It will output a JSON list. Note that song/identify can accept lists in the JSON, which will be faster than sending each code one at a time. The "tag" parameter is added to each code dictionary to match the resolving material.
+
+## Statistics
+
+Some statistics on speed on accuracy will be filled in below.
+
+### Speed
+
+Codegen scans audio at roughly 800-1000x real time per processor after decoding and resampling to 11025 Hz. This means a full song can be scanned in less than 0.5s on an average computer, and an amount of audio suitable for querying (30s) can be scanned in less than 0.04s.
+
+Decoding from MP3 will be the bottleneck for most implementations. Decoders like mpg123 or ffmpeg can decode 30s mp3 audio to 11025 PCM in under 0.10s.
+
+    clump:echoprint-codegen bwhitman$ time mpg123 -q -s -4 -n 1200 song.mp3  > /dev/null
+    real        0m0.079s
+    user        0m0.067s
+    sys         0m0.007s
+
+### Accuracy
+
+We'll fill this in soon. We run a large test suite on echoprint to test accuracy such as false positives, false negatives and errors in codegen given different "munge" levels (adding noise, lower bitrate or sampling rate, etc.)
 
 ## FAQ
 
