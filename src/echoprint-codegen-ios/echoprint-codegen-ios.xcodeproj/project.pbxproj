@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9AE5AA19139FB2620009FCD8 /* SubbandAnalysis.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AE5AA17139FB2620009FCD8 /* SubbandAnalysis.h */; };
+		9AE5AA1A139FB2620009FCD8 /* SubbandAnalysis.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 9AE5AA18139FB2620009FCD8 /* SubbandAnalysis.cxx */; };
 		C8D4AD20137EE85F00CD506D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D4AD1F137EE85F00CD506D /* Foundation.framework */; };
 		C8D4AD4F137EF41100CD506D /* AudioBufferInput.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD29137EF41100CD506D /* AudioBufferInput.cxx */; };
 		C8D4AD50137EF41100CD506D /* AudioBufferInput.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD2A137EF41100CD506D /* AudioBufferInput.h */; };
@@ -17,13 +19,6 @@
 		C8D4AD55137EF41100CD506D /* Codegen.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD2F137EF41100CD506D /* Codegen.cxx */; };
 		C8D4AD56137EF41100CD506D /* Codegen.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD30137EF41100CD506D /* Codegen.h */; };
 		C8D4AD57137EF41100CD506D /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD31137EF41100CD506D /* Common.h */; };
-		C8D4AD58137EF41100CD506D /* easyzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD32137EF41100CD506D /* easyzlib.c */; };
-		C8D4AD59137EF41100CD506D /* easyzlib.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD33137EF41100CD506D /* easyzlib.h */; };
-		C8D4AD5B137EF41100CD506D /* _kiss_fft_guts.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD3B137EF41100CD506D /* _kiss_fft_guts.h */; };
-		C8D4AD5C137EF41100CD506D /* kiss_fft.c in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD3C137EF41100CD506D /* kiss_fft.c */; };
-		C8D4AD5D137EF41100CD506D /* kiss_fft.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD3D137EF41100CD506D /* kiss_fft.h */; };
-		C8D4AD5E137EF41100CD506D /* kiss_fftr.c in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD3E137EF41100CD506D /* kiss_fftr.c */; };
-		C8D4AD5F137EF41100CD506D /* kiss_fftr.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD3F137EF41100CD506D /* kiss_fftr.h */; };
 		C8D4AD60137EF41100CD506D /* File.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD40137EF41100CD506D /* File.h */; };
 		C8D4AD61137EF41100CD506D /* fileref.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD41137EF41100CD506D /* fileref.h */; };
 		C8D4AD62137EF41100CD506D /* Fingerprint.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD42137EF41100CD506D /* Fingerprint.cxx */; };
@@ -31,15 +26,13 @@
 		C8D4AD64137EF41100CD506D /* MatrixUtility.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD44137EF41100CD506D /* MatrixUtility.cxx */; };
 		C8D4AD65137EF41100CD506D /* MatrixUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD45137EF41100CD506D /* MatrixUtility.h */; };
 		C8D4AD68137EF41100CD506D /* Params.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD48137EF41100CD506D /* Params.h */; };
-		C8D4AD69137EF41100CD506D /* Spectrogram.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD49137EF41100CD506D /* Spectrogram.cxx */; };
-		C8D4AD6A137EF41100CD506D /* Spectrogram.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD4A137EF41100CD506D /* Spectrogram.h */; };
-		C8D4AD6B137EF41100CD506D /* VectorUtility.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD4B137EF41100CD506D /* VectorUtility.cxx */; };
-		C8D4AD6C137EF41100CD506D /* VectorUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD4C137EF41100CD506D /* VectorUtility.h */; };
 		C8D4AD6D137EF41100CD506D /* win_funcs.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD4D137EF41100CD506D /* win_funcs.h */; };
 		C8D4AD6E137EF41100CD506D /* win_unistd.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD4E137EF41100CD506D /* win_unistd.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9AE5AA17139FB2620009FCD8 /* SubbandAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubbandAnalysis.h; path = ../SubbandAnalysis.h; sourceTree = SOURCE_ROOT; };
+		9AE5AA18139FB2620009FCD8 /* SubbandAnalysis.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SubbandAnalysis.cxx; path = ../SubbandAnalysis.cxx; sourceTree = SOURCE_ROOT; };
 		C8D4AD1C137EE85F00CD506D /* libechoprint-codegen-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libechoprint-codegen-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D4AD1F137EE85F00CD506D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C8D4AD23137EE85F00CD506D /* echoprint-codegen-ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "echoprint-codegen-ios-Prefix.pch"; sourceTree = "<group>"; };
@@ -52,13 +45,6 @@
 		C8D4AD2F137EF41100CD506D /* Codegen.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Codegen.cxx; path = ../../Codegen.cxx; sourceTree = "<group>"; };
 		C8D4AD30137EF41100CD506D /* Codegen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Codegen.h; path = ../../Codegen.h; sourceTree = "<group>"; };
 		C8D4AD31137EF41100CD506D /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Common.h; path = ../../Common.h; sourceTree = "<group>"; };
-		C8D4AD32137EF41100CD506D /* easyzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = easyzlib.c; path = ../../easyzlib.c; sourceTree = "<group>"; };
-		C8D4AD33137EF41100CD506D /* easyzlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = easyzlib.h; path = ../../easyzlib.h; sourceTree = "<group>"; };
-		C8D4AD3B137EF41100CD506D /* _kiss_fft_guts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _kiss_fft_guts.h; sourceTree = "<group>"; };
-		C8D4AD3C137EF41100CD506D /* kiss_fft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = kiss_fft.c; sourceTree = "<group>"; };
-		C8D4AD3D137EF41100CD506D /* kiss_fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kiss_fft.h; sourceTree = "<group>"; };
-		C8D4AD3E137EF41100CD506D /* kiss_fftr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = kiss_fftr.c; sourceTree = "<group>"; };
-		C8D4AD3F137EF41100CD506D /* kiss_fftr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kiss_fftr.h; sourceTree = "<group>"; };
 		C8D4AD40137EF41100CD506D /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = File.h; path = ../../File.h; sourceTree = "<group>"; };
 		C8D4AD41137EF41100CD506D /* fileref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileref.h; path = ../../fileref.h; sourceTree = "<group>"; };
 		C8D4AD42137EF41100CD506D /* Fingerprint.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fingerprint.cxx; path = ../../Fingerprint.cxx; sourceTree = "<group>"; };
@@ -66,10 +52,6 @@
 		C8D4AD44137EF41100CD506D /* MatrixUtility.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MatrixUtility.cxx; path = ../../MatrixUtility.cxx; sourceTree = "<group>"; };
 		C8D4AD45137EF41100CD506D /* MatrixUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MatrixUtility.h; path = ../../MatrixUtility.h; sourceTree = "<group>"; };
 		C8D4AD48137EF41100CD506D /* Params.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Params.h; path = ../../Params.h; sourceTree = "<group>"; };
-		C8D4AD49137EF41100CD506D /* Spectrogram.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spectrogram.cxx; path = ../../Spectrogram.cxx; sourceTree = "<group>"; };
-		C8D4AD4A137EF41100CD506D /* Spectrogram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Spectrogram.h; path = ../../Spectrogram.h; sourceTree = "<group>"; };
-		C8D4AD4B137EF41100CD506D /* VectorUtility.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VectorUtility.cxx; path = ../../VectorUtility.cxx; sourceTree = "<group>"; };
-		C8D4AD4C137EF41100CD506D /* VectorUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VectorUtility.h; path = ../../VectorUtility.h; sourceTree = "<group>"; };
 		C8D4AD4D137EF41100CD506D /* win_funcs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = win_funcs.h; path = ../../win_funcs.h; sourceTree = "<group>"; };
 		C8D4AD4E137EF41100CD506D /* win_unistd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = win_unistd.h; path = ../../win_unistd.h; sourceTree = "<group>"; };
 		C8D4AD6F137EF5AC00CD506D /* echoprint-codegen-ios.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "echoprint-codegen-ios.xcconfig"; sourceTree = "<group>"; };
@@ -118,6 +100,8 @@
 		C8D4AD21137EE85F00CD506D /* echoprint-codegen-ios */ = {
 			isa = PBXGroup;
 			children = (
+				9AE5AA17139FB2620009FCD8 /* SubbandAnalysis.h */,
+				9AE5AA18139FB2620009FCD8 /* SubbandAnalysis.cxx */,
 				C8D4AD29137EF41100CD506D /* AudioBufferInput.cxx */,
 				C8D4AD2A137EF41100CD506D /* AudioBufferInput.h */,
 				C8D4AD2B137EF41100CD506D /* AudioStreamInput.cxx */,
@@ -127,8 +111,6 @@
 				C8D4AD2F137EF41100CD506D /* Codegen.cxx */,
 				C8D4AD30137EF41100CD506D /* Codegen.h */,
 				C8D4AD31137EF41100CD506D /* Common.h */,
-				C8D4AD32137EF41100CD506D /* easyzlib.c */,
-				C8D4AD33137EF41100CD506D /* easyzlib.h */,
 				C8D4AD3A137EF41100CD506D /* fft */,
 				C8D4AD40137EF41100CD506D /* File.h */,
 				C8D4AD41137EF41100CD506D /* fileref.h */,
@@ -137,10 +119,6 @@
 				C8D4AD44137EF41100CD506D /* MatrixUtility.cxx */,
 				C8D4AD45137EF41100CD506D /* MatrixUtility.h */,
 				C8D4AD48137EF41100CD506D /* Params.h */,
-				C8D4AD49137EF41100CD506D /* Spectrogram.cxx */,
-				C8D4AD4A137EF41100CD506D /* Spectrogram.h */,
-				C8D4AD4B137EF41100CD506D /* VectorUtility.cxx */,
-				C8D4AD4C137EF41100CD506D /* VectorUtility.h */,
 				C8D4AD4D137EF41100CD506D /* win_funcs.h */,
 				C8D4AD4E137EF41100CD506D /* win_unistd.h */,
 				C8D4AD22137EE85F00CD506D /* Supporting Files */,
@@ -159,11 +137,6 @@
 		C8D4AD3A137EF41100CD506D /* fft */ = {
 			isa = PBXGroup;
 			children = (
-				C8D4AD3B137EF41100CD506D /* _kiss_fft_guts.h */,
-				C8D4AD3C137EF41100CD506D /* kiss_fft.c */,
-				C8D4AD3D137EF41100CD506D /* kiss_fft.h */,
-				C8D4AD3E137EF41100CD506D /* kiss_fftr.c */,
-				C8D4AD3F137EF41100CD506D /* kiss_fftr.h */,
 			);
 			name = fft;
 			path = ../../fft;
@@ -181,19 +154,14 @@
 				C8D4AD54137EF41100CD506D /* Base64.h in Headers */,
 				C8D4AD56137EF41100CD506D /* Codegen.h in Headers */,
 				C8D4AD57137EF41100CD506D /* Common.h in Headers */,
-				C8D4AD59137EF41100CD506D /* easyzlib.h in Headers */,
-				C8D4AD5B137EF41100CD506D /* _kiss_fft_guts.h in Headers */,
-				C8D4AD5D137EF41100CD506D /* kiss_fft.h in Headers */,
-				C8D4AD5F137EF41100CD506D /* kiss_fftr.h in Headers */,
 				C8D4AD60137EF41100CD506D /* File.h in Headers */,
 				C8D4AD61137EF41100CD506D /* fileref.h in Headers */,
 				C8D4AD63137EF41100CD506D /* Fingerprint.h in Headers */,
 				C8D4AD65137EF41100CD506D /* MatrixUtility.h in Headers */,
 				C8D4AD68137EF41100CD506D /* Params.h in Headers */,
-				C8D4AD6A137EF41100CD506D /* Spectrogram.h in Headers */,
-				C8D4AD6C137EF41100CD506D /* VectorUtility.h in Headers */,
 				C8D4AD6D137EF41100CD506D /* win_funcs.h in Headers */,
 				C8D4AD6E137EF41100CD506D /* win_unistd.h in Headers */,
+				9AE5AA19139FB2620009FCD8 /* SubbandAnalysis.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,13 +216,9 @@
 				C8D4AD51137EF41100CD506D /* AudioStreamInput.cxx in Sources */,
 				C8D4AD53137EF41100CD506D /* Base64.cxx in Sources */,
 				C8D4AD55137EF41100CD506D /* Codegen.cxx in Sources */,
-				C8D4AD58137EF41100CD506D /* easyzlib.c in Sources */,
-				C8D4AD5C137EF41100CD506D /* kiss_fft.c in Sources */,
-				C8D4AD5E137EF41100CD506D /* kiss_fftr.c in Sources */,
 				C8D4AD62137EF41100CD506D /* Fingerprint.cxx in Sources */,
 				C8D4AD64137EF41100CD506D /* MatrixUtility.cxx in Sources */,
-				C8D4AD69137EF41100CD506D /* Spectrogram.cxx in Sources */,
-				C8D4AD6B137EF41100CD506D /* VectorUtility.cxx in Sources */,
+				9AE5AA1A139FB2620009FCD8 /* SubbandAnalysis.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +299,7 @@
 				C8D4AD28137EE85F00CD506D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
