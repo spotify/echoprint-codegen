@@ -284,14 +284,15 @@ int main(int argc, char** argv) {
         free(t);
         free(parm);
         free(attr);
-        return 1;
+        return 0;
     }
     catch(std::runtime_error& ex) {
         fprintf(stderr, "%s\n", ex.what());
-        return -1;
+        return 1;
     }
     catch(...) {
         fprintf(stderr, "Unknown failure occurred\n");
+        return 2;
     }
 
 }
