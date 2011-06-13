@@ -14,7 +14,7 @@ There are two modes of operation of the Echoprint codegen:
 
 ## Additional requirements for the codegen binary
 
-* Taglib (we provide compiled libraries for Linux and OS X)
+* [TagLib](http://developer.kde.org/~wheeler/taglib.html "TagLib")
 * ffmpeg - this is called via shell and is not linked into codegen
 
 ## Notes about libcodegen:
