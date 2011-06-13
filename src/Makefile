@@ -6,7 +6,7 @@ ARCH=`uname -m`
 OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
 CXXFLAGS=-Wall -I/usr/local/include/boost-1_35 -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -fPIC $(OPTFLAGS)
-LDFLAGS=-L/usr/local/lib ../lib/libtag-$(UNAME)-$(ARCH).a -lz -lpthread $(OPTFLAGS)
+LDFLAGS=-L/usr/local/lib -ltag -lz -lpthread $(OPTFLAGS)
 
 MODULES_LIB = \
     AudioBufferInput.o \
