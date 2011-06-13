@@ -20,7 +20,6 @@
 		C8D4AD56137EF41100CD506D /* Codegen.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD30137EF41100CD506D /* Codegen.h */; };
 		C8D4AD57137EF41100CD506D /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD31137EF41100CD506D /* Common.h */; };
 		C8D4AD60137EF41100CD506D /* File.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD40137EF41100CD506D /* File.h */; };
-		C8D4AD61137EF41100CD506D /* fileref.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD41137EF41100CD506D /* fileref.h */; };
 		C8D4AD62137EF41100CD506D /* Fingerprint.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD42137EF41100CD506D /* Fingerprint.cxx */; };
 		C8D4AD63137EF41100CD506D /* Fingerprint.h in Headers */ = {isa = PBXBuildFile; fileRef = C8D4AD43137EF41100CD506D /* Fingerprint.h */; };
 		C8D4AD64137EF41100CD506D /* MatrixUtility.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C8D4AD44137EF41100CD506D /* MatrixUtility.cxx */; };
@@ -46,7 +45,6 @@
 		C8D4AD30137EF41100CD506D /* Codegen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Codegen.h; path = ../../Codegen.h; sourceTree = "<group>"; };
 		C8D4AD31137EF41100CD506D /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Common.h; path = ../../Common.h; sourceTree = "<group>"; };
 		C8D4AD40137EF41100CD506D /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = File.h; path = ../../File.h; sourceTree = "<group>"; };
-		C8D4AD41137EF41100CD506D /* fileref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileref.h; path = ../../fileref.h; sourceTree = "<group>"; };
 		C8D4AD42137EF41100CD506D /* Fingerprint.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fingerprint.cxx; path = ../../Fingerprint.cxx; sourceTree = "<group>"; };
 		C8D4AD43137EF41100CD506D /* Fingerprint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fingerprint.h; path = ../../Fingerprint.h; sourceTree = "<group>"; };
 		C8D4AD44137EF41100CD506D /* MatrixUtility.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MatrixUtility.cxx; path = ../../MatrixUtility.cxx; sourceTree = "<group>"; };
@@ -113,7 +111,6 @@
 				C8D4AD31137EF41100CD506D /* Common.h */,
 				C8D4AD3A137EF41100CD506D /* fft */,
 				C8D4AD40137EF41100CD506D /* File.h */,
-				C8D4AD41137EF41100CD506D /* fileref.h */,
 				C8D4AD42137EF41100CD506D /* Fingerprint.cxx */,
 				C8D4AD43137EF41100CD506D /* Fingerprint.h */,
 				C8D4AD44137EF41100CD506D /* MatrixUtility.cxx */,
@@ -155,7 +152,6 @@
 				C8D4AD56137EF41100CD506D /* Codegen.h in Headers */,
 				C8D4AD57137EF41100CD506D /* Common.h in Headers */,
 				C8D4AD60137EF41100CD506D /* File.h in Headers */,
-				C8D4AD61137EF41100CD506D /* fileref.h in Headers */,
 				C8D4AD63137EF41100CD506D /* Fingerprint.h in Headers */,
 				C8D4AD65137EF41100CD506D /* MatrixUtility.h in Headers */,
 				C8D4AD68137EF41100CD506D /* Params.h in Headers */,
@@ -251,7 +247,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
