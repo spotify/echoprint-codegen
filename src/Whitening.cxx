@@ -30,12 +30,11 @@ void Whitening::Init() {
     
     _R = (float *)malloc((_P+1)*sizeof(float));
     for (i = 0; i <= _P; ++i)  { _R[i] = 0.0; }
-	
-	_Xo = (float *)malloc((_P+1)*sizeof(float));
+    
+    _Xo = (float *)malloc((_P+1)*sizeof(float));
     for (i = 0; i < _P; ++i)  { _Xo[i] = 0.0; }
 
     _ai = (float *)malloc((_P+1)*sizeof(float));
-    
     _whitened = (float*) malloc(sizeof(float)*_NumSamples);
 }
 
@@ -51,65 +50,60 @@ void Whitening::Compute() {
 }
 
 void Whitening::ComputeBlock(int start, int blockSize) {
-	int i, j;
-	float alpha, E, ki;
+    int i, j;
+    float alpha, E, ki;
     float T = 100;
-	alpha = 1.0/T;
+    alpha = 1.0/T;
 
-
-	/* calculate autocorrelation of current block */
-	for (i = 0; i <= _P; ++i) {
-	    float acc = 0;
-        for (j = 0; j < (int)blockSize; ++j) {
-		    if (j >= i) {
-		        acc += _pSamples[j+start] * _pSamples[j-i+start];
-		    }
-	    }
-	    /* smoothed update */
-	    _R[i] += alpha*(acc - _R[i]);
-        fprintf(stderr, "%2.2f ", _R[i]);
-	}
-    fprintf(stderr, "\n");
-
-	/* calculate new filter coefficients */
-	/* Durbin's recursion, per p. 411 of Rabiner & Schafer 1978 */
-
-	E = _R[0];
-	for (i = 1; i <= _P; ++i) {
-	    float sumalphaR = 0;
-	    for (j = 1; j < i; ++j) {
-		    sumalphaR += _ai[j]*_R[i-j];
-	    }
-	    ki = (_R[i] - sumalphaR)/E;
-	    _ai[i] = ki;
-	    for (j = 1; j <= i/2; ++j) {
-		    float aj = _ai[j];
-		    float aimj = _ai[i-j];
-		    _ai[j] = aj - ki*aimj;
-		    _ai[i-j] = aimj - ki*aj;
-	    }
-	    E = (1-ki*ki)*E;
-	}
-
-
-	/* caculate new output */
-	for (i = 0; i < (int)blockSize; ++i) {
-	    float acc = _pSamples[i+start];
-	    for (j = 1; j <= _P; ++j) {
-		    if (i-j < 0) {
-		        acc -= _ai[j]*_Xo[_P + i-j];
-		    } else {
-		        acc -= _ai[j]*_pSamples[i-j+start];
-		    }
-	    }
-	    _whitened[i+start] = acc;
-	}
+	// calculate autocorrelation of current block 
 	
-	/* save last few frames of input */
-	for (i = 0; i <= _P; ++i) {
-	    _Xo[i] = _pSamples[blockSize-1-_P+i+start];
-	}
-
+    for (i = 0; i <= _P; ++i) {
+        float acc = 0;
+        for (j = 0; j < (int)blockSize; ++j) {
+            if (j >= i) {
+                acc += _pSamples[j+start] * _pSamples[j-i+start];
+            }
+        }
+	    // smoothed update
+        _R[i] += alpha*(acc - _R[i]);
+        fprintf(stderr, "%2.2f ", _R[i]);
+    }
+    fprintf(stderr, "\n");
+    
+    // calculate new filter coefficients 
+	// Durbin's recursion, per p. 411 of Rabiner & Schafer 1978 
+    E = _R[0];
+    for (i = 1; i <= _P; ++i) {
+        float sumalphaR = 0;
+        for (j = 1; j < i; ++j) {
+            sumalphaR += _ai[j]*_R[i-j];
+        }
+        ki = (_R[i] - sumalphaR)/E;
+        _ai[i] = ki;
+        for (j = 1; j <= i/2; ++j) {
+            float aj = _ai[j];
+            float aimj = _ai[i-j];
+            _ai[j] = aj - ki*aimj;
+            _ai[i-j] = aimj - ki*aj;
+        }
+        E = (1-ki*ki)*E;
+    }
+    // calculate new output 
+    for (i = 0; i < (int)blockSize; ++i) {
+        float acc = _pSamples[i+start];
+        for (j = 1; j <= _P; ++j) {
+            if (i-j < 0) {
+                acc -= _ai[j]*_Xo[_P + i-j];
+            } else {
+                acc -= _ai[j]*_pSamples[i-j+start];
+            }
+        }
+        _whitened[i+start] = acc;
+    }
+    // save last few frames of input 
+    for (i = 0; i <= _P; ++i) {
+        _Xo[i] = _pSamples[blockSize-1-_P+i+start];
+    }
 }
 
 
