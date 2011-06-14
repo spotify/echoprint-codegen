@@ -18,18 +18,15 @@
 Codegen::Codegen(const float* pcm, uint numSamples, int start_offset) {
     if (Params::AudioStreamInput::MaxSamples < (uint)numSamples)
         throw std::runtime_error("File was too big\n");
-    fprintf(stderr, "white\n");
     
     Whitening *pWhitening = new Whitening(pcm, numSamples);
     pWhitening->Compute();
-    fprintf(stderr, "copy\n");
     
     AudioBufferInput *pAudio = new AudioBufferInput();
     pAudio->SetBuffer(pWhitening->getWhitenedSamples(), pWhitening->getNumSamples());
-    fprintf(stderr, "subband %d\n", pAudio->getNumSamples());
+
     SubbandAnalysis *pSubbandAnalysis = new SubbandAnalysis(pAudio);
     pSubbandAnalysis->Compute();
-    fprintf(stderr, "fp\n");
 
     Fingerprint *pFingerprint = new Fingerprint(pSubbandAnalysis, start_offset);
     pFingerprint->Compute();

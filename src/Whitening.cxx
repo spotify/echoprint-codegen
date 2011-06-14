@@ -29,7 +29,8 @@ void Whitening::Init() {
     _P = 40;
     
     _R = (float *)malloc((_P+1)*sizeof(float));
-    for (i = 0; i <= _P; ++i)  { _R[i] = 0.0; }
+    for (i = 0; i <= _P; ++i)  { _R[i] = 0.0; } 
+    _R[0] = 0.001;
     
     _Xo = (float *)malloc((_P+1)*sizeof(float));
     for (i = 0; i < _P; ++i)  { _Xo[i] = 0.0; }
@@ -66,12 +67,10 @@ void Whitening::ComputeBlock(int start, int blockSize) {
         }
 	    // smoothed update
         _R[i] += alpha*(acc - _R[i]);
-        fprintf(stderr, "%2.2f ", _R[i]);
     }
-    fprintf(stderr, "\n");
     
     // calculate new filter coefficients 
-	// Durbin's recursion, per p. 411 of Rabiner & Schafer 1978 
+    // Durbin's recursion, per p. 411 of Rabiner & Schafer 1978 
     E = _R[0];
     for (i = 1; i <= _P; ++i) {
         float sumalphaR = 0;
