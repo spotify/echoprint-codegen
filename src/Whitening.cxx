@@ -22,6 +22,7 @@ Whitening::~Whitening() {
     free(_R);
     free(_Xo);
     free(_ai);
+    free(_whitened);
 }
 
 void Whitening::Init() {
