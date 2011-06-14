@@ -41,7 +41,7 @@ void Whitening::Init() {
 }
 
 void Whitening::Compute() {
-    int blocklen = 2000;
+    int blocklen = 10000;
     int i, newblocklen;
     for(i=0;i<(int)_NumSamples;i=i+blocklen) {
         if (i+blocklen >= (int)_NumSamples) {
@@ -54,7 +54,7 @@ void Whitening::Compute() {
 void Whitening::ComputeBlock(int start, int blockSize) {
     int i, j;
     float alpha, E, ki;
-    float T = 100;
+    float T = 8;
     alpha = 1.0/T;
 
 	// calculate autocorrelation of current block 
