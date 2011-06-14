@@ -41,7 +41,7 @@ void Whitening::Init() {
 }
 
 void Whitening::Compute() {
-    int blocklen = 1000;
+    int blocklen = 10000;
     int i, newblocklen;
     for(i=0;i<(int)_NumSamples;i=i+blocklen) {
         if (i+blocklen >= (int)_NumSamples) {
