@@ -185,24 +185,32 @@ void Fingerprint::Compute() {
     _Codes.resize(onset_count*6);
 
     for(unsigned char band=0;band<SUBBANDS;band++) { 
-        if (onset_counter_for_band[band]>4) {
-            for(uint onset=0;onset<onset_counter_for_band[band]-4;onset++) {
+        if (onset_counter_for_band[band]>2) {
+            for(uint onset=0;onset<onset_counter_for_band[band]-2;onset++) {
                 // What time was this onset at?
                 uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(out(band,onset));
             
                 uint p[2][6];
+                int nhashes = 6;
+                
+                if ((int)onset == (int)onset_counter_for_band[band]-4)  { nhashes = 3; }
+                if ((int)onset == (int)onset_counter_for_band[band]-3)  { nhashes = 1; }
                 p[0][0] = (out(band,onset+1) - out(band,onset));
                 p[1][0] = (out(band,onset+2) - out(band,onset+1));
-                p[0][1] = (out(band,onset+1) - out(band,onset));
-                p[1][1] = (out(band,onset+3) - out(band,onset+1));
-                p[0][2] = (out(band,onset+1) - out(band,onset));
-                p[1][2] = (out(band,onset+4) - out(band,onset+1));
-                p[0][3] = (out(band,onset+2) - out(band,onset));
-                p[1][3] = (out(band,onset+3) - out(band,onset+2));
-                p[0][4] = (out(band,onset+2) - out(band,onset));
-                p[1][4] = (out(band,onset+4) - out(band,onset+2));
-                p[0][5] = (out(band,onset+3) - out(band,onset));
-                p[1][5] = (out(band,onset+4) - out(band,onset+3));
+                if(nhashes > 1) {
+                    p[0][1] = (out(band,onset+1) - out(band,onset));
+                    p[1][1] = (out(band,onset+3) - out(band,onset+1));
+                    p[0][2] = (out(band,onset+2) - out(band,onset));
+                    p[1][2] = (out(band,onset+3) - out(band,onset+2));
+                    if(nhashes > 3) {
+                        p[0][3] = (out(band,onset+1) - out(band,onset));
+                        p[1][3] = (out(band,onset+4) - out(band,onset+1));
+                        p[0][4] = (out(band,onset+2) - out(band,onset));
+                        p[1][4] = (out(band,onset+4) - out(band,onset+2));
+                        p[0][5] = (out(band,onset+3) - out(band,onset));
+                        p[1][5] = (out(band,onset+4) - out(band,onset+3));
+                    }
+                }
 
                 // For each pair emit a code
                 for(uint k=0;k<6;k++) {
