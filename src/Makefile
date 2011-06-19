@@ -23,8 +23,8 @@ main: $(MODULES) main.o
 	$(CXX) $(MODULES) $(LDFLAGS) main.o -o ../codegen.$(UNAME)-$(ARCH) 
 	$(CXX) -shared -fPIC -o libcodegen.$(UNAME)-$(ARCH).so $(MODULES_LIB) -lz
 ifeq ($(UNAME),Darwin)
-	libtool -dynamic -flat_namespace -install_name libcodegen.4.0.0.dylib -lSystem -compatibility_version 4.0 -macosx_version_min 10.6 \
-	    -current_version 4.0.0 -o libcodegen.4.0.0.dylib -undefined suppress \
+	libtool -dynamic -flat_namespace -install_name libcodegen.4.1.1.dylib -lSystem -compatibility_version 4.1 -macosx_version_min 10.6 \
+	    -current_version 4.1.1 -o libcodegen.4.1.1.dylib -undefined suppress \
 	    $(MODULES) -framework vecLib -framework Accelerate
 endif
 

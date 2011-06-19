@@ -8,7 +8,7 @@
 #define CODEGEN_H
 
 // Entry point for generating codes from PCM data.
-#define VERSION 4.10
+#define VERSION 4.11
 
 #include <memory>
 #include <string>
