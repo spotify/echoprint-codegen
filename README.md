@@ -37,7 +37,7 @@ You only need to query for 20 seconds of audio to get a result.
 
 The makefile builds an example code generator that uses libcodegen, called "codegen." This code generator has more features -- it will output ID3 tag information and uses ffmpeg to decode any type of file. If you don't need to compile libcodegen into your app you can rely on this. Note that you need to have ffmpeg installed and accessible on your path for this to work.
 
-    ./codegen.Linux-x86_64 billie_jean.mp3 10 30
+    ./echoprint-codegen billie_jean.mp3 10 30
 
 Will take 30 seconds of audio from 10 seconds into the file and output JSON suitable for querying:
 
@@ -53,17 +53,15 @@ Or you can host your own [Echoprint server](http://github.com/echonest/echoprint
 
 Codegen also runs in a multithreaded mode for bulk resolving:
 
-    ./codegen.Linux-x86_64 -s 10 30 < file_list
+    ./echoprint-codegen -s 10 30 < file_list
 
 Will compute codes for every file in file_list for 30 seconds starting at 10 seconds. (It tries to be smart about the number of threads to use.) It will output a JSON list. Note that song/identify can accept lists in the JSON, which will be faster than sending each code one at a time. The "tag" parameter is added to each code dictionary to match the resolving material.
 
 ## Statistics
 
-Some statistics on speed on accuracy will be filled in below.
-
 ### Speed
 
-Codegen scans audio at roughly 800-1000x real time per processor after decoding and resampling to 11025 Hz. This means a full song can be scanned in less than 0.5s on an average computer, and an amount of audio suitable for querying (30s) can be scanned in less than 0.04s.
+Codegen scans audio at roughly 250x real time per processor after decoding and resampling to 11025 Hz. This means a full song can be scanned in less than 0.5s on an average computer, and an amount of audio suitable for querying (30s) can be scanned in less than 0.04s.
 
 Decoding from MP3 will be the bottleneck for most implementations. Decoders like mpg123 or ffmpeg can decode 30s mp3 audio to 11025 PCM in under 0.10s.
 
@@ -74,14 +72,10 @@ Decoding from MP3 will be the bottleneck for most implementations. Decoders like
 
 ### Accuracy
 
-We'll fill this in soon. We run a large test suite on echoprint to test accuracy such as false positives, false negatives and errors in codegen given different "munge" levels (adding noise, lower bitrate or sampling rate, etc.)
+Look at http://echoprint.me for information on the accuracy of the echoprint system.
 
 ## FAQ
 
-Q: Is this ready to go yet?
-
-A: No. We have it on github to work with collaborators and early partners but this is not ready for general use yet. We'll make an announcement when it is close.
-
 Q: I get "Couldn't decode any samples with: ffmpeg" when running codegen
 
-A: When running the example code generator (codegen.$(PLATFORM)) make sure ffmpeg is accessible to your path. Try running ffmpeg filename.mp3 on the file you are testing the code generator with. If it doesn't work, codegen won't work.
+A: When running the example code generator (echoprint-codegen) make sure ffmpeg is accessible to your path. Try running ffmpeg filename.mp3 on the file you are testing the code generator with. If it doesn't work, codegen won't work.
