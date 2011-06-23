@@ -17,9 +17,10 @@ config.CODEGEN_BINARY_OVERRIDE = os.path.abspath("../echoprint-codegen")
 # config.ECHO_NEST_API_KEY='KEY HERE'
 
 def lookup(file):
-    # Note that song.identify reads just the first 
+    # Note that song.identify reads just the first 30 seconds of the file
     fp = song.util.codegen(file)
     if len(fp) and "code" in fp[0]:
+        # The version parameter to song/identify indicates the use of echoprint
         result = song.identify(query_obj=fp, version="4.11")
         print "Got result:", result
         print "Artist: %s (%s)" % (result[0].artist_name, result[0].artist_id)
