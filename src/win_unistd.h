@@ -17,10 +17,10 @@
 #define srandom srand
 #define random rand
 
-const int F_OK = 0;
+#define F_OK 0
 
-const int W_OK = 2;
-const int R_OK = 4;
+#define W_OK 2
+#define R_OK 4
 
 #define access _access
 #define ftruncate _chsize
