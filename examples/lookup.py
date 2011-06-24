@@ -23,8 +23,11 @@ def lookup(file):
         # The version parameter to song/identify indicates the use of echoprint
         result = song.identify(query_obj=fp, version="4.11")
         print "Got result:", result
-        print "Artist: %s (%s)" % (result[0].artist_name, result[0].artist_id)
-        print "Song: %s (%s)" % (result[0].title, result[0].id)
+        if len(result):
+            print "Artist: %s (%s)" % (result[0].artist_name, result[0].artist_id)
+            print "Song: %s (%s)" % (result[0].title, result[0].id)
+        else:
+            print "No match. This track may not be in the database yet."
     else:
         print "Couldn't decode", file
             
