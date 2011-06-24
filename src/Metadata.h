@@ -29,7 +29,7 @@ private:
     string _Album;
     string _Title;
     string _Genre;
-    
+
     int _Bitrate;
     int _SampleRate;
     int _Seconds;

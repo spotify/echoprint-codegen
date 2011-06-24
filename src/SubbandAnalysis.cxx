@@ -13,7 +13,7 @@ SubbandAnalysis::SubbandAnalysis(AudioStreamInput* pAudio) {
     Init();
 }
 
-SubbandAnalysis::SubbandAnalysis(const float* pSamples, uint numSamples) : 
+SubbandAnalysis::SubbandAnalysis(const float* pSamples, uint numSamples) :
     _pSamples(pSamples), _NumSamples(numSamples) {
     Init();
 }
@@ -35,10 +35,10 @@ void SubbandAnalysis::Init() {
 
 void SubbandAnalysis::Compute() {
     uint t, i, j;
-    
+
     float Z[C_LEN];
     float Y[M_COLS];
-    
+
     _NumFrames = (_NumSamples - C_LEN + 1)/SUBBANDS;
     assert(_NumFrames > 0);
 

@@ -43,13 +43,13 @@ static inline double now (void) {
     return now;
 }
 
-typedef unsigned int uint; 
+typedef unsigned int uint;
 #define NELEM(array) (sizeof(array) / sizeof(array[0]))
 
 #ifndef _WIN32
-#define EN_ARRAY(type,var,size) type var[size] 
+#define EN_ARRAY(type,var,size) type var[size]
 #else
-#define EN_ARRAY(type,var,size) type* var = (type*) _alloca((size)*sizeof(type)) 
+#define EN_ARRAY(type,var,size) type* var = (type*) _alloca((size)*sizeof(type))
 #endif
 
 #endif

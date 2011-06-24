@@ -9,10 +9,10 @@
 #define MATRIXUTILITY_H
 
 #include "Common.h"
-#include <boost/numeric/ublas/matrix.hpp> 
+#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 
-namespace ublas = boost::numeric::ublas; 
+namespace ublas = boost::numeric::ublas;
 
 typedef ublas::matrix<float> matrix_f;
 typedef ublas::matrix<uint> matrix_u;

@@ -19,15 +19,15 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     const unsigned char * data = (const unsigned char *)key;
     while(len >= 4)    {
         unsigned int k = *(unsigned int *)data;
-        k *= m; 
-        k ^= k >> r; 
-        k *= m; 
-        h *= m; 
+        k *= m;
+        k ^= k >> r;
+        k *= m;
+        h *= m;
         h ^= k;
         data += 4;
         len -= 4;
     }
-    
+
     // Handle the last few bytes of the input array
     switch(len)    {
         case 3: h ^= data[2] << 16;
@@ -44,7 +44,7 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     return h;
 }
 
-Fingerprint::Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset) 
+Fingerprint::Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset)
     : _pSubbandAnalysis(pSubbandAnalysis), _Offset(offset) { }
 
 
@@ -76,12 +76,12 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
             Eb(i,j) = sqrtf(Eb(i,j));
         }
     }
-    
-    frames = Eb.size1(); 
-    bands = Eb.size2(); 
+
+    frames = Eb.size1();
+    bands = Eb.size2();
     pE = &Eb.data()[0];
 
-    out = matrix_u(SUBBANDS, frames); 
+    out = matrix_u(SUBBANDS, frames);
     onset_counter_for_band = new uint[SUBBANDS];
 
     double bn[] = {0.1883, 0.4230, 0.3392}; /* preemph filter */   // new
@@ -97,13 +97,13 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
         contact[j] = 0;
         lcontact[j] = 0;
         tsince[j] = 0;
-        Y0[j] = 0; 
+        Y0[j] = 0;
     }
 
     for (i = 0; i < frames; ++i) {
-        for (j = 0; j < SUBBANDS; ++j) { 
+        for (j = 0; j < SUBBANDS; ++j) {
 
-            double xn = 0;  
+            double xn = 0;
             /* calculate the filter -  FIR part */
             if (i >= 2*nbn) {
                 for (int k = 0; k < nbn; ++k) {
@@ -140,7 +140,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
                 }
                 out(j, onset_counter_for_band[j]++) = i;
                 ++onset_counter;
-                tsince[j] = 0;      
+                tsince[j] = 0;
             }
             ++tsince[j];
             if (tsince[j] > ttarg) {
@@ -184,15 +184,15 @@ void Fingerprint::Compute() {
     uint onset_count = adaptiveOnsets(345, out, onset_counter_for_band);
     _Codes.resize(onset_count*6);
 
-    for(unsigned char band=0;band<SUBBANDS;band++) { 
+    for(unsigned char band=0;band<SUBBANDS;band++) {
         if (onset_counter_for_band[band]>2) {
             for(uint onset=0;onset<onset_counter_for_band[band]-2;onset++) {
                 // What time was this onset at?
                 uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(out(band,onset));
-            
+
                 uint p[2][6];
                 int nhashes = 6;
-                
+
                 if ((int)onset == (int)onset_counter_for_band[band]-4)  { nhashes = 3; }
                 if ((int)onset == (int)onset_counter_for_band[band]-3)  { nhashes = 1; }
                 p[0][0] = (out(band,onset+1) - out(band,onset));
@@ -230,8 +230,8 @@ void Fingerprint::Compute() {
             }
         }
     }
-    
-    _Codes.resize(actual_codes);    
+
+    _Codes.resize(actual_codes);
     delete [] onset_counter_for_band;
 }
 
