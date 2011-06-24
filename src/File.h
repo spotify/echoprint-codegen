@@ -31,7 +31,7 @@ public:
     static bool ends_with(const char* filename, const char* ending) {
         int nFilename = strlen(filename);
         int nEnding = strlen(ending);
-        
+
         bool same = false;
         if (nEnding <= nFilename) {
             const char* file_end = filename + strlen(filename) - strlen(ending);

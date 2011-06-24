@@ -13,7 +13,7 @@ Whitening::Whitening(AudioStreamInput* pAudio) {
     Init();
 }
 
-Whitening::Whitening(const float* pSamples, uint numSamples) : 
+Whitening::Whitening(const float* pSamples, uint numSamples) :
     _pSamples(pSamples), _NumSamples(numSamples) {
     Init();
 }
@@ -28,11 +28,11 @@ Whitening::~Whitening() {
 void Whitening::Init() {
     int i;
     _p = 40;
-    
+
     _R = (float *)malloc((_p+1)*sizeof(float));
-    for (i = 0; i <= _p; ++i)  { _R[i] = 0.0; } 
+    for (i = 0; i <= _p; ++i)  { _R[i] = 0.0; }
     _R[0] = 0.001;
-    
+
     _Xo = (float *)malloc((_p+1)*sizeof(float));
     for (i = 0; i < _p; ++i)  { _Xo[i] = 0.0; }
 
@@ -57,8 +57,8 @@ void Whitening::ComputeBlock(int start, int blockSize) {
     float T = 8;
     alpha = 1.0/T;
 
-    // calculate autocorrelation of current block 
-	
+    // calculate autocorrelation of current block
+
     for (i = 0; i <= _p; ++i) {
         float acc = 0;
         for (j = 0; j < (int)blockSize; ++j) {
@@ -66,12 +66,12 @@ void Whitening::ComputeBlock(int start, int blockSize) {
                 acc += _pSamples[j+start] * _pSamples[j-i+start];
             }
         }
-	    // smoothed update
+        // smoothed update
         _R[i] += alpha*(acc - _R[i]);
     }
-    
-    // calculate new filter coefficients 
-    // Durbin's recursion, per p. 411 of Rabiner & Schafer 1978 
+
+    // calculate new filter coefficients
+    // Durbin's recursion, per p. 411 of Rabiner & Schafer 1978
     E = _R[0];
     for (i = 1; i <= _p; ++i) {
         float sumalphaR = 0;
@@ -88,7 +88,7 @@ void Whitening::ComputeBlock(int start, int blockSize) {
         }
         E = (1-ki*ki)*E;
     }
-    // calculate new output 
+    // calculate new output
     for (i = 0; i < (int)blockSize; ++i) {
         float acc = _pSamples[i+start];
         for (j = 1; j <= _p; ++j) {
@@ -100,7 +100,7 @@ void Whitening::ComputeBlock(int start, int blockSize) {
         }
         _whitened[i+start] = acc;
     }
-    // save last few frames of input 
+    // save last few frames of input
     for (i = 0; i <= _p; ++i) {
         _Xo[i] = _pSamples[blockSize-1-_p+i+start];
     }

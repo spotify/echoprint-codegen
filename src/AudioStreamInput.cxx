@@ -24,7 +24,7 @@
 #include "Common.h"
 #include "Params.h"
 
-using std::string; 
+using std::string;
 
 namespace FFMPEG {
     // Do we think FFmpeg will read this as an audio file?
@@ -35,7 +35,7 @@ namespace FFMPEG {
             if (File::ends_with(pFileName, supportedExtensions[i]))
                 return true;
         }
-        return false;        
+        return false;
     }
 }
 
@@ -54,20 +54,20 @@ AudioStreamInput::~AudioStreamInput() {
 bool AudioStreamInput::ProcessFile(const char* filename, int offset_s/*=0*/, int seconds/*=0*/) {
     if (!File::Exists(filename) || !IsSupported(filename))
         return false;
-    
+
     _Offset_s = offset_s;
     _Seconds = seconds;
     std::string message = GetCommandLine(filename);
-    
+
     FILE* fp = popen(message.c_str(), POPEN_MODE);
     bool ok = (fp != NULL);
-    if (ok) 
+    if (ok)
     {
         bool did_work = ProcessFilePointer(fp);
         bool succeeded = !pclose(fp);
         ok = did_work && succeeded;
-    } 
-    else 
+    }
+    else
         fprintf(stderr, "AudioStreamInput::ProcessFile can't open %s\n", filename);
 
     return ok;
@@ -77,16 +77,16 @@ bool AudioStreamInput::ProcessFile(const char* filename, int offset_s/*=0*/, int
 bool AudioStreamInput::ProcessRawFile(const char* rawFilename) {
     FILE* fp = fopen(rawFilename, "r"); // TODO: Windows
     bool ok = (fp != NULL);
-    if (ok) 
+    if (ok)
     {
         ok = ProcessFilePointer(fp);
         fclose(fp);
     }
-    
+
     return ok;
 }
 
-// reads raw signed 16-bit shorts from stdin, for example: 
+// reads raw signed 16-bit shorts from stdin, for example:
 // ffmpeg -i fille.mp3 -f s16le -ac 1 -ar 11025 - | TestAudioSTreamInput
 bool AudioStreamInput::ProcessStandardInput(void) {
     // TODO - Windows will explodey at not setting O_BINARY on stdin.
@@ -108,7 +108,7 @@ bool AudioStreamInput::ProcessFilePointer(FILE* pFile) {
     uint sampleCounter = 0;
     _pSamples = new float[_NumberSamples];
     uint samplesLeft = _NumberSamples;
-    for (uint i = 0; i < vChunks.size(); i++) 
+    for (uint i = 0; i < vChunks.size(); i++)
     {
         short* pChunk = vChunks[i];
         uint numSamples = samplesLeft < nSamplesPerChunk ? samplesLeft : nSamplesPerChunk;

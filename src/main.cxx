@@ -26,12 +26,12 @@
 
 // Struct to pass to the worker threads
 typedef struct {
-	char *filename;
+    char *filename;
     int start_offset;
     int duration;
     int done ;
     int tag;
-	char *output;
+    char *output;
 } thread_parm_t;
 
 // Thank you http://stackoverflow.com/questions/150355/programmatically-find-the-number-of-cores-on-a-machine
@@ -79,7 +79,7 @@ std::string escape(const string& value) {
         char c = s[i];
         if (c <= 31)
             continue;
-        
+
         switch (c) {
             case '"' : out += "\\\""; break;
             case '\\': out += "\\\\"; break;
@@ -94,39 +94,39 @@ std::string escape(const string& value) {
                 // TODO: do something with unicode?
         }
     }
-    
+
     return out;
 }
 
 char* json_string_for_file(char* filename, int start_offset, int duration, int tag) {
-    // Given a filename, do all the work to get a JSON string output. 
+    // Given a filename, do all the work to get a JSON string output.
     // This is called by a thread
     double t1 = now();
-    
+
     auto_ptr<FfmpegStreamInput> pAudio(new FfmpegStreamInput());
     pAudio->ProcessFile(filename, start_offset, duration);
-    
+
     if (pAudio.get() == NULL) { // Unable to decode!
         char* output = (char*) malloc(16384);
-        sprintf(output,"{\"error\":\"could not create decoder\", \"tag\":%d, \"metadata\":{\"filename\":\"%s\"}}", 
-            tag, 
+        sprintf(output,"{\"error\":\"could not create decoder\", \"tag\":%d, \"metadata\":{\"filename\":\"%s\"}}",
+            tag,
             escape(filename).c_str());
         return output;
     }
-    
+
     int numSamples = pAudio->getNumSamples();
-    
+
     if (numSamples < 1) {
         char* output = (char*) malloc(16384);
-        sprintf(output,"{\"error\":\"could not decode\", \"tag\":%d, \"metadata\":{\"filename\":\"%s\"}}", 
-            tag, 
+        sprintf(output,"{\"error\":\"could not decode\", \"tag\":%d, \"metadata\":{\"filename\":\"%s\"}}",
+            tag,
             escape(filename).c_str());
         return output;
     }
     t1 = now() - t1;
 
     double t2 = now();
-    auto_ptr<Codegen> pCodegen(new Codegen(pAudio->getSamples(), numSamples, start_offset));    
+    auto_ptr<Codegen> pCodegen(new Codegen(pAudio->getSamples(), numSamples, start_offset));
     t2 = now() - t2;
 
     // Get the ID3 tag information.
@@ -134,14 +134,14 @@ char* json_string_for_file(char* filename, int start_offset, int duration, int t
 
     // preamble + codelen
     char* output = (char*) malloc(sizeof(char)*(16384 + strlen(pCodegen->getCodeString().c_str()) ));
-    
+
     sprintf(output,"{\"metadata\":{\"artist\":\"%s\", \"release\":\"%s\", \"title\":\"%s\", \"genre\":\"%s\", \"bitrate\":%d,"
                     "\"sample_rate\":%d, \"duration\":%d, \"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
                     " \"start_offset\":%d, \"version\":%2.2f, \"codegen_time\":%2.6f, \"decode_time\":%2.6f}, \"code_count\":%d,"
                     " \"code\":\"%s\", \"tag\":%d}",
-        escape(pMetadata->Artist()).c_str(), 
-        escape(pMetadata->Album()).c_str(), 
-        escape(pMetadata->Title()).c_str(), 
+        escape(pMetadata->Artist()).c_str(),
+        escape(pMetadata->Album()).c_str(),
+        escape(pMetadata->Title()).c_str(),
         escape(pMetadata->Genre()).c_str(),
         pMetadata->Bitrate(),
         pMetadata->SampleRate(),
@@ -185,7 +185,7 @@ int main(int argc, char** argv) {
         fprintf(stderr, "Usage: %s [ filename | -s ] [seconds_start] [seconds_duration] [< file_list (if -s is set)]\n", argv[0]);
         exit(-1);
     }
-    
+
     try {
         string files[MAX_FILES];
         char *filename = argv[1];
@@ -209,7 +209,7 @@ int main(int argc, char** argv) {
                 }
             }
         } else files[count++] = filename;
-        
+
         if(count == 0) throw std::runtime_error("No files given.\n");
 
 
@@ -239,7 +239,7 @@ int main(int argc, char** argv) {
         // Kick off the first N threads
         int still_left = count-1-already;
         for(int i=0;i<num_threads;i++) {
-    	    parm[i] = (thread_parm_t *)malloc(sizeof(thread_parm_t));
+            parm[i] = (thread_parm_t *)malloc(sizeof(thread_parm_t));
             parm[i]->filename = (char*)files[still_left].c_str();
             parm[i]->start_offset = start_offset;
             parm[i]->tag = still_left;
@@ -252,7 +252,7 @@ int main(int argc, char** argv) {
             if (pthread_create(&t[i], &attr[i], threaded_json_string_for_file, (void*)parm[i]))
                 throw std::runtime_error("Problem creating thread\n");
         }
-        
+
         int done = 0;
         // Now wait for the threads to come back, and also kick off new ones
         while(done<count) {
@@ -269,12 +269,12 @@ int main(int argc, char** argv) {
                         parm[i]->filename = (char*)files[still_left].c_str();
                         still_left--;
                         int err= pthread_create(&t[i], &attr[i], threaded_json_string_for_file, (void*)parm[i]);
-                        if(err) 
+                        if(err)
                             throw std::runtime_error("Problem creating thread\n");
-                        
+
                     }
                 }
-            }       
+            }
         }
 
         // Clean up threads

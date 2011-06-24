@@ -18,7 +18,7 @@ void AudioBufferInput::SetBuffer(const float* pBuffer, uint numSamples) {
     memcpy(_pSamples, pBuffer, numSamples*sizeof(float));
 }
 
-void AudioBufferInput::SaveBuffer(const char*filename) {    
+void AudioBufferInput::SaveBuffer(const char*filename) {
     FILE *out = fopen(filename,"wb");
     fwrite(&_NumberSamples, sizeof(int), 1, out);
     uint mn = 1;
