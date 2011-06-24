@@ -33,7 +33,7 @@ protected:
     float* _R;
     float *_Xo;
     float *_ai;
-    int _P;
+    int _p;
 private:
     void Init();
 };
