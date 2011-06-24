@@ -26,12 +26,12 @@
 
 // Struct to pass to the worker threads
 typedef struct {
-	char *filename;
+    char *filename;
     int start_offset;
     int duration;
     int done ;
     int tag;
-	char *output;
+    char *output;
 } thread_parm_t;
 
 // Thank you http://stackoverflow.com/questions/150355/programmatically-find-the-number-of-cores-on-a-machine
@@ -239,7 +239,7 @@ int main(int argc, char** argv) {
         // Kick off the first N threads
         int still_left = count-1-already;
         for(int i=0;i<num_threads;i++) {
-    	    parm[i] = (thread_parm_t *)malloc(sizeof(thread_parm_t));
+            parm[i] = (thread_parm_t *)malloc(sizeof(thread_parm_t));
             parm[i]->filename = (char*)files[still_left].c_str();
             parm[i]->start_offset = start_offset;
             parm[i]->tag = still_left;

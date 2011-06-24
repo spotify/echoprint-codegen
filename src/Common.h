@@ -11,17 +11,17 @@
 
 #include <assert.h>
 #ifndef _WIN32
-	#include <sys/time.h>
+    #include <sys/time.h>
 #else
 #include "win_funcs.h"
 #include <sys/types.h>
 /* for STL*/
-	#ifdef max
-		#undef max
-	#endif
-	#ifdef min
-		#undef min
-	#endif
+    #ifdef max
+        #undef max
+    #endif
+    #ifdef min
+        #undef min
+    #endif
 #include <malloc.h>
 #endif
 #include <float.h>

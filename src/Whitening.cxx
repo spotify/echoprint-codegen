@@ -58,7 +58,7 @@ void Whitening::ComputeBlock(int start, int blockSize) {
     alpha = 1.0/T;
 
     // calculate autocorrelation of current block 
-	
+    
     for (i = 0; i <= _p; ++i) {
         float acc = 0;
         for (j = 0; j < (int)blockSize; ++j) {
@@ -66,7 +66,7 @@ void Whitening::ComputeBlock(int start, int blockSize) {
                 acc += _pSamples[j+start] * _pSamples[j-i+start];
             }
         }
-	    // smoothed update
+        // smoothed update
         _R[i] += alpha*(acc - _R[i]);
     }
     

@@ -11,37 +11,37 @@
 unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     // MurmurHash2, by Austin Appleby http://sites.google.com/site/murmurhash/
     // m and r are constants set by austin
-	const unsigned int m = 0x5bd1e995;
-	const int r = 24;
-	// Initialize the hash to a 'random' value
-	unsigned int h = seed ^ len;
-	// Mix 4 bytes at a time into the hash
-	const unsigned char * data = (const unsigned char *)key;
-	while(len >= 4)	{
-		unsigned int k = *(unsigned int *)data;
-		k *= m; 
-		k ^= k >> r; 
-		k *= m; 
-		h *= m; 
-		h ^= k;
-		data += 4;
-		len -= 4;
-	}
-	
-	// Handle the last few bytes of the input array
-	switch(len)	{
-	    case 3: h ^= data[2] << 16;
-	    case 2: h ^= data[1] << 8;
-	    case 1: h ^= data[0];
-	            h *= m;
-	};
+    const unsigned int m = 0x5bd1e995;
+    const int r = 24;
+    // Initialize the hash to a 'random' value
+    unsigned int h = seed ^ len;
+    // Mix 4 bytes at a time into the hash
+    const unsigned char * data = (const unsigned char *)key;
+    while(len >= 4)    {
+        unsigned int k = *(unsigned int *)data;
+        k *= m; 
+        k ^= k >> r; 
+        k *= m; 
+        h *= m; 
+        h ^= k;
+        data += 4;
+        len -= 4;
+    }
+    
+    // Handle the last few bytes of the input array
+    switch(len)    {
+        case 3: h ^= data[2] << 16;
+        case 2: h ^= data[1] << 8;
+        case 1: h ^= data[0];
+                h *= m;
+    };
 
-	// Do a few final mixes of the hash to ensure the last few
-	// bytes are well-incorporated.
-	h ^= h >> 13;
-	h *= m;
-	h ^= h >> 15;
-	return h;
+    // Do a few final mixes of the hash to ensure the last few
+    // bytes are well-incorporated.
+    h ^= h >> 13;
+    h *= m;
+    h ^= h >> 15;
+    return h;
 }
 
 Fingerprint::Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset) 
@@ -117,21 +117,21 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
 
             contact[j] = (xn > H[j])? 1 : 0;
 
-    	    if (contact[j] == 1 && lcontact[j] == 0) {
-    	        /* attach - record the threshold level unless we have one */
-    		    if(N[j] == 0) {
-    			    N[j] = H[j];
-    		    }
-    		}
-    		if (contact[j] == 1) {
-    		    /* update with new threshold */
+            if (contact[j] == 1 && lcontact[j] == 0) {
+                /* attach - record the threshold level unless we have one */
+                if(N[j] == 0) {
+                    N[j] = H[j];
+                }
+            }
+            if (contact[j] == 1) {
+                /* update with new threshold */
                 H[j] = xn * overfact;
-    		} else {
-    		    /* apply decays */
-    		    H[j] = H[j] * exp(-1.0/(double)taus[j]);
-    		}
+            } else {
+                /* apply decays */
+                H[j] = H[j] * exp(-1.0/(double)taus[j]);
+            }
 
-    		if (contact[j] == 0 && lcontact[j] == 1) {
+            if (contact[j] == 0 && lcontact[j] == 1) {
                 /* detach */
                 if (onset_counter_for_band[j] > 0   && (int)out(j, onset_counter_for_band[j]-1) > i - deadtime) {
                     // overwrite last-written time
@@ -141,22 +141,22 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
                 out(j, onset_counter_for_band[j]++) = i;
                 ++onset_counter;
                 tsince[j] = 0;      
-    	    }
-    		++tsince[j];
-    		if (tsince[j] > ttarg) {
-    		    taus[j] = taus[j] - 1;
-    		    if (taus[j] < 1) taus[j] = 1;
-    		} else {
-    		    taus[j] = taus[j] + 1;
-    		}
+            }
+            ++tsince[j];
+            if (tsince[j] > ttarg) {
+                taus[j] = taus[j] - 1;
+                if (taus[j] < 1) taus[j] = 1;
+            } else {
+                taus[j] = taus[j] + 1;
+            }
 
-    		if ( (contact[j] == 0) &&  (tsince[j] > deadtime)) {
-    		    /* forget the threshold where we recently hit */
-    		    N[j] = 0;
-    		}
-    		lcontact[j] = contact[j];
-    	}
-    	pE += bands;
+            if ( (contact[j] == 0) &&  (tsince[j] > deadtime)) {
+                /* forget the threshold where we recently hit */
+                N[j] = 0;
+            }
+            lcontact[j] = contact[j];
+        }
+        pE += bands;
     }
 
     return onset_counter;
