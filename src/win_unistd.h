@@ -1,17 +1,17 @@
 #ifndef _UNISTD_H
 #define _UNISTD_H        1
 
-/* This file intended to serve as a drop-in replacement for 
+/* This file intended to serve as a drop-in replacement for
  *  unistd.h on Windows
- *  Please add functionality as neeeded 
+ *  Please add functionality as neeeded
  http://stackoverflow.com/questions/341817/is-there-a-replacement-for-unistd-h-for-windows-visual-c
  */
 
 #include <stdlib.h>
 #include <io.h>
-/* 
-#include <getopt.h> 
- 
+/*
+#include <getopt.h>
+
  getopt from: http://www.pwilson.net/sample.html. */
 
 #define srandom srand
@@ -26,7 +26,7 @@
 #define ftruncate _chsize
 
 /* stdio */
-#define popen _popen 
+#define popen _popen
 #define pclose _pclose
 /* float.h */
 #define finite _finite

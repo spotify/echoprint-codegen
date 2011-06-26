@@ -17,15 +17,15 @@ class Whitening {
 public:
     inline Whitening() {};
     Whitening(AudioStreamInput* pAudio);
-    Whitening(const float* pSamples, uint numSamples);    
+    Whitening(const float* pSamples, uint numSamples);
     virtual ~Whitening();
     void Compute();
     void ComputeBlock(int start, int blockSize);
-    
+
 public:
     float* getWhitenedSamples() const {return _whitened;}
     inline uint getNumSamples() const {return _NumSamples;}
-    
+
 protected:
     const float* _pSamples;
     float* _whitened;
