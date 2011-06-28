@@ -10,13 +10,9 @@
 // Entry point for generating codes from PCM data.
 #define VERSION 4.11
 
-#include <memory>
 #include <string>
-
-#include "Common.h"
-#include "AudioBufferInput.h"
-#include "SubbandAnalysis.h"
-#include "Fingerprint.h"
+#include <vector>
+#include <sys/types.h>
 
 using namespace std;
 
@@ -33,6 +29,8 @@ using namespace std;
 #endif
 
 class Fingerprint;
+class SubbandAnalysis;
+struct FPCode;
 
 class CODEGEN_API Codegen {
 public:
