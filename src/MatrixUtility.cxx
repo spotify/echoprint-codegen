@@ -47,8 +47,6 @@ bool FileOutput(const matrix_f& A, const char* filename) {
     return success;
 }
 
-void clear(matrix_f A) {
-    for(uint i=0;i<A.size1();i++) for(uint j=0;j<A.size2();j++) A(i,j) = 0.0;
-}
+
 
 } // namespace

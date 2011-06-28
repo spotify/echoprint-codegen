@@ -69,7 +69,8 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
 
     int nc =  floor((float)E.size2()/(float)hop)-(floor((float)nsm/(float)hop)-1);
     matrix_f Eb = matrix_f(nc, 8);
-    MatrixUtility::clear(Eb);
+    for(uint r=0;r<Eb.size1();r++) for(uint c=0;c<Eb.size2();c++) Eb(r,c) = 0.0;
+
     for(i=0;i<nc;i++) {
         for(j=0;j<SUBBANDS;j++) {
             for(k=0;k<nsm;k++)  Eb(i,j) = Eb(i,j) + ( E(j,(i*hop)+k) * ham[k]);
