@@ -20,10 +20,6 @@
 #include <string>
 #define MAX_FILES 200000
 
-#ifdef _WIN32
-#include <pthread.h>
-#endif
-
 using namespace std;
 
 // The response from the codegen. Contains all the fields necessary
@@ -249,7 +245,6 @@ int main(int argc, char** argv) {
 
 
 #ifdef _WIN32
-//#ifdef __APPLE__
         fprintf(stderr, "no thread mode\n");
         // Threading doesn't work in windows yet.
         for(int i=0;i<count;i++) {
@@ -259,9 +254,10 @@ int main(int argc, char** argv) {
             free(output);
         }
         return 1;
-#endif
 
-        // FIgure out how many threads to use based on # of cores
+#else
+
+        // Figure out how many threads to use based on # of cores
         int num_threads = getNumCores();
         if (num_threads > 8) num_threads = 8;
         if (num_threads < 2) num_threads = 2;
@@ -323,6 +319,8 @@ int main(int argc, char** argv) {
         free(parm);
         free(attr);
         return 0;
+
+#endif // _WIN32
     }
     catch(std::runtime_error& ex) {
         fprintf(stderr, "%s\n", ex.what());
