@@ -53,9 +53,11 @@ endif
 PREFIX ?= /usr/local
 # todo: dylib
 install: all
+	install -d $(PREFIX)/bin
 	install ../echoprint-codegen $(PREFIX)/bin
 	install -d $(PREFIX)/include/echoprint
 	install -m 644 Codegen.h $(PREFIX)/include/echoprint
+	install -d $(PREFIX)/lib
 	install -m 644 libcodegen.so $(PREFIX)/lib
 
 .PHONY: clean all libcodegen echoprint-codegen install
