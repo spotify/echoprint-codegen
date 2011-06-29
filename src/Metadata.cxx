@@ -5,8 +5,8 @@
 
 
 #include "Metadata.h"
-#include <taglib/fileref.h>
-#include <taglib/tag.h>
+#include <fileref.h>
+#include <tag.h>
 #include <iostream>
 
 Metadata::Metadata(const string& file) : _Filename(file), _Artist(""), _Album(""), _Title(""), _Genre(""), _Bitrate(0), _SampleRate(0), _Seconds(0) {
