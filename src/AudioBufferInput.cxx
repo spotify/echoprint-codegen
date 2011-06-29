@@ -26,3 +26,4 @@ void AudioBufferInput::SaveBuffer(const char*filename) {
     fwrite(_pSamples, 4, _NumberSamples, out);
     fclose(out);
 }
+
