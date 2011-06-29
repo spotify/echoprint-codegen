@@ -7,6 +7,10 @@
 #include "SubbandAnalysis.h"
 #include "AudioStreamInput.h"
 
+#ifdef _WIN32
+#include "win_funcs.h"
+#endif
+
 SubbandAnalysis::SubbandAnalysis(AudioStreamInput* pAudio) {
     _pSamples = pAudio->getSamples();
     _NumSamples = pAudio->getNumSamples();

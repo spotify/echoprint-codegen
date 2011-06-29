@@ -13,7 +13,6 @@
 #include <math.h>
 #include "File.h"
 #ifdef _WIN32
-#define and &&
 #define snprintf _snprintf
 #endif
 
@@ -59,7 +58,7 @@ protected:
     std::string GetCommandLine(const char* filename) {
         // TODO: Windows
         char message[4096] = {0};
-        if (_Offset_s == 0 and _Seconds == 0)
+        if (_Offset_s == 0 && _Seconds == 0)
             snprintf(message, NELEM(message), "ffmpeg -i \"%s\"  -ac %d -ar %d -f s16le - 2>/dev/null",
                     filename, Params::AudioStreamInput::Channels, (uint) Params::AudioStreamInput::SamplingRate);
         else
@@ -82,7 +81,7 @@ protected:
     bool IsSupported(const char* pFileName){ return File::ends_with(pFileName, ".mp3");};
     std::string GetCommandLine(const char* filename) {
         char message[4096] = {0};
-        if (_Offset_s == 0 and _Seconds == 0)
+        if (_Offset_s == 0 && _Seconds == 0)
             snprintf(message, NELEM(message), "mpg123 --quiet --singlemix --stdout --rate %d \"%s\"",
                 (uint) Params::AudioStreamInput::SamplingRate, filename);
         else

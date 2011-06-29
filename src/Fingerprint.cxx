@@ -8,6 +8,10 @@
 #include "Params.h"
 #include <string.h>
 
+#ifdef _WIN32
+#include "win_funcs.h"
+#endif
+
 unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     // MurmurHash2, by Austin Appleby http://sites.google.com/site/murmurhash/
     // m and r are constants set by austin
@@ -63,7 +67,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
     // Take successive stretches of 8 subband samples and sum their energy under a hann window, then hop by 4 samples (50% window overlap).
     int hop = 4;
     int nsm = 8;
-    float ham[nsm];
+    float ham[8];
     for(int i = 0 ; i != nsm ; i++)
         ham[i] = .5 - .5*cos( (2.*M_PI/(nsm-1))*i);
 

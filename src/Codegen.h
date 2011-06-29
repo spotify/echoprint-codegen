@@ -12,7 +12,6 @@
 
 #include <string>
 #include <vector>
-#include <sys/types.h>
 
 using namespace std;
 
@@ -34,7 +33,7 @@ struct FPCode;
 
 class CODEGEN_API Codegen {
 public:
-    Codegen(const float* pcm, uint numSamples, int start_offset);
+    Codegen(const float* pcm, unsigned int numSamples, int start_offset);
 
     string getCodeString(){return _CodeString;}
     int getNumCodes(){return _NumCodes;}
