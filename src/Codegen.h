@@ -13,9 +13,6 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-
 #ifdef _MSC_VER
     #ifdef CODEGEN_EXPORTS
         #define CODEGEN_API __declspec(dllexport)
@@ -36,15 +33,15 @@ class CODEGEN_API Codegen {
 public:
     Codegen(const float* pcm, unsigned int numSamples, int start_offset);
 
-    string getCodeString(){return _CodeString;}
+    std::string getCodeString(){return _CodeString;}
     int getNumCodes(){return _NumCodes;}
     static double getVersion() { return ECHOPRINT_VERSION; }
 private:
     Fingerprint* computeFingerprint(SubbandAnalysis *pSubbandAnalysis, int start_offset);
-    string createCodeString(vector<FPCode> vCodes);
+    std::string createCodeString(std::vector<FPCode> vCodes);
 
-    string compress(const string& s);
-    string _CodeString;
+    std::string compress(const std::string& s);
+    std::string _CodeString;
     int _NumCodes;
 };
 
