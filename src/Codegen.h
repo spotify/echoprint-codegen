@@ -8,13 +8,10 @@
 #define CODEGEN_H
 
 // Entry point for generating codes from PCM data.
-#define VERSION 4.11
 
 #include <string>
 #include <vector>
 #include <sys/types.h>
-
-using namespace std;
 
 #ifdef _MSC_VER
     #ifdef CODEGEN_EXPORTS
@@ -34,17 +31,17 @@ struct FPCode;
 
 class CODEGEN_API Codegen {
 public:
-    Codegen(const float* pcm, uint numSamples, int start_offset);
+    Codegen(const float* pcm, unsigned int numSamples, int start_offset);
 
-    string getCodeString(){return _CodeString;}
+    std::string getCodeString(){return _CodeString;}
     int getNumCodes(){return _NumCodes;}
-    float getVersion() { return VERSION; }
+    static float getVersion();
 private:
     Fingerprint* computeFingerprint(SubbandAnalysis *pSubbandAnalysis, int start_offset);
-    string createCodeString(vector<FPCode> vCodes);
+    std::string createCodeString(std::vector<FPCode> vCodes);
 
-    string compress(const string& s);
-    string _CodeString;
+    std::string compress(const std::string& s);
+    std::string _CodeString;
     int _NumCodes;
 };
 

@@ -19,6 +19,14 @@
 #include "Base64.h"
 #include <zlib.h>
 
+#define VERSION 4.11
+
+using namespace std;
+
+float Codegen::getVersion() {
+  return VERSION;
+}
+
 Codegen::Codegen(const float* pcm, uint numSamples, int start_offset) {
     if (Params::AudioStreamInput::MaxSamples < (uint)numSamples)
         throw std::runtime_error("File was too big\n");
