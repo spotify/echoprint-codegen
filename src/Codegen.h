@@ -8,12 +8,13 @@
 #define CODEGEN_H
 
 // Entry point for generating codes from PCM data.
-#define VERSION 4.11
+#define ECHOPRINT_VERSION 4.11
 
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::string;
+using std::vector;
 
 #ifdef _MSC_VER
     #ifdef CODEGEN_EXPORTS
@@ -37,7 +38,7 @@ public:
 
     string getCodeString(){return _CodeString;}
     int getNumCodes(){return _NumCodes;}
-    float getVersion() { return VERSION; }
+    static double getVersion() { return ECHOPRINT_VERSION; }
 private:
     Fingerprint* computeFingerprint(SubbandAnalysis *pSubbandAnalysis, int start_offset);
     string createCodeString(vector<FPCode> vCodes);
