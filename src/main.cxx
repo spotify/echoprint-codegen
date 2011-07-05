@@ -250,15 +250,14 @@ int main(int argc, char** argv) {
 
 
 #ifdef _WIN32
-        fprintf(stderr, "no thread mode\n");
         // Threading doesn't work in windows yet.
         for(int i=0;i<count;i++) {
             codegen_response_t* response = codegen_file((char*)files[i].c_str(), start_offset, duration, i);
             char *output = make_json_string(response);
-            print_json_to_screen(output, count, i);
+            print_json_to_screen(output, count, i+1);
             free(output);
         }
-        return 1;
+        return 0;
 
 #else
 
