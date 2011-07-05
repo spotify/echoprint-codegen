@@ -168,10 +168,15 @@ void *threaded_codegen_file(void *parm) {
 
 void print_json_to_screen(char* output, int count, int done) {
     // Print a json block depending on how many there are and where we are.
-    if(done==1 && count>1) printf("[\n%s,\n", output);
-        else if(done==1 && count == 1) printf("[\n%s\n]\n", output);
-            else if(done == count) printf("%s\n]\n", output);
-                else printf("%s,\n", output);
+    if(done==1 && count>1) {
+        printf("[\n%s,\n", output);
+    } else if(done==1 && count == 1) {
+        printf("[\n%s\n]\n", output);
+    } else if(done == count) {
+        printf("%s\n]\n", output);
+    } else {
+        printf("%s,\n", output);
+    }
 }
 
 char *make_json_string(codegen_response_t* response) {
