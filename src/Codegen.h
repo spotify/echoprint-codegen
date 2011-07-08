@@ -8,7 +8,7 @@
 #define CODEGEN_H
 
 // Entry point for generating codes from PCM data.
-#define ECHOPRINT_VERSION 4.11
+#define ECHOPRINT_VERSION 4.12
 
 #include <string>
 #include <vector>
