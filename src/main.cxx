@@ -255,6 +255,8 @@ int main(int argc, char** argv) {
             codegen_response_t* response = codegen_file((char*)files[i].c_str(), start_offset, duration, i);
             char *output = make_json_string(response);
             print_json_to_screen(output, count, i+1);
+            delete response->codegen;
+            free(response);
             free(output);
         }
         return 0;
@@ -300,7 +302,9 @@ int main(int argc, char** argv) {
                     codegen_response_t *response = (codegen_response_t*)parm[i]->response;
                     char *json = make_json_string(response);
                     print_json_to_screen(json, count, done);
+                    delete response->codegen;
                     free(parm[i]->response);
+                    free(json);
                     // More to do? Start a new one on this just finished thread
                     if(still_left >= 0) {
                         parm[i]->tag = still_left;
