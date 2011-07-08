@@ -196,6 +196,10 @@ void Fingerprint::Compute() {
                 uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(out(band,onset));
 
                 uint p[2][6];
+                for (int i = 0; i < 6; i++) {
+                    p[0][i] = 0;
+                    p[1][i] = 0;
+                }
                 int nhashes = 6;
 
                 if ((int)onset == (int)onset_counter_for_band[band]-4)  { nhashes = 3; }
