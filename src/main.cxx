@@ -114,6 +114,7 @@ codegen_response_t *codegen_file(char* filename, int start_offset, int duration,
     double t1 = now();
     codegen_response_t *response = (codegen_response_t *)malloc(sizeof(codegen_response_t));
     response->error = NULL;
+    response->codegen = NULL;
 
     auto_ptr<FfmpegStreamInput> pAudio(new FfmpegStreamInput());
     pAudio->ProcessFile(filename, start_offset, duration);
@@ -255,7 +256,9 @@ int main(int argc, char** argv) {
             codegen_response_t* response = codegen_file((char*)files[i].c_str(), start_offset, duration, i);
             char *output = make_json_string(response);
             print_json_to_screen(output, count, i+1);
-            delete response->codegen;
+            if (response->codegen) {
+                delete response->codegen;
+            }
             free(response);
             free(output);
         }
@@ -302,7 +305,9 @@ int main(int argc, char** argv) {
                     codegen_response_t *response = (codegen_response_t*)parm[i]->response;
                     char *json = make_json_string(response);
                     print_json_to_screen(json, count, done);
-                    delete response->codegen;
+                    if (response->codegen) {
+                        delete response->codegen;
+                    }
                     free(parm[i]->response);
                     free(json);
                     // More to do? Start a new one on this just finished thread
