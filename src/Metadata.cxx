@@ -16,10 +16,10 @@ Metadata::Metadata(const string& file) : _Filename(file), _Artist(""), _Album(""
 
         TagLib::Tag* tag = f.isNull() ? NULL : f.tag();
         if (tag != NULL) {
-            _Artist = tag->artist().toCString();
-            _Album = tag->album().toCString();
-            _Title = tag->title().toCString();
-            _Genre = tag->genre().toCString();
+            _Artist = tag->artist().to8Bit(true);
+            _Album = tag->album().to8Bit(true);
+            _Title = tag->title().to8Bit(true);
+            _Genre = tag->genre().to8Bit(true);
         }
 
         TagLib::AudioProperties* properties = f.isNull() ? NULL : f.audioProperties();
