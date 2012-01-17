@@ -9,6 +9,8 @@
 #include <string.h>
 #ifdef _WIN32
 #include "win_unistd.h"
+#else
+#include <unistd.h>
 #endif
 /*
 This makes file writing a bit easier (makes sure we don't forget to fclose, basically). Use it like this:

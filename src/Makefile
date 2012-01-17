@@ -1,11 +1,18 @@
+VERSION := 4.1.1
+VERSION_MAJ := $(shell echo $(VERSION) |sed 's/\..*//')
 UNAME := $(shell uname -s)
 CXX=g++
 CC=gcc
 #OPTFLAGS=-g -O0
 OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
-CXXFLAGS=-Wall -I/usr/local/include/boost-1_35 `taglib-config --cflags` -fPIC $(OPTFLAGS)
+BOOST_CFLAGS=-I/usr/local/include/boost-1_35
+TAGLIB_CFLAGS=`taglib-config --cflags`
+TAGLIB_LIBS=`taglib-config --libs`
+CXXFLAGS=-Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -fPIC $(OPTFLAGS)
-LDFLAGS=`taglib-config --libs` -lz -lpthread $(OPTFLAGS)
+LDFLAGS=$(TAGLIB_LIBS) -lz -lpthread $(OPTFLAGS)
+LIBNAME=libcodegen.so
+SONAME=$(LIBNAME).$(VERSION_MAJ)
 
 MODULES_LIB = \
     AudioBufferInput.o \
@@ -21,11 +28,12 @@ MODULES = $(MODULES_LIB) Metadata.o
 all: libcodegen echoprint-codegen
 
 libcodegen: $(MODULES_LIB)
-	$(CXX) -shared -fPIC -o libcodegen.so $(MODULES_LIB) -lz
 ifeq ($(UNAME),Darwin)
 	libtool -dynamic -flat_namespace -install_name libcodegen.4.1.1.dylib -lSystem -compatibility_version 4.1 -macosx_version_min 10.6 \
         -current_version 4.1.1 -o libcodegen.4.1.1.dylib -undefined suppress \
 	    $(MODULES_LIB) -framework vecLib -framework Accelerate
+else
+    $(CXX) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBNAME).$(VERSION) $(MODULES_LIB) -lz
 endif
 
 echoprint-codegen: $(MODULES) main.o
@@ -51,13 +59,18 @@ ifeq ($(UNAME),Darwin)
 endif
 
 PREFIX ?= /usr/local
+LIBDIR ?= $(PREFIX)/lib
+INCLUDEDIR ?= $(PREFIX)/include
+
 # todo: dylib
 install: all
-	install -d $(PREFIX)/bin
-	install ../echoprint-codegen $(PREFIX)/bin
-	install -d $(PREFIX)/include/echoprint
-	install -m 644 Codegen.h $(PREFIX)/include/echoprint
-	install -d $(PREFIX)/lib
-	install -m 644 libcodegen.so $(PREFIX)/lib
+	install -d $(DESTDIR)$(BINDIR)
+	install ../echoprint-codegen $(DESTDIR)$(BINDIR)
+	install -d $(DESTDIR)$(INCLUDEDIR)/echoprint
+	install -pm 644 Codegen.h $(DESTDIR)$(INCLUDEDIR)/echoprint/
+	install -d $(DESTDIR)$(LIBDIR)
+	install -m 755 $(LIBNAME).$(VERSION) $(DESTDIR)$(LIBDIR)
+	ln -s $(LIBNAME).$(VERSION) $(DESTDIR)$(LIBDIR)/$(SONAME)
+	ln -s $(SONAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
 
 .PHONY: clean all libcodegen echoprint-codegen install
