@@ -33,7 +33,7 @@ ifeq ($(UNAME),Darwin)
         -current_version 4.1.1 -o libcodegen.4.1.1.dylib -undefined suppress \
 	    $(MODULES_LIB) -framework vecLib -framework Accelerate
 else
-    $(CXX) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBNAME).$(VERSION) $(MODULES_LIB) -lz
+	$(CXX) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBNAME).$(VERSION) $(MODULES_LIB) -lz
 endif
 
 echoprint-codegen: $(MODULES) main.o
