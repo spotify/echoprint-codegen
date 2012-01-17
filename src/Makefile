@@ -53,14 +53,15 @@ echoprint-codegen: $(MODULES) main.o
 
 clean:
 	rm -f *.o ../echoprint-codegen
-	rm -f *.so
+	rm -f libcodegen.so*
 ifeq ($(UNAME),Darwin)
 	rm -f *.dylib
 endif
 
-PREFIX ?= /usr/local
-LIBDIR ?= $(PREFIX)/lib
-INCLUDEDIR ?= $(PREFIX)/include
+DESTDIR ?= /usr/local
+BINDIR ?= /bin
+LIBDIR ?= /lib
+INCLUDEDIR ?= /include
 
 # todo: dylib
 install: all
@@ -70,7 +71,7 @@ install: all
 	install -pm 644 Codegen.h $(DESTDIR)$(INCLUDEDIR)/echoprint/
 	install -d $(DESTDIR)$(LIBDIR)
 	install -m 755 $(LIBNAME).$(VERSION) $(DESTDIR)$(LIBDIR)
-	ln -s $(LIBNAME).$(VERSION) $(DESTDIR)$(LIBDIR)/$(SONAME)
-	ln -s $(SONAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+	ln -fs $(DESTDIR)$(LIBDIR)/$(LIBNAME).$(VERSION) $(DESTDIR)$(LIBDIR)/$(SONAME)
+	ln -fs $(DESTDIR)$(LIBDIR)/$(SONAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
 
 .PHONY: clean all libcodegen echoprint-codegen install
