@@ -61,10 +61,8 @@ void Whitening::ComputeBlock(int start, int blockSize) {
 
     for (i = 0; i <= _p; ++i) {
         float acc = 0;
-        for (j = 0; j < (int)blockSize; ++j) {
-            if (j >= i) {
-                acc += _pSamples[j+start] * _pSamples[j-i+start];
-            }
+        for (j = i; j < (int)blockSize; ++j) {
+            acc += _pSamples[j+start] * _pSamples[j-i+start];
         }
         // smoothed update
         _R[i] += alpha*(acc - _R[i]);
@@ -91,12 +89,16 @@ void Whitening::ComputeBlock(int start, int blockSize) {
     // calculate new output
     for (i = 0; i < (int)blockSize; ++i) {
         float acc = _pSamples[i+start];
-        for (j = 1; j <= _p; ++j) {
-            if (i-j < 0) {
-                acc -= _ai[j]*_Xo[_p + i-j];
-            } else {
-                acc -= _ai[j]*_pSamples[i-j+start];
-            }
+        int minip = i;
+        if (_p < minip) {
+            minip = _p;
+        }
+        
+        for (j = i+1; j <= _p; ++j) {
+            acc -= _ai[j]*_Xo[_p + i-j];
+        }
+        for (j = 1; j <= minip; ++j) {
+            acc -= _ai[j]*_pSamples[i-j+start];
         }
         _whitened[i+start] = acc;
     }
