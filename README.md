@@ -53,12 +53,14 @@ The makefile builds an example code generator that uses libcodegen, called "code
 
 Will take 30 seconds of audio from 10 seconds into the file and output JSON suitable for querying:
 
-    {"metadata":{"artist":"Michael jackson", "release":"800 chansons des annes 80", "title":"Billie jean", "genre":"", "bitrate":192, "sample_rate":44100, "seconds":294, "filename":"billie_jean.mp3", "samples_decoded":220598, "given_duration":30, "start_offset":10, "version":4.00}, "code_count":846, "code":"JxVlIuNwzAMQ1fxCDL133+xo1rnGqNAEcWy/ERa2aKeZmW...
+    [
+    {"metadata":{"artist":"Michael Jackson", "release":"Thriller", "title":"Billie Jean", "genre":"", "bitrate":128,"sample_rate":44100, "duration":294, "filename":"billie_jean.mp3", "samples_decoded":330902, "given_duration":30, "start_offset":10, "version":4.12, "codegen_time":0.087329, "decode_time":0.297166}, "code_count":906, "code":"eJztmm2OZacORafEt2E4YGD-Q8jCt1UnXdKlIlVa ..."
+    ]
 
 You can POST this JSON directly to the Echo Nest's [song/identify](http://developer.echonest.com/docs/v4/song.html#identify "song/identify") (who has an Echoprint server booted), for example:
 
     curl -F "query=@post_string" http://developer.echonest.com/api/v4/song/identify?api_key=YOUR_KEY
-    {"fp_lookup_time_ms": 21, "results": [{"songID": "SOAFVGQ1280ED4E371", "match_type": "fp", "title": "Billie Jean", "artist": "Michael Jackson", "artistID": "ARXPPEY1187FB51DF4", "score": 63, "release": "Thriller"}]
+    {"response": {"status": {"version": "4.2", "code": 0, "message": "Success"}, "songs": [{"tag": 0, "score": 273, "title": "Billie Jean", "message": "OK (match type 6)", "artist_id": "ARXPPEY1187FB51DF4", "artist_name": "Michael Jackson", "id": "SOJIZLV12A58A78309"}]}}
     (you can also use GET, see the API description)
 
 Or you can host your own [Echoprint server](http://github.com/echonest/echoprint-server "echoprint-server") and ingest or query to that.
