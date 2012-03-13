@@ -1,6 +1,6 @@
 # Version of echoprint, as a list. Is expanded out
 # for various version numbers.
-EP_VERSION := 4 1 1
+EP_VERSION := 4 1 2
 VERSION := $(word 1, $(EP_VERSION)).$(word 2, $(EP_VERSION)).$(word 3, $(EP_VERSION))
 VERSION_MAJ := $(word 1, $(EP_VERSION))
 VERSION_COMPAT := $(word 1, $(EP_VERSION)).$(word 2, $(EP_VERSION))
