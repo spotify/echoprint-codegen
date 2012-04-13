@@ -221,7 +221,6 @@ void Fingerprint::Compute() {
                     }
                 }
 
-                if (p[0][0] < 8 && p[1][0] < 8) nhashes = 0; // n < 8 => quantized_time_for_frame_delta(n) == 0
                 // For each pair emit a code
                 for(uint k=0;k<nhashes;k++) {
                     // Quantize the time deltas to 23ms
