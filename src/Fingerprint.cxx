@@ -222,7 +222,7 @@ void Fingerprint::Compute() {
                 }
 
                 // For each pair emit a code
-                for(uint k=0;k<6;k++) {
+                for(uint k=0;k<nhashes;k++) {
                     // Quantize the time deltas to 23ms
                     short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
                     short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
@@ -232,7 +232,7 @@ void Fingerprint::Compute() {
                     memcpy(hash_material+4, (const void*)&band, 1);
                     uint hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
 
-                    if (time_delta0 != 0 || time_delta1 != 0) {
+                    if (k == 0 && (time_delta0 != 0 || time_delta1 != 0)) {
                       // Set the code alongside the time of onset
                       _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
                       //fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %u at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);
