@@ -232,9 +232,11 @@ void Fingerprint::Compute() {
                     memcpy(hash_material+4, (const void*)&band, 1);
                     uint hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
 
-                    // Set the code alongside the time of onset
-                    _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
-                    //fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %u at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);
+                    if (time_delta0 != 0 || time_delta1 != 0) {
+                      // Set the code alongside the time of onset
+                      _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
+                      //fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %u at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);
+                    }
                 }
             }
         }
