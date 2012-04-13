@@ -200,7 +200,7 @@ void Fingerprint::Compute() {
                     p[0][i] = 0;
                     p[1][i] = 0;
                 }
-                int nhashes = 6;
+                uint nhashes = 6;
 
                 if ((int)onset == (int)onset_counter_for_band[band]-4)  { nhashes = 3; }
                 if ((int)onset == (int)onset_counter_for_band[band]-3)  { nhashes = 1; }
