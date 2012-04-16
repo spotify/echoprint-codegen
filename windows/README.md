@@ -46,6 +46,8 @@ Using Visual C++ 2010 Express
 
 1. Load codegen.sln
 2. If you downloaded different versions of the dependencies you will need to change the path to the include and library directories.
+3. Make sure release is selected in the top bar (next to the play button)
+4. In the solution explorer, right click on tag project and select Build
 
  
 ## Running
