@@ -10,6 +10,7 @@
 #include "Params.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <math.h>
 #include "File.h"
 #if defined(_WIN32) && !defined(__MINGW32__)
@@ -60,15 +61,29 @@ public:
 protected:
     std::string GetCommandLine(const char* filename) {
         // TODO: Windows
-        char message[4096] = {0};
-        if (_Offset_s == 0 && _Seconds == 0)
-            snprintf(message, NELEM(message), "ffmpeg -i \"%s\"  -ac %d -ar %d -f s16le - 2>%s",
-                    filename, Params::AudioStreamInput::Channels, (uint) Params::AudioStreamInput::SamplingRate, DEVNULL);
-        else
-            snprintf(message, NELEM(message), "ffmpeg -i \"%s\"  -ac %d -ar %d -f s16le -t %d -ss %d - 2>%s",
-                    filename, Params::AudioStreamInput::Channels, (uint) Params::AudioStreamInput::SamplingRate, _Seconds, _Offset_s, DEVNULL);
-
-        return std::string(message);
+        std::string filestr = std::string(filename);
+#if defined(_WIN32) && !defined(__MINGW32__)
+#else
+        std::string::size_type next;
+        std::string search = "'";
+        std::string replace = "'\\''";
+        for (next = filestr.find(search); next != std::string::npos; next = filestr.find(search, next)) {
+            filestr.replace(next, search.length(), replace);
+            next += replace.length();
+        }
+#endif
+        std::ostringstream message;
+        // ffmpeg -i '%s' -ac %d -ar %d -f s16le (-t %d -ss %d) - 2>DEVNULL
+        message << "ffmpeg -i '" << filestr << "' ";
+        message << "-ac " << Params::AudioStreamInput::Channels << " ";
+        message << "-ar " << (uint) Params::AudioStreamInput::SamplingRate << " ";
+        message << "-f s16le ";
+        if (_Offset_s > 0 && _Seconds > 0) {
+            message << "-t " << _Seconds << " ";
+            message << "-ss " << _Offset_s << " ";
+        }
+        message << "- 2> " << DEVNULL;
+        return message.str();
     }
 };
 
