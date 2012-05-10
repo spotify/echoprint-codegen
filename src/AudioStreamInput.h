@@ -63,7 +63,9 @@ protected:
         // TODO: Windows
         std::string filestr = std::string(filename);
 #if defined(_WIN32) && !defined(__MINGW32__)
+        std::string quote = "\"";
 #else
+        std::string quote = "'";
         std::string::size_type next;
         std::string search = "'";
         std::string replace = "'\\''";
@@ -74,7 +76,7 @@ protected:
 #endif
         std::ostringstream message;
         // ffmpeg -i '%s' -ac %d -ar %d -f s16le (-t %d -ss %d) - 2>DEVNULL
-        message << "ffmpeg -i '" << filestr << "' ";
+        message << "ffmpeg -i " << quote << filestr << quote << " ";
         message << "-ac " << Params::AudioStreamInput::Channels << " ";
         message << "-ar " << (uint) Params::AudioStreamInput::SamplingRate << " ";
         message << "-f s16le ";
