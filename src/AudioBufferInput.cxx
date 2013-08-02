@@ -3,11 +3,8 @@
 //  Copyright 2011 The Echo Nest Corporation. All rights reserved.
 //
 
-#include <string.h>
-#include <limits.h>
-#include <assert.h>
-
-
+#include <cstring>
+#include <climits>
 #include "AudioBufferInput.h"
 
 AudioBufferInput::AudioBufferInput() { }

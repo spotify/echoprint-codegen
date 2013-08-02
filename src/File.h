@@ -6,7 +6,7 @@
 
 #ifndef FILE_H
 #define FILE_H
-#include <string.h>
+#include <cstring>
 #ifdef _WIN32
 #include "win_unistd.h"
 #else

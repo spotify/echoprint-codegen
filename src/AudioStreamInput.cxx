@@ -5,6 +5,7 @@
 
 
 
+#include <cstring>
 #include <stddef.h>
 #include <stdio.h>
 #include <iostream>
@@ -18,13 +19,9 @@
 #include <winsock.h>
 #define POPEN_MODE "rb"
 #endif
-#include <string.h>
-
 #include "AudioStreamInput.h"
 #include "Common.h"
 #include "Params.h"
-
-using std::string;
 
 namespace FFMPEG {
     // Do we think FFmpeg will read this as an audio file?
@@ -121,8 +118,7 @@ bool AudioStreamInput::ProcessFilePointer(FILE* pFile) {
     }
     assert(samplesLeft == 0);
 
-    int error = ferror(pFile);
-    bool success = error == 0;
+    bool success = (ferror(pFile) == 0);
 
     if (!success)
         perror("ProcessFilePointer error");
