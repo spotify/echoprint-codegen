@@ -29,6 +29,12 @@ On OS-X with [homebrew](http://mxcl.github.io/homebrew/) you can use:
 
     brew install ffmpeg boost taglib
 
+On Windows:
+
+Refer to the documentation under the windows folder for more specifics.
+
+The binary generated in Windows will be named codegen by default where as on Linux or Mac OS-X it is named echoprint-codegen.
+
 ## Notes about libcodegen:
 
 Code generation takes a buffer of floating point PCM data sampled at 11025 Hz and mono. 
