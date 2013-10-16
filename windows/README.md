@@ -5,7 +5,7 @@ Using Visual C++ 2010 Express
 ## Preliminary steps
 
 1. Install CMake using the Win32 Installer: http://cmake.org/cmake/resources/software.html 
-2. Download zlib: http://zlib.net/zlib125.zip
+2. Download zlib: http://zlib.net/zlib-1.2.8.tar.gz ( 1.2.5 is no longer available, you will need to change where Visual C++ looks for the zlib files )
 3. Download taglib: http://developer.kde.org/~wheeler/files/src/taglib-1.7.tar.gz
 4. Download Boost: http://sourceforge.net/projects/boost/files/boost/1.46.1/
 5. Uncompress zlib, taglib and boost into the echoprint-codegen directory
