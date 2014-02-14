@@ -41,7 +41,7 @@ else
 endif
 
 echoprint-codegen: $(MODULES) main.o
-	$(CXX) $(MODULES) $(LDFLAGS) main.o -o ../echoprint-codegen
+	$(CXX) $(MODULES) main.o -o ../echoprint-codegen $(LDFLAGS)
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c -o $@ $<
