@@ -27,7 +27,7 @@ extern "C" {
  * Method:    code
  * Signature: ()V
  */
-JNIEXPORT jstring JNICALL Java_com_playax_bigear_Echoprint_code(JNIEnv *, jobject, jstring);
+JNIEXPORT jstring JNICALL Java_com_playax_fingerprint_Echoprint_code(JNIEnv *, jobject, jstring);
  
 #ifdef __cplusplus
 }

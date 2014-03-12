@@ -46,7 +46,7 @@ char *make_short_json_string(codegen_response_t* response) {
 
 extern "C"
 JNIEXPORT jstring JNICALL 
-Java_com_playax_bigear_Echoprint_code(JNIEnv *env, jobject obj, jstring fileName) {
+Java_com_playax_fingerprint_Echoprint_code(JNIEnv *env, jobject obj, jstring fileName) {
     const char *nativeString = env->GetStringUTFChars(fileName, 0);
     char* str1 = const_cast<char *>(nativeString); 
  
