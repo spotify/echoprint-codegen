@@ -4,11 +4,12 @@ Using Visual C++ 2010 Express
 
 ## Preliminary steps
 
-1. Install CMake using the Win32 Installer: http://cmake.org/cmake/resources/software.html 
-2. Download zlib: http://zlib.net/zlib125.zip
-3. Download taglib: http://developer.kde.org/~wheeler/files/src/taglib-1.7.tar.gz
-4. Download Boost: http://sourceforge.net/projects/boost/files/boost/1.46.1/
-5. Uncompress zlib, taglib and boost into the echoprint-codegen directory
+1. Install CMake using the Win32 Installer: http://cmake.org/cmake/resources/software.html
+2. Download and install 7-Zip: http://www.7-zip.org/
+3. Download zlib: http://zlib.net/zlib-1.2.8.tar.gz ( 1.2.5 is no longer available, you will need to change where Visual C++ looks for the zlib files )
+4. Download taglib: http://developer.kde.org/~wheeler/files/src/taglib-1.7.tar.gz
+5. Download Boost: http://sourceforge.net/projects/boost/files/boost/1.46.1/
+6. Uncompress zlib, taglib and boost into the echoprint-codegen directory
 
 ## Dependencies
 
@@ -38,14 +39,16 @@ Using Visual C++ 2010 Express
 
 ### FFmpeg
 
-1. Download ffmpeg: http://ffmpeg.zeranoe.com/builds/
-3. Uncompress and move somewhere
-4. Update your path to include the ffmpeg\bin directory
+1. Download ffmpeg: http://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-latest-win32-static.7z
+2. Uncompress and move somewhere in your path or 
+3. Update your path to include the ffmpeg\bin directory
 
 ## Compiling codegen
 
 1. Load codegen.sln
 2. If you downloaded different versions of the dependencies you will need to change the path to the include and library directories.
+3. Make sure release is selected in the top bar (next to the play button)
+4. In the solution explorer, right click on tag project and select Build
 
  
 ## Running

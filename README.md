@@ -25,9 +25,15 @@ There are two modes of operation of the Echoprint codegen:
 On Ubuntu or Debian you can install these dependencies with:
 
     sudo apt-get install ffmpeg libboost1.42-dev libtag1-dev zlib1g-dev
-On OS-X with homebrew you can use:
+On OS-X with [homebrew](http://mxcl.github.io/homebrew/) you can use:
 
     brew install ffmpeg boost taglib
+
+On Windows:
+
+Refer to the documentation under the windows folder for more specifics.
+
+The binary generated in Windows will be named codegen by default where as on Linux or Mac OS-X it is named echoprint-codegen.
 
 ## Notes about libcodegen:
 
