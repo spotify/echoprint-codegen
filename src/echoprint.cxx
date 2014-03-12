@@ -52,7 +52,6 @@ Java_com_playax_bigear_Echoprint_code(JNIEnv *env, jobject obj, jstring fileName
  
  	codegen_response_t* response = codegen_file(str1, 0, 0, 0);
 	
-	printf("oi\n");
 	char *output = make_short_json_string(response);
 	 
     free(response);
