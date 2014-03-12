@@ -9,10 +9,11 @@ CXX=g++
 CC=gcc
 #OPTFLAGS=-g -O0
 OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
-BOOST_CFLAGS=-I/usr/local/include/boost-1_35
+BOOST_CFLAGS=-I/usr/local/include/boost
+JNI_CFLAGS=-I$$JAVA_HOME/include/ -I$$JAVA_HOME/include/darwin/
 TAGLIB_CFLAGS=`taglib-config --cflags`
 TAGLIB_LIBS=`taglib-config --libs`
-CXXFLAGS=-Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) -fPIC $(OPTFLAGS)
+CXXFLAGS=-Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) $(JNI_CFLAGS) -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -fPIC $(OPTFLAGS)
 LDFLAGS=$(TAGLIB_LIBS) -lz -lpthread $(OPTFLAGS)
 LIBNAME=libcodegen.so
@@ -26,7 +27,10 @@ MODULES_LIB = \
     Fingerprint.o \
     MatrixUtility.o \
     SubbandAnalysis.o \
-    Whitening.o
+    Whitening.o \
+	functions.o \
+	echoprint.o
+	
 MODULES = $(MODULES_LIB) Metadata.o
 
 all: libcodegen echoprint-codegen
