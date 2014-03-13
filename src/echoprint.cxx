@@ -57,6 +57,9 @@ Java_com_playax_fingerprint_Echoprint_code(JNIEnv *env, jobject obj, jstring fil
     free(response);
  
     env->ReleaseStringUTFChars(fileName, nativeString);
-	return env->NewStringUTF(output);  	
+
+	jstring result = env->NewStringUTF(output);
+	free(output);  // or whatever will release this memory
+	return result; // result does not need output
 }
 
