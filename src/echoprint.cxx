@@ -54,14 +54,12 @@ Java_com_playax_fingerprint_Echoprint_code(JNIEnv *env, jobject obj, jstring fil
 	
 	char *output = make_short_json_string(response);
 	 
- 
     env->ReleaseStringUTFChars(fileName, nativeString);
 
 	jstring result = env->NewStringUTF(output);
 
 	free(output); 
     free(response);
-	free(cFilename);
 
 	return result; // result does not need output
 }
