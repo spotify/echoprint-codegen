@@ -48,18 +48,21 @@ extern "C"
 JNIEXPORT jstring JNICALL 
 Java_com_playax_fingerprint_Echoprint_code(JNIEnv *env, jobject obj, jstring fileName) {
     const char *nativeString = env->GetStringUTFChars(fileName, 0);
-    char* str1 = const_cast<char *>(nativeString); 
+    char* cFilename = const_cast<char *>(nativeString); 
  
- 	codegen_response_t* response = codegen_file(str1, 0, 0, 0);
+ 	codegen_response_t* response = codegen_file(cFilename, 0, 0, 0);
 	
 	char *output = make_short_json_string(response);
 	 
-    free(response);
  
     env->ReleaseStringUTFChars(fileName, nativeString);
 
 	jstring result = env->NewStringUTF(output);
-	free(output);  // or whatever will release this memory
+
+	free(output); 
+    free(response);
+	free(cFilename);
+
 	return result; // result does not need output
 }
 
