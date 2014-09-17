@@ -19,12 +19,7 @@
 #define HASH_BITMASK 0x000fffff
 #define SUBBANDS 8
 
-struct FPCode {
-    FPCode() : frame(0), code(0) {}
-    FPCode(uint f, int c) : frame(f), code(c) {}
-    uint frame;
-    uint code;
-};
+#include "FPCode.h"
 
 unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed );
 
