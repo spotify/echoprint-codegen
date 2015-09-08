@@ -230,8 +230,15 @@ void Fingerprint::Compute() {
                     memcpy(hash_material+0, (const void*)&time_delta0, 2);
                     memcpy(hash_material+2, (const void*)&time_delta1, 2);
                     memcpy(hash_material+4, (const void*)&band, 1);
-                    uint hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
-
+                    uint hashed_code;
+#if defined(UNHASHED_CODES)
+                    assert(band <= 7);
+                    assert(time_delta0 <= 1023);
+                    assert(time_delta1 <= 1023);
+                    hashed_code = ((band & 7) << 20) | ((time_delta0 & 1023) << 10) | (time_delta1 & 1023);
+#else
+                    hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
+#endif
                     // Set the code alongside the time of onset
                     _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
                     //fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %u at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);

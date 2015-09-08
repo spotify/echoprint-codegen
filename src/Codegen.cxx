@@ -38,7 +38,11 @@ Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
     Fingerprint *pFingerprint = new Fingerprint(pSubbandAnalysis, start_offset);
     pFingerprint->Compute();
 
+#if defined(UNHASHED_CODES)
+    _CodeString = createCodeStringJSON(pFingerprint->getCodes());
+#else
     _CodeString = createCodeString(pFingerprint->getCodes());
+#endif
     _NumCodes = pFingerprint->getCodes().size();
 
     delete pFingerprint;
@@ -63,6 +67,27 @@ string Codegen::createCodeString(vector<FPCode> vCodes) {
     return compress(codestream.str());
 }
 
+string Codegen::createCodeStringJSON(vector<FPCode> vCodes) {
+    if (vCodes.size() < 3) {
+        return "";
+    }
+    std::ostringstream codestream;
+    codestream << "[";
+    for (uint i = 0; i < vCodes.size(); i++) {
+        int hash = vCodes[i].code;
+        // codestream << std::setw(5) << hash;
+        codestream << "[" <<  vCodes[i].frame << ", "
+            << ((hash >> 20) & 7) << ", "
+            << ((hash >> 10) & 1023) << ", "
+            << ((hash >>  0) & 1023)
+            << "]";
+        if (i < vCodes.size()-1) {
+            codestream << ", ";
+        }
+    }
+    codestream << "]";
+    return codestream.str();
+}
 
 string Codegen::compress(const string& s) {
     long max_compressed_length = s.size()*2;
