@@ -75,7 +75,7 @@ Codegen also runs in a multithreaded mode for bulk resolving:
 
     ./echoprint-codegen -s 10 30 < file_list
 
-Will compute codes for every file in file_list for 30 seconds starting at 10 seconds. (It tries to be smart about the number of threads to use.) It will output a JSON list. Note that song/identify can accept lists in the JSON, which will be faster than sending each code one at a time. The "tag" parameter is added to each code dictionary to match the resolving material.
+Will compute codes for every file in file_list for 30 seconds starting at 10 seconds. (It tries to be smart about the number of threads to use.) It will output a JSON list.
 
 ## Integration with Scala and Java via JNI
 You can use echoprint-codegen inside a JVM. For this you need to create a class named Echoprint in package com.playax.fingerprint. Here is a Scala example of this class:
