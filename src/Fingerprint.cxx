@@ -12,6 +12,8 @@
 #include "win_funcs.h"
 #endif
 
+#define SATURATE(var, val) if ((var) > (val)) (var) = (val);
+
 unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     // MurmurHash2, by Austin Appleby http://sites.google.com/site/murmurhash/
     // m and r are constants set by austin
@@ -182,13 +184,18 @@ uint Fingerprint::quantized_time_for_frame_absolute(uint frame) {
 
 void Fingerprint::Compute() {
     uint actual_codes = 0;
+#if !defined(UNHASHED_CODES)
     unsigned char hash_material[5];
     for(uint i=0;i<5;i++) hash_material[i] = 0;
+#endif
     uint * onset_counter_for_band;
     matrix_u out;
     uint onset_count = adaptiveOnsets(345, out, onset_counter_for_band);
     _Codes.resize(onset_count*6);
 
+#if defined(UNHASHED_CODES)
+    assert(SUBBANDS <= 8);
+#endif
     for(unsigned char band=0;band<SUBBANDS;band++) {
         if (onset_counter_for_band[band]>2) {
             for(uint onset=0;onset<onset_counter_for_band[band]-2;onset++) {
@@ -228,9 +235,12 @@ void Fingerprint::Compute() {
                     short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
                     uint hashed_code;
 #if defined(UNHASHED_CODES)
-                    assert(band <= 7);
                     assert(time_delta0 <= 1023);
                     assert(time_delta1 <= 1023);
+#if defined(NDEBUG)
+                    SATURATE(time_delta0, 1023);
+                    SATURATE(time_delta1, 1023);
+#endif
                     hashed_code = ((band & 7) << 20) | ((time_delta0 & 1023) << 10) | (time_delta1 & 1023);
 #else
                     // Create a key from the time deltas and the band index
