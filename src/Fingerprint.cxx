@@ -226,10 +226,6 @@ void Fingerprint::Compute() {
                     // Quantize the time deltas to 23ms
                     short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
                     short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
-                    // Create a key from the time deltas and the band index
-                    memcpy(hash_material+0, (const void*)&time_delta0, 2);
-                    memcpy(hash_material+2, (const void*)&time_delta1, 2);
-                    memcpy(hash_material+4, (const void*)&band, 1);
                     uint hashed_code;
 #if defined(UNHASHED_CODES)
                     assert(band <= 7);
@@ -237,6 +233,10 @@ void Fingerprint::Compute() {
                     assert(time_delta1 <= 1023);
                     hashed_code = ((band & 7) << 20) | ((time_delta0 & 1023) << 10) | (time_delta1 & 1023);
 #else
+                    // Create a key from the time deltas and the band index
+                    memcpy(hash_material+0, (const void*)&time_delta0, 2);
+                    memcpy(hash_material+2, (const void*)&time_delta1, 2);
+                    memcpy(hash_material+4, (const void*)&band, 1);
                     hashed_code = MurmurHash2(&hash_material, 5, HASH_SEED) & HASH_BITMASK;
 #endif
                     // Set the code alongside the time of onset
