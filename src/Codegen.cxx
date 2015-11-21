@@ -124,9 +124,17 @@ std::string Codegen::getCodeString(bool human_readable) {
     if (!is_code_string_cached[n]) {
         is_code_string_cached[n] = true;
         if (human_readable) {
-            code_string_cache[n] = _CodeString;
+            if (_CodeString.size() > 0) {
+                code_string_cache[n] = _CodeString;
+            } else {
+                code_string_cache[n] = "[]";
+            }
         } else {
-            code_string_cache[n] = '"' + compress(_CodeString) + '"';
+            if (_CodeString.size() > 0) {
+                code_string_cache[n] = '"' + compress(_CodeString) + '"';
+            } else {
+                code_string_cache[n] = "\"\"";
+            }
         }
     }
     return code_string_cache[n];
