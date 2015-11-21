@@ -23,6 +23,10 @@ using std::string;
 using std::vector;
 
 Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
+    for (int i = 0; i < 2; ++i) {
+        is_code_string_cached[i] = false;
+    }
+
     if (Params::AudioStreamInput::MaxSamples < (uint)numSamples)
         throw std::runtime_error("File was too big\n");
 
@@ -113,4 +117,17 @@ string Codegen::compress(const string& s) {
     string encoded = base64_encode(compressed, compressed_length, true);
     delete [] compressed;
     return encoded;
+}
+
+std::string Codegen::getCodeString(bool human_readable) {
+    const uint n = human_readable;
+    if (!is_code_string_cached[n]) {
+        is_code_string_cached[n] = true;
+        if (human_readable) {
+            code_string_cache[n] = _CodeString;
+        } else {
+            code_string_cache[n] = '"' + compress(_CodeString) + '"';
+        }
+    }
+    return code_string_cache[n];
 }

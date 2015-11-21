@@ -99,7 +99,7 @@ void print_json_to_screen(char* output, int count, int done) {
     }
 }
 
-char *make_json_string(codegen_response_t* response) {
+char *make_json_string(codegen_response_t* response, bool human_readable_code) {
     
     if (response->error != NULL) {
         return response->error;
@@ -109,7 +109,7 @@ char *make_json_string(codegen_response_t* response) {
     auto_ptr<Metadata> pMetadata(new Metadata(response->filename));
 
     // preamble + codelen
-    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString().c_str()) ));
+    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString(human_readable_code).c_str()) ));
 
     sprintf(output,"{\"metadata\":{\"artist\":\"%s\", \"release\":\"%s\", \"title\":\"%s\", \"genre\":\"%s\", \"bitrate\":%d,"
                     "\"sample_rate\":%d, \"duration\":%d, \"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
@@ -130,15 +130,45 @@ char *make_json_string(codegen_response_t* response) {
         response->t2,
         response->t1,
         response->codegen->getNumCodes(),
-        response->codegen->getCodeString().c_str(),
+        response->codegen->getCodeString(human_readable_code).c_str(),
         response->tag
     );
     return output;
 }
 
+// Return true if has specified flag, false otherwise. Remove specified flags.
+bool extract_flag(int* p_argc, char*** p_argv, const char* flag) {
+    int argc = *p_argc;
+    char** const argv = *p_argv;
+    for (int i = 1; i < argc; ++i) {
+        if (strcmp(flag, argv[i]) == 0) {
+            for (int k = i+1; k < argc; ++k) {
+                *(*p_argv+k-1) = *(*p_argv+k);
+            }
+            --argc;
+        }
+    }
+    const bool changed = (*p_argc != argc);
+    *p_argc = argc;
+    return changed;
+ }
+
+bool take_human_readable_flag(int* p_argc, char*** p_argv) {
+    return extract_flag(p_argc, p_argv, "-h");
+ }
+
 int main(int argc, char** argv) {
+    const bool human_readable_code = take_human_readable_flag(&argc, &argv);
+
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s [ filename | -s ] [seconds_start] [seconds_duration] [< file_list (if -s is set)]\n", argv[0]);
+        const char left_margin[] = "    ";
+        fprintf(stderr,
+            "Usage:\n"
+            "%s%s [ filename | -s ] [seconds_start] [seconds_duration] "
+            "[< file_list (if -s is set)]\n",
+            left_margin, argv[0]);
+        fputs("OPTIONS\n", stderr);
+        fprintf(stderr, "%s-h\tHuman-readable code (in contrast to the default""base64 encoded zlib compressed code)\n", left_margin);
         exit(-1);
     }
 
@@ -173,7 +203,8 @@ int main(int argc, char** argv) {
         // Threading doesn't work in windows yet.
         for(int i=0;i<count;i++) {
             codegen_response_t* response = codegen_file((char*)files[i].c_str(), start_offset, duration, i);
-            char *output = make_json_string(response);
+            char *output = make_json_string(response, human_readable_code
+                );
             print_json_to_screen(output, count, i+1);
             if (response->codegen) {
                 delete response->codegen;
@@ -222,7 +253,7 @@ int main(int argc, char** argv) {
                     parm[i]->done = 0;
                     done++;
                     codegen_response_t *response = (codegen_response_t*)parm[i]->response;
-                    char *json = make_json_string(response);
+                    char *json = make_json_string(response, human_readable_code);
                     print_json_to_screen(json, count, done);
                     if (response->codegen) {
                         delete response->codegen;
