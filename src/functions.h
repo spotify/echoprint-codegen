@@ -28,4 +28,4 @@ typedef struct {
 
 codegen_response_t *codegen_file(char*, int, int, int);
 std::string escape(const string& value);
-char *make_json_string(codegen_response_t* response);
+char *make_json_string(codegen_response_t* response, bool human_readable_code);

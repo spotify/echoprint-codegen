@@ -18,14 +18,14 @@
 
 using namespace std;
 
-char *make_short_json_string(codegen_response_t* response) {
+char *make_short_json_string(codegen_response_t* response, bool human_readable_code) {
     
     if (response->error != NULL) {
         return response->error;
     }
     
     // preamble + codelen
-    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString().c_str()) ));
+    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString(human_readable_code).c_str()) ));
 
     sprintf(output,"{\"metadata\":{\"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
                     " \"start_offset\":%d, \"version\":%2.2f, \"codegen_time\":%2.6f, \"decode_time\":%2.6f}, \"code_count\":%d,"
@@ -38,7 +38,7 @@ char *make_short_json_string(codegen_response_t* response) {
         response->t2,
         response->t1,
         response->codegen->getNumCodes(),
-        response->codegen->getCodeString().c_str(),
+        response->codegen->getCodeString(human_readable_code).c_str(),
         response->tag
     );
     return output;
@@ -47,12 +47,13 @@ char *make_short_json_string(codegen_response_t* response) {
 extern "C"
 JNIEXPORT jstring JNICALL 
 Java_com_playax_fingerprint_Echoprint_code(JNIEnv *env, jobject obj, jstring fileName) {
+    const bool human_readable_code = false;
     const char *nativeString = env->GetStringUTFChars(fileName, 0);
     char* cFilename = const_cast<char *>(nativeString); 
  
  	codegen_response_t* response = codegen_file(cFilename, 0, 0, 0);
 	
-	char *output = make_short_json_string(response);
+	char *output = make_short_json_string(response, human_readable_code);
 	 
     env->ReleaseStringUTFChars(fileName, nativeString);
 

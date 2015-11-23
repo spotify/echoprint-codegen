@@ -99,43 +99,6 @@ void print_json_to_screen(char* output, int count, int done) {
     }
 }
 
-char *make_json_string(codegen_response_t* response, bool human_readable_code) {
-    
-    if (response->error != NULL) {
-        return response->error;
-    }
-    
-    // Get the ID3 tag information.
-    auto_ptr<Metadata> pMetadata(new Metadata(response->filename));
-
-    // preamble + codelen
-    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString(human_readable_code).c_str()) ));
-
-    sprintf(output,"{\"metadata\":{\"artist\":\"%s\", \"release\":\"%s\", \"title\":\"%s\", \"genre\":\"%s\", \"bitrate\":%d,"
-                    "\"sample_rate\":%d, \"duration\":%d, \"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
-                    " \"start_offset\":%d, \"version\":%2.2f, \"codegen_time\":%2.6f, \"decode_time\":%2.6f}, \"code_count\":%d,"
-                    " \"code\":%s, \"tag\":%d}",
-        escape(pMetadata->Artist()).c_str(),
-        escape(pMetadata->Album()).c_str(),
-        escape(pMetadata->Title()).c_str(),
-        escape(pMetadata->Genre()).c_str(),
-        pMetadata->Bitrate(),
-        pMetadata->SampleRate(),
-        pMetadata->Seconds(),
-        escape(response->filename).c_str(),
-        response->numSamples,
-        response->duration,
-        response->start_offset,
-        response->codegen->getVersion(),
-        response->t2,
-        response->t1,
-        response->codegen->getNumCodes(),
-        response->codegen->getCodeString(human_readable_code).c_str(),
-        response->tag
-    );
-    return output;
-}
-
 // Return true if has specified flag, false otherwise. Remove specified flags.
 bool extract_flag(int* p_argc, char*** p_argv, const char* flag) {
     int argc = *p_argc;
