@@ -24,10 +24,6 @@
 
 using namespace std;
 
-// The response from the codegen. Contains all the fields necessary
-// to create a json string.
-
-
 // Struct to pass to the worker threads
 typedef struct {
     char *filename;

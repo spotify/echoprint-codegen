@@ -13,7 +13,8 @@
 #include "Codegen.h"
 #include <string>
 
-
+// The response from the codegen. Contains all the fields necessary
+// to create a json string.
 typedef struct {
     char *error;
     char *filename;
