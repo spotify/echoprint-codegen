@@ -233,6 +233,9 @@ void Fingerprint::Compute() {
                     // Quantize the time deltas to 23ms
                     short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
                     short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
+                    if (k == 0 && time_delta0 == 0 && time_delta1 == 0) {
+                        continue;
+                    }
                     uint hashed_code;
 #if defined(UNHASHED_CODES)
                     assert(time_delta0 <= 1023);
