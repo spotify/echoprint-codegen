@@ -229,7 +229,7 @@ void Fingerprint::Compute() {
                 }
 
                 // For each pair emit a code
-                for(uint k=0;k<nhashes;k++) {
+                for(uint k=0; k < nhashes; k++) {
                     // Quantize the time deltas to 23ms
                     short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
                     short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);

@@ -26,7 +26,8 @@ MODULES_LIB = \
     Fingerprint.o \
     MatrixUtility.o \
     SubbandAnalysis.o \
-    Whitening.o
+    Whitening.o \
+    functions.o
 MODULES = $(MODULES_LIB) Metadata.o
 
 all: libcodegen echoprint-codegen
