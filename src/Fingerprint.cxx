@@ -207,7 +207,7 @@ void Fingerprint::Compute() {
                     p[0][i] = 0;
                     p[1][i] = 0;
                 }
-                int nhashes = 6;
+                uint nhashes = 6;
 
                 if ((int)onset == (int)onset_counter_for_band[band]-4)  { nhashes = 3; }
                 if ((int)onset == (int)onset_counter_for_band[band]-3)  { nhashes = 1; }
@@ -229,10 +229,13 @@ void Fingerprint::Compute() {
                 }
 
                 // For each pair emit a code
-                for(uint k=0;k<6;k++) {
+                for(uint k=0; k < nhashes; k++) {
                     // Quantize the time deltas to 23ms
                     short time_delta0 = (short)quantized_time_for_frame_delta(p[0][k]);
                     short time_delta1 = (short)quantized_time_for_frame_delta(p[1][k]);
+                    if (k == 0 && time_delta0 == 0 && time_delta1 == 0) {
+                        continue;
+                    }
                     uint hashed_code;
 #if defined(UNHASHED_CODES)
                     assert(time_delta0 <= 1023);
