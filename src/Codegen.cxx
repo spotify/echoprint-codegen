@@ -72,9 +72,6 @@ string Codegen::createCodeString(vector<FPCode> vCodes) {
 }
 
 string Codegen::createCodeStringJSON(vector<FPCode> vCodes) {
-    if (vCodes.size() < 3) {
-        return "";
-    }
     std::ostringstream codestream;
     codestream << "[";
     for (uint i = 0; i < vCodes.size(); i++) {
