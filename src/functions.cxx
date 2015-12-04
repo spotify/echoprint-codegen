@@ -94,7 +94,7 @@ codegen_response_t *codegen_file(char* filename, int start_offset, int duration,
     return response;
 }
 
-char *make_json_string(codegen_response_t* response) {
+char *make_json_string(codegen_response_t* response, bool human_readable_code) {
     
     if (response->error != NULL) {
         return response->error;
@@ -104,12 +104,12 @@ char *make_json_string(codegen_response_t* response) {
     auto_ptr<Metadata> pMetadata(new Metadata(response->filename));
 
     // preamble + codelen
-    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString().c_str()) ));
+    char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString(human_readable_code).c_str()) ));
 
     sprintf(output,"{\"metadata\":{\"artist\":\"%s\", \"release\":\"%s\", \"title\":\"%s\", \"genre\":\"%s\", \"bitrate\":%d,"
                     "\"sample_rate\":%d, \"duration\":%d, \"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
                     " \"start_offset\":%d, \"version\":%2.2f, \"codegen_time\":%2.6f, \"decode_time\":%2.6f}, \"code_count\":%d,"
-                    " \"code\":\"%s\", \"tag\":%d}",
+                    " \"code\":%s, \"tag\":%d}",
         escape(pMetadata->Artist()).c_str(),
         escape(pMetadata->Album()).c_str(),
         escape(pMetadata->Title()).c_str(),
@@ -125,7 +125,7 @@ char *make_json_string(codegen_response_t* response) {
         response->t2,
         response->t1,
         response->codegen->getNumCodes(),
-        response->codegen->getCodeString().c_str(),
+        response->codegen->getCodeString(human_readable_code).c_str(),
         response->tag
     );
     return output;
