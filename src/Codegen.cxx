@@ -26,25 +26,20 @@ Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
     if (Params::AudioStreamInput::MaxSamples < (uint)numSamples)
         throw std::runtime_error("File was too big\n");
 
-    Whitening *pWhitening = new Whitening(pcm, numSamples);
+    std::auto_ptr<Whitening> pWhitening = new Whitening(pcm, numSamples);
     pWhitening->Compute();
 
-    AudioBufferInput *pAudio = new AudioBufferInput();
+    std::auto_ptr<AudioBufferInput> pAudio = new AudioBufferInput();
     pAudio->SetBuffer(pWhitening->getWhitenedSamples(), pWhitening->getNumSamples());
 
-    SubbandAnalysis *pSubbandAnalysis = new SubbandAnalysis(pAudio);
+    std::auto_ptr<SubbandAnalysis> pSubbandAnalysis = new SubbandAnalysis(pAudio);
     pSubbandAnalysis->Compute();
 
-    Fingerprint *pFingerprint = new Fingerprint(pSubbandAnalysis, start_offset);
+    std::auto_ptr<Fingerprint> pFingerprint = new Fingerprint(pSubbandAnalysis, start_offset);
     pFingerprint->Compute();
 
     _CodeString = createCodeString(pFingerprint->getCodes());
     _NumCodes = pFingerprint->getCodes().size();
-
-    delete pFingerprint;
-    delete pSubbandAnalysis;
-    delete pWhitening;
-    delete pAudio;
 }
 
 string Codegen::createCodeString(vector<FPCode> vCodes) {
