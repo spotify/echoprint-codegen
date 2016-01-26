@@ -30,14 +30,14 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed );
 
 class Fingerprint {
 public:
+    Fingerprint(std::unique_ptr<SubbandAnalysis> pSubbandAnalysis, int offset);
     uint quantized_time_for_frame_delta(uint frame_delta);
     uint quantized_time_for_frame_absolute(uint frame);
-    Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset);
     void Compute();
     uint adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) ;
-    std::vector<FPCode>& getCodes(){return _Codes;}
+    std::vector<FPCode>& getCodes() {return _Codes;}
 protected:
-    SubbandAnalysis *_pSubbandAnalysis;
+    std::unique_ptr<SubbandAnalysis> _pSubbandAnalysis;
     int _Offset;
     std::vector<FPCode> _Codes;
 };

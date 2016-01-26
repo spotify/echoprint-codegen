@@ -48,8 +48,9 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     return h;
 }
 
-Fingerprint::Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset)
-    : _pSubbandAnalysis(pSubbandAnalysis), _Offset(offset) { }
+Fingerprint::Fingerprint(std::unique_ptr<SubbandAnalysis> pSubbandAnalysis, int offset)
+  : _pSubbandAnalysis(std::move(pSubbandAnalysis)), _Offset(offset)
+{ }
 
 
 uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {

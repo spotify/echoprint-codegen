@@ -11,12 +11,6 @@
 #include "win_funcs.h"
 #endif
 
-SubbandAnalysis::SubbandAnalysis(AudioStreamInput* pAudio) {
-    _pSamples = pAudio->getSamples();
-    _NumSamples = pAudio->getNumSamples();
-    Init();
-}
-
 SubbandAnalysis::SubbandAnalysis(const float* pSamples, uint numSamples) :
     _pSamples(pSamples), _NumSamples(numSamples) {
     Init();

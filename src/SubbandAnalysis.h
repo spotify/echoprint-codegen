@@ -6,6 +6,7 @@
 
 #ifndef SUBBANDANALYSIS_H
 #define SUBBANDANALYSIS_H
+
 #include "Common.h"
 #include "Params.h"
 #include "MatrixUtility.h"
@@ -36,12 +37,9 @@ namespace SubbandFilterBank {
         -0.000009060, -0.000006199, -0.000003815, -0.000002384, -0.000001431, -0.000000954, -0.000000477, 0};
 }
 
-class AudioStreamInput;
-
 class SubbandAnalysis {
 public:
     inline SubbandAnalysis() {};
-    SubbandAnalysis(AudioStreamInput* pAudio);
     SubbandAnalysis(const float* pSamples, uint numSamples);
     virtual ~SubbandAnalysis();
     void Compute();
