@@ -65,11 +65,11 @@ int getNumCores() {
   uint32_t count;
 
   nm[0] = CTL_HW; nm[1] = HW_AVAILCPU;
-  sysctl(nm, 2, &count, &len, NULL, 0);
+  sysctl(nm, 2, &count, &len, nullptr, 0);
 
   if(count < 1) {
     nm[1] = HW_NCPU;
-    sysctl(nm, 2, &count, &len, NULL, 0);
+    sysctl(nm, 2, &count, &len, nullptr, 0);
     if(count < 1) { count = 1; }
   }
   return count;
@@ -111,13 +111,13 @@ codegen_response_t *codegen_file(char* filename, int start_offset, int duration,
   // This is called by a thread
   double t1 = now();
   codegen_response_t *response = (codegen_response_t *)malloc(sizeof(codegen_response_t));
-  response->error = NULL;
-  response->codegen = NULL;
+  response->error = nullptr;
+  response->codegen = nullptr;
 
   std::auto_ptr<FfmpegStreamInput> pAudio(new FfmpegStreamInput());
   pAudio->ProcessFile(filename, start_offset, duration);
 
-  if (pAudio.get() == NULL) { // Unable to decode!
+  if (pAudio.get() == nullptr) { // Unable to decode!
     char* output = (char*) malloc(16384);
     sprintf(output,"{\"error\":\"could not create decoder\", \"tag\":%d, \"metadata\":{\"filename\":\"%s\"}}",
             tag,
@@ -162,7 +162,7 @@ void *threaded_codegen_file(void *parm) {
   p->response = response;
   // mark when we're done so the controlling thread can move on.
   p->done = 1;
-  return NULL;
+  return nullptr;
 }
 
 void print_json_to_screen(char* output, int count, int done) {
@@ -180,7 +180,7 @@ void print_json_to_screen(char* output, int count, int done) {
 
 char *make_json_string(codegen_response_t* response) {
     
-  if (response->error != NULL) {
+  if (response->error) {
     return response->error;
   }
     

@@ -12,7 +12,7 @@ OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
 BOOST_CFLAGS=-I/usr/local/include/boost-1_35
 TAGLIB_CFLAGS=`taglib-config --cflags`
 TAGLIB_LIBS=`taglib-config --libs`
-CXXFLAGS=-Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) -fPIC $(OPTFLAGS)
+CXXFLAGS=-std=c++11 -Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -fPIC $(OPTFLAGS)
 LDFLAGS=$(TAGLIB_LIBS) -lz -lpthread $(OPTFLAGS)
 LIBNAME=libcodegen.so

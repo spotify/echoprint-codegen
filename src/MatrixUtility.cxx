@@ -13,7 +13,7 @@ namespace MatrixUtility {
 
 bool TextFileOutput(const matrix_f& A, const char* filename) {
     FILE *matrix_file = fopen(filename, "w");
-    bool success = (matrix_file != NULL);
+    bool success = (matrix_file != nullptr);
     if (success) {
         const float *d = &A.data()[0];
         for (uint i = 0; i < A.size1(); i++) {
@@ -29,7 +29,7 @@ bool TextFileOutput(const matrix_f& A, const char* filename) {
 
 bool FileOutput(const matrix_f& A, const char* filename) {
     FILE *matrix_file = fopen(filename, "wb");
-    bool success = (matrix_file != NULL);
+    bool success = (matrix_file != nullptr);
     if (success) {
         uint mm = A.size1();
         uint mn = A.size2();

@@ -26,8 +26,8 @@ bool WriteStuffToFile(const char* filename)
 class File {
 public:
     File(const char* filename){_f = fopen(filename, "w");};
-    ~File(){fclose(_f); _f = NULL;}
-    operator bool(){return _f != NULL;}
+    ~File(){fclose(_f); _f = nullptr;}
+    operator bool(){return _f != nullptr;}
     operator FILE*(){return _f;}
     static bool Exists(const char* filename){return (access(filename, F_OK) == 0);}
     static bool ends_with(const char* filename, const char* ending) {
