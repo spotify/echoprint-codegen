@@ -46,8 +46,8 @@ bool AudioStreamInput::IsSupported(const char *path) {
 AudioStreamInput::AudioStreamInput() : _pSamples(nullptr), _NumberSamples(0), _Offset_s(0), _Seconds(0) {}
 
 AudioStreamInput::~AudioStreamInput() {
-  if (_pSamples != nullptr)
-    delete [] _pSamples, _pSamples = nullptr;
+  delete [] _pSamples;
+  _pSamples = nullptr;
 }
 
 
