@@ -3,3 +3,7 @@
 *.so
 echoprint-codegen
 src/libcodegen.so.4.1.1
+
+Debug
+*.opendb
+*~

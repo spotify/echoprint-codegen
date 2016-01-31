@@ -11,12 +11,13 @@
 #include "Params.h"
 #include "MatrixUtility.h"
 
-#define C_LEN 128
-#define SUBBANDS 8
-#define M_ROWS 8
-#define M_COLS 16
-
 namespace SubbandFilterBank {
+	static const unsigned int C_LEN = 128;
+	static const unsigned int SUBBANDS = 8;
+
+	static const unsigned int M_ROWS = 8;
+	static const unsigned int M_COLS = 16;
+
     // 128pt, 1/8th band low-pass prototype subsampled from Table_analysis_window
     static const float C[C_LEN] = {
          0.000000477,  0.000000954,  0.000001431,  0.000002384,  0.000003815,  0.000006199,  0.000009060,  0.000013828,
@@ -45,7 +46,7 @@ public:
     void Compute();
 public:
     inline uint getNumFrames() const {return _NumFrames;}
-    inline uint getNumBands() const {return SUBBANDS;}
+    inline uint getNumBands() const {return SubbandFilterBank::SUBBANDS;}
     const matrix_f& getMatrix() {return _Data;}
 
 protected:

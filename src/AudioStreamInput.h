@@ -13,7 +13,7 @@
 #include <math.h>
 #include "File.h"
 #if defined(_WIN32) && !defined(__MINGW32__)
-#define snprintf _snprintf
+#define snprintf _snprintf_s
 #define DEVNULL "nul"
 #else
 #define DEVNULL "/dev/null"

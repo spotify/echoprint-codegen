@@ -95,7 +95,8 @@ bool AudioStreamInput::ProcessStandardInput(void) {
 
 bool AudioStreamInput::ProcessFilePointer(FILE* pFile) {
   std::vector<short*> vChunks;
-  uint nSamplesPerChunk = (uint) Params::AudioStreamInput::SamplingRate * Params::AudioStreamInput::SecondsPerChunk;
+
+  uint nSamplesPerChunk = static_cast<uint>(Params::AudioStreamInput::SamplingRate * Params::AudioStreamInput::SecondsPerChunk);
   uint samplesRead = 0;
   do {
     short* pChunk = new short[nSamplesPerChunk];
