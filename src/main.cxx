@@ -167,6 +167,11 @@ void *threaded_codegen_file(void *parm) {
     return NULL;
 }
 
+#ifdef NO_THREADS
+// no difference.
+#define nothread_codegen_file threaded_codegen_file
+#endif
+
 void print_json_to_screen(char* output, int count, int done) {
     // Print a json block depending on how many there are and where we are.
     if(done==1 && count>1) {
@@ -272,10 +277,12 @@ int main(int argc, char** argv) {
         if (num_threads < 2) num_threads = 2;
         if (num_threads > count) num_threads = count;
 
+        thread_parm_t **parm = (thread_parm_t**)malloc(sizeof(thread_parm_t*)*num_threads);
+#ifndef NO_THREADS
         // Setup threading
         pthread_t *t = (pthread_t*)malloc(sizeof(pthread_t)*num_threads);
-        thread_parm_t **parm = (thread_parm_t**)malloc(sizeof(thread_parm_t*)*num_threads);
         pthread_attr_t *attr = (pthread_attr_t*)malloc(sizeof(pthread_attr_t)*num_threads);
+#endif
 
         // Kick off the first N threads
         int still_left = count-1-already;
@@ -287,19 +294,27 @@ int main(int argc, char** argv) {
             parm[i]->duration = duration;
             parm[i]->done = 0;
             still_left--;
+#ifndef NO_THREADS
             pthread_attr_init(&attr[i]);
             pthread_attr_setdetachstate(&attr[i], PTHREAD_CREATE_DETACHED);
             // Kick off the thread
             if (pthread_create(&t[i], &attr[i], threaded_codegen_file, (void*)parm[i]))
                 throw std::runtime_error("Problem creating thread\n");
+#else
+	    // run sequentially, one by one
+	    nothread_codegen_file((void*)parm[i]);
+#endif
         }
 
         int done = 0;
         // Now wait for the threads to come back, and also kick off new ones
         while(done<count) {
             // Check which threads are done
+	    //                              -- this is an inefficient polling. Please consider using
+	    //                                 mutex and condvar instead of this "lockfree" algorithm
             for(int i=0;i<num_threads;i++) {
-                if (parm[i]->done) {
+                if (parm[i]->done) { // There is a race condition here in the threaded version.
+				     // We get a coredump file every hour.
                     parm[i]->done = 0;
                     done++;
                     codegen_response_t *response = (codegen_response_t*)parm[i]->response;
@@ -315,10 +330,13 @@ int main(int argc, char** argv) {
                         parm[i]->tag = still_left;
                         parm[i]->filename = (char*)files[still_left].c_str();
                         still_left--;
+#ifndef NO_THREADS
                         int err= pthread_create(&t[i], &attr[i], threaded_codegen_file, (void*)parm[i]);
                         if(err)
                             throw std::runtime_error("Problem creating thread\n");
-
+#else
+			nothread_codegen_file((void*)parm[i]);
+#endif
                     }
                 }
             }
@@ -328,9 +346,11 @@ int main(int argc, char** argv) {
         for(int i=0;i<num_threads;i++) {
             free(parm[i]);
         }
+#ifndef NO_THREADS
         free(t);
-        free(parm);
         free(attr);
+#endif
+        free(parm);
         return 0;
 
 #endif // _WIN32
