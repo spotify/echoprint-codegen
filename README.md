@@ -59,15 +59,46 @@ The makefile builds an example code generator that uses libcodegen, called "code
 
 Will take 30 seconds of audio from 10 seconds into the file and output JSON suitable for querying:
 
-    {"metadata":{"artist":"Michael jackson", "release":"800 chansons des annes 80", "title":"Billie jean", "genre":"", "bitrate":192, "sample_rate":44100, "seconds":294, "filename":"billie_jean.mp3", "samples_decoded":220598, "given_duration":30, "start_offset":10, "version":4.00}, "code_count":846, "code":"JxVlIuNwzAMQ1fxCDL133+xo1rnGqNAEcWy/ERa2aKeZmW...
+    [
+    {"metadata":{"artist":"Michael Jackson", "release":"Thriller", "title":"Billie Jean", "genre":"", "bitrate":128,"sample_rate":44100, "duration":294, "filename":"billie_jean.mp3", "samples_decoded":330902, "given_duration":30, "start_offset":10, "version":4.12, "codegen_time":0.087329, "decode_time":0.297166}, "code_count":906, "code":"eJztmm2OZacORafEt2E4YGD-Q8jCt1UnXdKlIlVa ..."
+    ]
 
-You can host your own [Echoprint server](http://github.com/echonest/echoprint-server "echoprint-server") and ingest or query to that.
+You can POST this JSON directly to the Echo Nest's [song/identify](http://developer.echonest.com/docs/v4/song.html#identify "song/identify") (who has an Echoprint server booted), for example:
+
+    curl -F "query=@post_string" http://developer.echonest.com/api/v4/song/identify?api_key=YOUR_KEY
+    {"response": {"status": {"version": "4.2", "code": 0, "message": "Success"}, "songs": [{"tag": 0, "score": 273, "title": "Billie Jean", "message": "OK (match type 6)", "artist_id": "ARXPPEY1187FB51DF4", "artist_name": "Michael Jackson", "id": "SOJIZLV12A58A78309"}]}}
+    (you can also use GET, see the API description)
+
+Or you can host your own [Echoprint server](http://github.com/echonest/echoprint-server "echoprint-server") and ingest or query to that.
 
 Codegen also runs in a multithreaded mode for bulk resolving:
 
     ./echoprint-codegen -s 10 30 < file_list
 
 Will compute codes for every file in file_list for 30 seconds starting at 10 seconds. (It tries to be smart about the number of threads to use.) It will output a JSON list.
+
+## Integration with Scala and Java via JNI
+You can use echoprint-codegen inside a JVM. For this you need to create a class named Echoprint in package com.playax.fingerprint. Here is a Scala example of this class:
+
+    package com.playax.fingerprint
+
+    class Echoprint {
+       @native def code(fileName: String): String 
+    }
+
+    object Echoprint {
+      val EP = new Echoprint
+
+      System.load("/path/to/libcodegen.4.1.2.dylib")
+
+     def code(fileName: String) = EP.code(fileName)
+    }
+
+Then you call static Method:
+
+    Echoprint.code("/path/to/file.mp3")
+
+And it will return the json with fingerprint data.
 
 ## Statistics
 
