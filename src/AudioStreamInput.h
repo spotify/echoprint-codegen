@@ -60,6 +60,7 @@ public:
 protected:
     std::string GetCommandLine(const char* filename) {
         // TODO: Windows
+        // As a workaround, this works if the program can write to C:\dev\null
         char message[4096] = {0};
         if (_Offset_s == 0 && _Seconds == 0)
             snprintf(message, NELEM(message), "ffmpeg -i \"%s\"  -ac %d -ar %d -f s16le - 2>%s",
