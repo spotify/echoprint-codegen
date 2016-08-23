@@ -6,9 +6,7 @@
 
 #ifndef WHITENING_H
 #define WHITENING_H
-#include "Common.h"
-#include "Params.h"
-#include "MatrixUtility.h"
+#include "AudioStreamInput.h"
 
 
 class AudioStreamInput;
