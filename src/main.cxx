@@ -191,23 +191,13 @@ char *make_json_string(codegen_response_t* response) {
         return response->error;
     }
     
-    // Get the ID3 tag information.
-    auto_ptr<Metadata> pMetadata(new Metadata(response->filename));
-
     // preamble + codelen
     char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString().c_str()) ));
 
-    sprintf(output,"{\"metadata\":{\"artist\":\"%s\", \"release\":\"%s\", \"title\":\"%s\", \"genre\":\"%s\", \"bitrate\":%d,"
-                    "\"sample_rate\":%d, \"duration\":%d, \"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
+    sprintf(output,"{\"metadata\":{\"artist\":\"\", \"release\":\"\", \"title\":\"\", \"genre\":\"\", \"bitrate\":0,"
+                    "\"sample_rate\":0, \"duration\":0, \"filename\":\"%s\", \"samples_decoded\":%d, \"given_duration\":%d,"
                     " \"start_offset\":%d, \"version\":%2.2f, \"codegen_time\":%2.6f, \"decode_time\":%2.6f}, \"code_count\":%d,"
                     " \"code\":\"%s\", \"tag\":%d}",
-        escape(pMetadata->Artist()).c_str(),
-        escape(pMetadata->Album()).c_str(),
-        escape(pMetadata->Title()).c_str(),
-        escape(pMetadata->Genre()).c_str(),
-        pMetadata->Bitrate(),
-        pMetadata->SampleRate(),
-        pMetadata->Seconds(),
         escape(response->filename).c_str(),
         response->numSamples,
         response->duration,
