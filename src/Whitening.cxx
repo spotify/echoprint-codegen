@@ -3,8 +3,9 @@
 //  Copyright 2011 The Echo Nest Corporation. All rights reserved.
 //
 
-#include "Common.h"
+
 #include "Whitening.h"
+#include "AudioStreamInput.h"
 
 Whitening::Whitening(AudioStreamInput* pAudio) {
     _pSamples = pAudio->getSamples();
