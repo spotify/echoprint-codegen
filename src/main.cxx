@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <memory>
+#include <atomic>
 #ifndef _WIN32
     #include <libgen.h>
     #include <dirent.h>
@@ -42,7 +43,7 @@ typedef struct {
     int start_offset;
     int duration;
     int tag;
-    int done;
+    atomic<bool> done;
     codegen_response_t *response;
 } thread_parm_t;
 
@@ -285,7 +286,7 @@ int main(int argc, char** argv) {
             parm[i]->start_offset = start_offset;
             parm[i]->tag = still_left;
             parm[i]->duration = duration;
-            parm[i]->done = 0;
+            parm[i]->done = false;
             still_left--;
             pthread_attr_init(&attr[i]);
             pthread_attr_setdetachstate(&attr[i], PTHREAD_CREATE_DETACHED);
