@@ -5,6 +5,6 @@
 set -e
 
 apt update
-apt install -y build-essential ffmpeg libboost1.42-dev libtag1-dev zlib1g-dev
+apt install -y build-essential ffmpeg libboost1.67-dev libtag1-dev zlib1g-dev
 cd src
 make
