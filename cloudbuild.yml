@@ -1,0 +1,23 @@
+# This script builds echoprint-codegen for a Linux distro and uploads it
+# into GCS. This is NOT a good solution, as the binary will probably break
+# down if libraries in the OS change even by an inch.
+#
+# Ideally, this should be repackaged as a microservice and built as a regular
+# container image, and the main Playax app should access this as an API instead
+# expecting to have the binary available locally.
+options:
+  dynamic_substitutions: true
+
+substitutions:
+  _DISTRO: 'debian'
+  _RELEASE: 'buster'
+  _BINARIES_BUCKET: 'gs://files.playax.com/binaries/echoprint-codegen'
+
+steps:
+  - name: '${_DISTRO}:${_RELEASE}'
+    args: ['bash', '-c', './build-codegen.sh']
+  
+artifacts:
+  objects:
+    location: '${_BINARIES_BUCKET}/echoprint-codegen/${_DISTRO}-${_RELEASE}'
+    paths: ['echoprint-codegen']
