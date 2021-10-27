@@ -21,6 +21,8 @@ steps:
   - name: '${_DISTRO}:${_RELEASE}'
     args: ['bash', '-c', './build-${_DISTRO}-${_RELEASE}.sh']
 
+  # We unfortunately cannot use the cloudbuild artifact copy because
+  # we need to set the ACLs.
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ['cp', './echoprint-codegen', '${_ARTIFACT_URL}']
 
