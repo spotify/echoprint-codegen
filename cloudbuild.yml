@@ -4,7 +4,7 @@
 #
 # Ideally, this should be repackaged as a microservice and built as a regular
 # container image deployed as a sidecar, and the main Playax app should access 
-# this as an API instead expecting to have the binary available locally.
+# this as an API instead of expecting to have the binary available locally.
 #
 # Other options would include building an APT or AppImage package, but clearly a 
 # microservice would provide better isolation for dependencies.
@@ -14,13 +14,15 @@ options:
 substitutions:
   _DISTRO: 'debian'
   _RELEASE: 'buster'
-  _BINARIES_BUCKET: 'gs://files.playax.com/binaries/echoprint-codegen'
+  _BINARIES_BUCKET: 'gs://files.playax.com/binaries'
+  _ARTIFACT_URL: '${_BINARIES_BUCKET}/echoprint-codegen/${_DISTRO}-${_RELEASE}/echoprint-codegen'
 
 steps:
   - name: '${_DISTRO}:${_RELEASE}'
     args: ['bash', '-c', './build-${_DISTRO}-${_RELEASE}.sh']
-  
-artifacts:
-  objects:
-    location: '${_BINARIES_BUCKET}/echoprint-codegen/${_DISTRO}-${_RELEASE}'
-    paths: ['echoprint-codegen']
+
+  - name: 'gsutil'
+    args: ['cp', './echoprint-codegen', '${_ARTIFACT_URL}']
+
+  - name: 'gsutil'
+    args: ['acl', 'ch', '-u', 'AllUsers:r', '${_ARTIFACT_URL}']
