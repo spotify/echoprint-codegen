@@ -21,8 +21,8 @@ steps:
   - name: '${_DISTRO}:${_RELEASE}'
     args: ['bash', '-c', './build-${_DISTRO}-${_RELEASE}.sh']
 
-  - name: 'gsutil'
+  - name: 'gcr.io/cloud-builders/gsutil'
     args: ['cp', './echoprint-codegen', '${_ARTIFACT_URL}']
 
-  - name: 'gsutil'
+  - name: 'gcr.io/cloud-builders/gsutil'
     args: ['acl', 'ch', '-u', 'AllUsers:r', '${_ARTIFACT_URL}']
