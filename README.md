@@ -1,5 +1,7 @@
 # Codegen for Echoprint
 
+**Note:** This project is no longer actively maintained
+
 Echoprint is an open source music fingerprint and resolving framework powered by the [The Echo Nest](http://the.echonest.com/ "The Echo Nest"). The [code generator](http://github.com/echonest/echoprint-codegen "echoprint-codegen") (library to convert PCM samples from a microphone or file into Echoprint codes) is open source (MIT licensed) and free for any use. The [server component](http://github.com/echonest/echoprint-server "echoprint-server") that stores and resolves queries is open source (Apache 2 licensed) and free for any use. The [data for resolving to millions of songs](http://echoprint.me/data "Echoprint Data") is free for any use provided any changes or additions are merged back to the community. 
 
 [Read more about Echoprint here](http://echoprint.me)
