@@ -39,6 +39,7 @@ Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
     pFingerprint->Compute();
 
     _CodeString = createCodeString(pFingerprint->getCodes());
+    _vCodes = pFingerprint->getCodes();
     _NumCodes = pFingerprint->getCodes().size();
 
     delete pFingerprint;

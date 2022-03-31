@@ -22,6 +22,7 @@ MODULES_LIB = \
     AudioBufferInput.o \
     AudioStreamInput.o \
     Base64.o \
+    FPCode.o \
     Codegen.o \
     Fingerprint.o \
     MatrixUtility.o \
@@ -72,7 +73,7 @@ install: all
 	mkdir -p $(DESTDIR)$(BINDIR)
 	install ../echoprint-codegen $(DESTDIR)$(BINDIR)
 	install -d $(DESTDIR)$(INCLUDEDIR)/echoprint
-	install -pm 644 Codegen.h $(DESTDIR)$(INCLUDEDIR)/echoprint/
+	install -pm 644 FPCode.h Codegen.h $(DESTDIR)$(INCLUDEDIR)/echoprint/
 	mkdir -p $(DESTDIR)$(LIBDIR)
 ifeq ($(UNAME),Darwin)
 	install -m 755 libcodegen.$(VERSION).dylib $(DESTDIR)$(LIBDIR)
