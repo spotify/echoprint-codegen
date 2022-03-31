@@ -19,9 +19,6 @@
 #include "Base64.h"
 #include <zlib.h>
 
-using std::string;
-using std::vector;
-
 Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
     if (Params::AudioStreamInput::MaxSamples < (uint)numSamples)
         throw std::runtime_error("File was too big\n");
@@ -47,7 +44,7 @@ Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
     delete pAudio;
 }
 
-string Codegen::createCodeString(vector<FPCode> vCodes) {
+std::string Codegen::createCodeString(std::vector<FPCode> vCodes) {
     if (vCodes.size() < 3) {
         return "";
     }
@@ -64,7 +61,7 @@ string Codegen::createCodeString(vector<FPCode> vCodes) {
 }
 
 
-string Codegen::compress(const string& s) {
+std::string Codegen::compress(const std::string& s) {
     long max_compressed_length = s.size()*2;
     unsigned char *compressed = new unsigned char[max_compressed_length];
 
@@ -85,7 +82,7 @@ string Codegen::compress(const string& s) {
     deflateEnd(&stream);
 
     // base64 the zlib'd code string
-    string encoded = base64_encode(compressed, compressed_length, true);
+    std::string encoded = base64_encode(compressed, compressed_length, true);
     delete [] compressed;
     return encoded;
 }

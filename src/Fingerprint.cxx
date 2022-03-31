@@ -6,7 +6,7 @@
 
 #include "Fingerprint.h"
 #include "Params.h"
-#include <string.h>
+#include <cstring>
 
 #ifdef _WIN32
 #include "win_funcs.h"

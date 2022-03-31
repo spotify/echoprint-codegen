@@ -5,7 +5,7 @@
 
 
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 #include <memory>
 #ifndef _WIN32
     #include <libgen.h>
@@ -19,8 +19,6 @@
 #include "Codegen.h"
 #include <string>
 #define MAX_FILES 200000
-
-using namespace std;
 
 // The response from the codegen. Contains all the fields necessary
 // to create a json string.
@@ -116,7 +114,7 @@ codegen_response_t *codegen_file(char* filename, int start_offset, int duration,
     response->error = NULL;
     response->codegen = NULL;
 
-    auto_ptr<FfmpegStreamInput> pAudio(new FfmpegStreamInput());
+    std::auto_ptr<FfmpegStreamInput> pAudio(new FfmpegStreamInput());
     pAudio->ProcessFile(filename, start_offset, duration);
 
     if (pAudio.get() == NULL) { // Unable to decode!
@@ -143,7 +141,7 @@ codegen_response_t *codegen_file(char* filename, int start_offset, int duration,
     double t2 = now();
     Codegen *pCodegen = new Codegen(pAudio->getSamples(), numSamples, start_offset);
     t2 = now() - t2;
-    
+
     response->t1 = t1;
     response->t2 = t2;
     response->numSamples = numSamples;
@@ -152,7 +150,7 @@ codegen_response_t *codegen_file(char* filename, int start_offset, int duration,
     response->duration = duration;
     response->tag = tag;
     response->filename = filename;
-    
+
     return response;
 }
 
@@ -181,13 +179,13 @@ void print_json_to_screen(char* output, int count, int done) {
 }
 
 char *make_json_string(codegen_response_t* response) {
-    
+
     if (response->error != NULL) {
         return response->error;
     }
-    
+
     // Get the ID3 tag information.
-    auto_ptr<Metadata> pMetadata(new Metadata(response->filename));
+    std::auto_ptr<Metadata> pMetadata(new Metadata(response->filename));
 
     // preamble + codelen
     char* output = (char*) malloc(sizeof(char)*(16384 + strlen(response->codegen->getCodeString().c_str()) ));
@@ -220,7 +218,7 @@ char *make_json_string(codegen_response_t* response) {
 int main(int argc, char** argv) {
     if (argc < 2) {
         fprintf(stderr, "Usage: %s [ filename | -s ] [seconds_start] [seconds_duration] [< file_list (if -s is set)]\n", argv[0]);
-        exit(-1);
+        exit(EXIT_FAILURE);
     }
 
     try {
@@ -235,10 +233,10 @@ int main(int argc, char** argv) {
         if (argc > 4) already = atoi(argv[4]);
         // If you give it -s, it means to read in a list of files from stdin.
         if (strcmp(filename, "-s") == 0) {
-            while(cin) {
+            while(std::cin) {
                 if (count < MAX_FILES) {
                     string temp_str;
-                    getline(cin, temp_str);
+                    getline(std::cin, temp_str);
                     if (temp_str.size() > 2)
                         files[count++] = temp_str;
                 } else {
