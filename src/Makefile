@@ -7,8 +7,8 @@ VERSION_COMPAT := $(word 1, $(EP_VERSION)).$(word 2, $(EP_VERSION))
 UNAME := $(shell uname -s)
 CXX=g++
 CC=gcc
-#OPTFLAGS=-g -O0
-OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
+#OPTFLAGS=-g -O0 -DUNHASHED_CODES
+OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG -DUNHASHED_CODES
 BOOST_CFLAGS=-I/usr/local/include/boost-1_35
 TAGLIB_CFLAGS=`taglib-config --cflags`
 TAGLIB_LIBS=`taglib-config --libs`
@@ -26,7 +26,8 @@ MODULES_LIB = \
     Fingerprint.o \
     MatrixUtility.o \
     SubbandAnalysis.o \
-    Whitening.o
+    Whitening.o \
+    functions.o
 MODULES = $(MODULES_LIB) Metadata.o
 
 all: libcodegen echoprint-codegen
