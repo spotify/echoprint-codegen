@@ -1,18 +1,19 @@
 # Version of echoprint, as a list. Is expanded out
 # for various version numbers.
-EP_VERSION := 4 1 1
+EP_VERSION := 4 1 2
 VERSION := $(word 1, $(EP_VERSION)).$(word 2, $(EP_VERSION)).$(word 3, $(EP_VERSION))
 VERSION_MAJ := $(word 1, $(EP_VERSION))
 VERSION_COMPAT := $(word 1, $(EP_VERSION)).$(word 2, $(EP_VERSION))
 UNAME := $(shell uname -s)
 CXX=g++
 CC=gcc
-#OPTFLAGS=-g -O0
-OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
-BOOST_CFLAGS=-I/usr/local/include/boost-1_35
+#OPTFLAGS=-g -O0 -DUNHASHED_CODES
+OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG -DUNHASHED_CODES
+BOOST_CFLAGS=-I/usr/local/include/boost
+JNI_CFLAGS=-I$$JAVA_HOME/include/ -I$$JAVA_HOME/include/darwin/ -I$$JAVA_HOME/include/linux/
 TAGLIB_CFLAGS=`taglib-config --cflags`
 TAGLIB_LIBS=`taglib-config --libs`
-CXXFLAGS=-Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) -fPIC $(OPTFLAGS)
+CXXFLAGS=-Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) $(JNI_CFLAGS) -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -fPIC $(OPTFLAGS)
 LDFLAGS=$(TAGLIB_LIBS) -lz -lpthread $(OPTFLAGS)
 LIBNAME=libcodegen.so
@@ -26,7 +27,10 @@ MODULES_LIB = \
     Fingerprint.o \
     MatrixUtility.o \
     SubbandAnalysis.o \
-    Whitening.o
+    Whitening.o \
+	functions.o \
+	echoprint.o
+	
 MODULES = $(MODULES_LIB) Metadata.o
 
 all: libcodegen echoprint-codegen
@@ -41,7 +45,7 @@ else
 endif
 
 echoprint-codegen: $(MODULES) main.o
-	$(CXX) $(MODULES) main.o $(LDFLAGS) -o ../echoprint-codegen
+	$(CXX) $(MODULES) main.o -o ../echoprint-codegen $(LDFLAGS)
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c -o $@ $<

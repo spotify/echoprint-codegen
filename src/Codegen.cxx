@@ -23,6 +23,10 @@ using std::string;
 using std::vector;
 
 Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
+    for (int i = 0; i < 2; ++i) {
+        is_code_string_cached[i] = false;
+    }
+
     if (Params::AudioStreamInput::MaxSamples < (uint)numSamples)
         throw std::runtime_error("File was too big\n");
 
@@ -38,7 +42,11 @@ Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
     Fingerprint *pFingerprint = new Fingerprint(pSubbandAnalysis, start_offset);
     pFingerprint->Compute();
 
+#if defined(UNHASHED_CODES)
+    _CodeString = createCodeStringJSON(pFingerprint->getCodes());
+#else
     _CodeString = createCodeString(pFingerprint->getCodes());
+#endif
     _NumCodes = pFingerprint->getCodes().size();
 
     delete pFingerprint;
@@ -63,6 +71,24 @@ string Codegen::createCodeString(vector<FPCode> vCodes) {
     return compress(codestream.str());
 }
 
+string Codegen::createCodeStringJSON(vector<FPCode> vCodes) {
+    std::ostringstream codestream;
+    codestream << "[";
+    for (uint i = 0; i < vCodes.size(); i++) {
+        int hash = vCodes[i].code;
+        // codestream << std::setw(5) << hash;
+        codestream << "[" <<  vCodes[i].frame << ", "
+            << ((hash >> 20) & 7) << ", "
+            << ((hash >> 10) & 1023) << ", "
+            << ((hash >>  0) & 1023)
+            << "]";
+        if (i < vCodes.size()-1) {
+            codestream << ", ";
+        }
+    }
+    codestream << "]";
+    return codestream.str();
+}
 
 string Codegen::compress(const string& s) {
     long max_compressed_length = s.size()*2;
@@ -88,4 +114,25 @@ string Codegen::compress(const string& s) {
     string encoded = base64_encode(compressed, compressed_length, true);
     delete [] compressed;
     return encoded;
+}
+
+std::string Codegen::getCodeString(bool human_readable) {
+    const uint n = human_readable;
+    if (!is_code_string_cached[n]) {
+        is_code_string_cached[n] = true;
+        if (human_readable) {
+            if (_CodeString.size() > 0) {
+                code_string_cache[n] = _CodeString;
+            } else {
+                code_string_cache[n] = "[]";
+            }
+        } else {
+            if (_CodeString.size() > 0) {
+                code_string_cache[n] = '"' + compress(_CodeString) + '"';
+            } else {
+                code_string_cache[n] = "\"\"";
+            }
+        }
+    }
+    return code_string_cache[n];
 }
