@@ -84,10 +84,6 @@ Decoding from MP3 will be the bottleneck for most implementations. Decoders like
     user        0m0.067s
     sys         0m0.007s
 
-### Accuracy
-
-Look at http://echoprint.me for information on the accuracy of the echoprint system.
-
 ## FAQ
 
 Q: I get "Couldn't decode any samples with: ffmpeg" when running codegen
