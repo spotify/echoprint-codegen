@@ -1,7 +1,8 @@
 #ifndef __WIN_FUNCS_H
-#define __WIN_FUNCS_H 1
+#define __WIN_FUNCS_H
 
 #define _USE_MATH_DEFINES
+
 #include <math.h>
 #include <winsock.h>
 #include <sys/timeb.h>
@@ -27,9 +28,9 @@ ROUND_FUNC(double,)
 
 inline void gettimeofday(struct timeval* t,void* timezone)
 {       struct _timeb timebuffer;
-        _ftime( &timebuffer );
-        t->tv_sec=timebuffer.time;
-        t->tv_usec=1000*timebuffer.millitm;
+        _ftime_s( &timebuffer );
+        t->tv_sec = timebuffer.time;
+        t->tv_usec = 1000*timebuffer.millitm;
 }
 
 inline double rint( double x) 

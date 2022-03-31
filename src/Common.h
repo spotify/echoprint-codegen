@@ -7,8 +7,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-
-
 #include <assert.h>
 #ifndef _WIN32
     #include <sys/time.h>
@@ -28,17 +26,11 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-
-#ifndef NULL
-#define NULL 0
-#endif
-
-
 // Returns the current date in seconds.  The precision is in microseconds.
 static inline double now (void) {
     struct timeval tv;
     double now;
-    gettimeofday (&tv, NULL);
+    gettimeofday (&tv, nullptr);
     now = 1e-6 * tv.tv_usec + tv.tv_sec;
     return now;
 }

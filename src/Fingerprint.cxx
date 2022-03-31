@@ -48,8 +48,9 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed ) {
     return h;
 }
 
-Fingerprint::Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset)
-    : _pSubbandAnalysis(pSubbandAnalysis), _Offset(offset) { }
+Fingerprint::Fingerprint(std::unique_ptr<SubbandAnalysis> pSubbandAnalysis, int offset)
+  : _pSubbandAnalysis(std::move(pSubbandAnalysis)), _Offset(offset)
+{ }
 
 
 uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) {
@@ -171,7 +172,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
 // dan is going to beat me if i call this "decimated_time_for_frame" like i want to
 uint Fingerprint::quantized_time_for_frame_delta(uint frame_delta) {
     double time_for_frame_delta = (double)frame_delta / ((double)Params::AudioStreamInput::SamplingRate / 32.0);
-    return ((int)floor((time_for_frame_delta * 1000.0) / (float)QUANTIZE_DT_S) * QUANTIZE_DT_S) / floor(QUANTIZE_DT_S*1000.0);
+    return (static_cast<int>(floor((time_for_frame_delta * 1000.0) / (float)QUANTIZE_DT_S) * QUANTIZE_DT_S) / floor(QUANTIZE_DT_S*1000.0));
 }
 
 uint Fingerprint::quantized_time_for_frame_absolute(uint frame) {
